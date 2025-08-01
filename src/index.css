@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RoofPro Mobile App Design System - Material UI Inspired */
+
+@layer base {
+  :root {
+    /* Primary brand colors - converted to HSL */
+    --primary: 213 100% 28%;           /* #00408E */
+    --primary-variant: 213 100% 21%;   /* #002E6B */
+    --primary-foreground: 0 0% 100%;
+    
+    /* Surface colors */
+    --background: 0 0% 98%;
+    --surface: 0 0% 100%;
+    --surface-variant: 220 15% 96%;
+    --foreground: 213 15% 15%;
+    
+    /* Secondary colors */
+    --secondary: 213 25% 92%;
+    --secondary-foreground: 213 15% 20%;
+    
+    /* Accent colors */
+    --accent: 213 50% 45%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Status colors */
+    --success: 145 80% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 93% 58%;
+    --warning-foreground: 213 15% 15%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Neutral colors */
+    --muted: 220 15% 96%;
+    --muted-foreground: 213 15% 50%;
+    --border: 220 15% 90%;
+    --input: 220 15% 95%;
+    --ring: 213 100% 28%;
+    
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 213 15% 15%;
+    
+    /* Popover colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 15% 15%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-variant)));
+    --gradient-surface: linear-gradient(180deg, hsl(var(--surface)), hsl(var(--surface-variant)));
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px hsl(var(--primary) / 0.08);
+    --shadow-md: 0 4px 12px hsl(var(--primary) / 0.12);
+    --shadow-lg: 0 8px 24px hsl(var(--primary) / 0.16);
+    --shadow-floating: 0 12px 32px hsl(var(--primary) / 0.24);
+    
+    /* Border radius */
+
+    --radius: 0.75rem;
+    
+    /* Mobile specific spacing */
+    --spacing-mobile: 1rem;
+    --spacing-bottom-nav: 5rem;
+    
+    /* Animations */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 213 25% 8%;
+    --surface: 213 20% 12%;
+    --surface-variant: 213 15% 16%;
+    --foreground: 0 0% 95%;
+    
+    --primary: 213 80% 65%;
+    --primary-variant: 213 70% 55%;
+    --primary-foreground: 213 25% 8%;
+    
+    --secondary: 213 15% 20%;
+    --secondary-foreground: 0 0% 90%;
+    
+    --accent: 213 60% 70%;
+    --accent-foreground: 213 25% 8%;
+    
+    --muted: 213 15% 16%;
+    --muted-foreground: 213 10% 60%;
+    
+    --border: 213 15% 20%;
+    --input: 213 15% 16%;
+    --ring: 213 80% 65%;
+    
+    --card: 213 20% 12%;
+    --card-foreground: 0 0% 95%;
+    
+    --popover: 213 20% 12%;
+    --popover-foreground: 0 0% 95%;
+    
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-variant)));
+    --gradient-surface: linear-gradient(180deg, hsl(var(--surface)), hsl(var(--surface-variant)));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+    overflow: hidden; /* Prevent scroll on mobile */
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    /* iOS specific fixes */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #root {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  /* Material UI inspired elevation system */
+  .elevation-1 {
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .elevation-2 {
+    box-shadow: var(--shadow-md);
+  }
+  
+  .elevation-3 {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .elevation-floating {
+    box-shadow: var(--shadow-floating);
+  }
+  
+  /* Mobile safe areas */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Mobile page container */
+  .mobile-page {
+    @apply h-full overflow-y-auto bg-background;
+    padding-bottom: var(--spacing-bottom-nav);
+  }
+  
+  /* Material UI style transitions */
+  .transition-material {
+    transition: var(--transition-normal);
+  }
+  
+  .transition-material-fast {
+    transition: var(--transition-fast);
+  }
+}
