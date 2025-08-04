@@ -25,63 +25,70 @@ export function InstallationDetails() {
       name: 'Deck Preparation',
       description: 'Clean and prepare the roof deck surface',
       status: 'complete',
-      materials: ['Deck Cleaner', 'Safety Equipment'],
+      materials: ['Deck Cleaner & Primer', 'Safety Equipment', 'Surface Preparation Tools'],
       videoUrl: '/api/video/deck-prep',
-      documents: ['Deck Preparation Guide.pdf', 'Safety Checklist.pdf']
+      documents: ['Carlisle Deck Preparation Guide.pdf', 'Safety Checklist.pdf'],
+      specs: ['https://www.carlisle.com/specs/deck-preparation']
     },
     {
       id: 2,
-      name: 'Primer Application',
-      description: 'Apply primer to ensure proper membrane adhesion',
+      name: 'FAST Adhesive Application',
+      description: 'Apply FAST Adhesive system to ensure proper membrane adhesion',
       status: 'complete',
-      materials: ['Primer XL', 'Application Tools'],
-      videoUrl: '/api/video/primer-application',
-      documents: ['Primer Application Guide.pdf', 'Technical Data Sheet.pdf']
+      materials: ['FAST Adhesive Primer', 'Application Rollers', 'Spray Equipment'],
+      videoUrl: '/api/video/fast-adhesive-application',
+      documents: ['FAST Adhesive Application Guide.pdf', 'FAST Technical Data Sheet.pdf'],
+      specs: ['https://www.carlisle.com/specs/fast-adhesive']
     },
     {
       id: 3,
-      name: 'Base Sheet Installation',
-      description: 'Install base sheet layer for membrane foundation',
+      name: 'SecurShield Base Installation',
+      description: 'Install SecurShield base layer for membrane foundation',
       status: 'in-progress',
-      materials: ['Base Sheet', 'Fasteners', 'Sealing Tape'],
-      videoUrl: '/api/video/base-sheet',
-      documents: ['Base Sheet Installation.pdf', 'Fastening Pattern Guide.pdf']
+      materials: ['SecurShield Base Sheet', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Sealing Tape'],
+      videoUrl: '/api/video/securshield-base',
+      documents: ['SecurShield Installation Guide.pdf', 'Fastening Pattern Specifications.pdf'],
+      specs: ['https://www.carlisle.com/specs/securshield-base']
     },
     {
       id: 4,
-      name: 'Bottom Insulation',
-      description: 'Install first layer of polyiso insulation',
+      name: 'Bottom SecurShield HD Insulation',
+      description: 'Install first layer of SecurShield HD polyiso insulation',
       status: 'pending',
-      materials: ['Polyiso Insulation 2"', 'Adhesive', 'Fasteners'],
-      videoUrl: '/api/video/insulation-bottom',
-      documents: ['Insulation Installation.pdf', 'R-Value Chart.pdf']
+      materials: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Insulation Fasteners'],
+      videoUrl: '/api/video/securshield-hd-bottom',
+      documents: ['SecurShield HD Installation Manual.pdf', 'R-Value Performance Chart.pdf'],
+      specs: ['https://www.carlisle.com/specs/securshield-hd']
     },
     {
       id: 5,
-      name: 'Top Insulation',
-      description: 'Install second layer of insulation with offset joints',
+      name: 'Top SecurShield HD Insulation',
+      description: 'Install second layer of SecurShield HD with offset joints',
       status: 'pending',
-      materials: ['Polyiso Insulation 2"', 'Adhesive', 'Joint Tape'],
-      videoUrl: '/api/video/insulation-top',
-      documents: ['Insulation Installation.pdf', 'Joint Sealing Guide.pdf']
+      materials: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Pressure-Sensitive Joint Tape'],
+      videoUrl: '/api/video/securshield-hd-top',
+      documents: ['SecurShield HD Installation Manual.pdf', 'Joint Sealing Best Practices.pdf'],
+      specs: ['https://www.carlisle.com/specs/securshield-hd']
     },
     {
       id: 6,
-      name: 'Cover Board',
-      description: 'Install cover board for membrane protection',
+      name: 'SecurShield Cover Board',
+      description: 'Install SecurShield cover board for membrane protection',
       status: 'pending',
-      materials: ['Cover Board', 'Fasteners', 'Joint Tape'],
-      videoUrl: '/api/video/cover-board',
-      documents: ['Cover Board Installation.pdf', 'Protection Guidelines.pdf']
+      materials: ['SecurShield Cover Board', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Joint Tape'],
+      videoUrl: '/api/video/securshield-cover-board',
+      documents: ['SecurShield Cover Board Installation.pdf', 'Membrane Protection Guidelines.pdf'],
+      specs: ['https://www.carlisle.com/specs/securshield-cover-board']
     },
     {
       id: 7,
-      name: 'Membrane Installation',
-      description: 'Install EPDM membrane with proper seaming',
+      name: 'Sure-Seal EPDM Installation',
+      description: 'Install Sure-Seal EPDM membrane with proper seaming',
       status: 'pending',
-      materials: ['EPDM Membrane 60 mil', 'Seaming Tape', 'Primer'],
-      videoUrl: '/api/video/membrane',
-      documents: ['Membrane Installation.pdf', 'Seaming Procedures.pdf', 'Warranty Info.pdf']
+      materials: ['Sure-Seal EPDM 60 mil', 'Pressure-Sensitive Seaming Tape', 'Sure-Weld Splicing Cement', 'Sure-Seal Lap Sealant'],
+      videoUrl: '/api/video/sure-seal-epdm',
+      documents: ['Sure-Seal Installation Manual.pdf', 'EPDM Seaming Procedures.pdf', 'Carlisle Warranty Information.pdf'],
+      specs: ['https://www.carlisle.com/specs/sure-seal-epdm']
     }
   ];
 
@@ -186,12 +193,32 @@ export function InstallationDetails() {
                     <h4 className="font-semibold text-sm">Required Materials:</h4>
                     <div className="space-y-2">
                       {step.materials.map((material, index) => (
-                        <div key={index} className="flex items-center space-x-2">
-                          <Package size={16} className="text-primary" />
-                          <span className="text-sm">{material}</span>
+                        <div key={index} className="flex items-center justify-between p-2 bg-muted/20 rounded">
+                          <div className="flex items-center space-x-2">
+                            <Package size={16} className="text-primary" />
+                            <span className="text-sm">{material}</span>
+                          </div>
+                          {step.specs && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-xs"
+                              onClick={() => window.open(step.specs[0], '_blank')}
+                            >
+                              Specs
+                            </Button>
+                          )}
                         </div>
                       ))}
                     </div>
+                    {step.specs && (
+                      <p 
+                        className="text-xs text-primary mt-2 cursor-pointer hover:underline"
+                        onClick={() => window.open(step.specs[0], '_blank')}
+                      >
+                        View complete product specifications
+                      </p>
+                    )}
                   </TabsContent>
 
                   <TabsContent value="video" className="space-y-3">

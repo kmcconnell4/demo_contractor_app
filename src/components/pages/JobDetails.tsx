@@ -57,33 +57,38 @@ export function JobDetails() {
   ];
 
   const documents = [
-    { id: 1, name: 'Installation Manual - EPDM', type: 'pdf', size: '2.4 MB' },
-    { id: 2, name: 'Safety Data Sheet - Primer', type: 'pdf', size: '1.1 MB' },
-    { id: 3, name: 'Warranty Certificate', type: 'pdf', size: '0.8 MB' },
+    { id: 1, name: 'Sure-Seal EPDM Installation Manual', type: 'pdf', size: '2.4 MB', link: 'https://www.carlisle.com/docs/sure-seal-installation-guide' },
+    { id: 2, name: 'FAST Adhesive Safety Data Sheet', type: 'pdf', size: '1.1 MB', link: 'https://www.carlisle.com/docs/fast-adhesive-sds' },
+    { id: 3, name: 'Carlisle Warranty Certificate', type: 'pdf', size: '0.8 MB', link: 'https://www.carlisle.com/warranty' },
+    { id: 4, name: 'Sure-Weld TPO Specification Sheet', type: 'pdf', size: '1.8 MB', link: 'https://www.carlisle.com/docs/sure-weld-tpo-specs' },
   ];
 
   const materials = [
-    { id: 1, name: 'EPDM Membrane 60 mil', quantity: '2,500 sq ft', status: 'delivered' },
-    { id: 2, name: 'Polyiso Insulation 2"', quantity: '2,500 sq ft', status: 'delivered' },
-    { id: 3, name: 'Primer XL', quantity: '15 gallons', status: 'pending' },
+    { id: 1, name: 'Sure-Seal EPDM Membrane 60 mil', quantity: '2,500 sq ft', status: 'delivered', specs: 'https://www.carlisle.com/specs/sure-seal-epdm-60mil' },
+    { id: 2, name: 'SecurShield HD Polyiso Insulation 2"', quantity: '2,500 sq ft', status: 'delivered', specs: 'https://www.carlisle.com/specs/securshield-hd' },
+    { id: 3, name: 'FAST Adhesive Primer', quantity: '15 gallons', status: 'pending', specs: 'https://www.carlisle.com/specs/fast-adhesive' },
+    { id: 4, name: 'Sure-Seal Lap Sealant', quantity: '24 tubes', status: 'delivered', specs: 'https://www.carlisle.com/specs/sure-seal-lap-sealant' },
+    { id: 5, name: 'Pressure-Sensitive Walkway Pads', quantity: '50 pads', status: 'pending', specs: 'https://www.carlisle.com/specs/walkway-pads' },
   ];
 
   const repairItems = [
     {
       id: 1,
       area: 'Section B-2',
-      issue: 'Membrane seam separation',
-      description: 'Seam requires re-welding and additional adhesive',
+      issue: 'Sure-Seal EPDM seam separation',
+      description: 'EPDM seam requires re-welding with Sure-Weld splicing cement and additional FAST Adhesive',
       priority: 'high',
-      photos: ['/api/placeholder/200/150']
+      photos: ['/api/placeholder/200/150'],
+      recommendedProducts: ['Sure-Weld Splicing Cement', 'FAST Adhesive', 'Pressure-Sensitive Seam Tape']
     },
     {
       id: 2,
       area: 'Section A-4',
-      issue: 'Insulation displacement',
-      description: 'Insulation boards need repositioning and securing',
+      issue: 'SecurShield insulation displacement',
+      description: 'SecurShield HD insulation boards need repositioning and securing with proper fasteners',
       priority: 'medium',
-      photos: ['/api/placeholder/200/150']
+      photos: ['/api/placeholder/200/150'],
+      recommendedProducts: ['SecurShield HD Polyiso', 'Heavy-Duty Fasteners', 'Insulation Adhesive']
     }
   ];
 
@@ -150,6 +155,9 @@ export function JobDetails() {
                         <div className="flex-1">
                           <h3 className="font-semibold">{doc.name}</h3>
                           <p className="text-sm text-muted-foreground">{doc.size}</p>
+                          {doc.link && (
+                            <p className="text-xs text-primary mt-1">View Specification Sheet</p>
+                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -166,9 +174,14 @@ export function JobDetails() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <Package size={24} className="text-primary" />
-                          <div>
+                          <div className="flex-1">
                             <h3 className="font-semibold">{material.name}</h3>
                             <p className="text-sm text-muted-foreground">{material.quantity}</p>
+                            {material.specs && (
+                              <p className="text-xs text-primary mt-1 cursor-pointer hover:underline">
+                                View Product Specifications
+                              </p>
+                            )}
                           </div>
                         </div>
                         <Badge className={material.status === 'delivered' ? 'bg-success text-success-foreground' : 'bg-warning text-warning-foreground'}>
