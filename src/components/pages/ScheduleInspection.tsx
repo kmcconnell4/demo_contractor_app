@@ -51,7 +51,7 @@ export function ScheduleInspection() {
       return;
     }
 
-    // Update job status to "Pending Inspection"
+    // Update job status to "Complete"
     const inspectionData = {
       jobId: id,
       preferredDates: selectedDates,
@@ -64,11 +64,11 @@ export function ScheduleInspection() {
     localStorage.setItem(`inspection_${id}`, JSON.stringify(inspectionData));
     
     // Update job status
-    localStorage.setItem(`job_status_${id}`, 'Pending Inspection');
+    localStorage.setItem(`job_status_${id}`, 'Complete');
 
     toast({
       title: "Inspection scheduled successfully",
-      description: "We'll contact you within 24 hours to confirm the appointment."
+      description: "Job has been marked as complete and we'll contact you within 24 hours to confirm the appointment."
     });
 
     navigate(`/job/${id}`);

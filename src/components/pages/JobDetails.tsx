@@ -34,7 +34,7 @@ export function JobDetails() {
     if (storedStatus) return storedStatus;
     
     // Default status based on job ID
-    return id === '1' ? 'Installation' : id === '3' ? 'Pending Inspection' : id === '7' ? 'Repairs Needed' : 'Awarded';
+    return id === '1' ? 'Installation' : id === '3' ? 'Complete' : id === '7' ? 'Complete' : 'Awarded';
   };
 
   // Mock job data based on status
@@ -96,9 +96,7 @@ export function JobDetails() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Installation': return 'bg-warning text-warning-foreground';
-      case 'Pending Inspection': return 'bg-accent text-accent-foreground';
       case 'Awarded': return 'bg-primary text-primary-foreground';
-      case 'Repairs Needed': return 'bg-destructive text-destructive-foreground';
       case 'Complete': return 'bg-success text-success-foreground';
       default: return 'bg-muted text-muted-foreground';
     }
@@ -283,82 +281,6 @@ export function JobDetails() {
                 ))}
               </CardContent>
             </Card>
-          </div>
-        );
-
-      case 'Pending Inspection':
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Schedule Inspection</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  className="rounded-md border"
-                />
-                <Button className="w-full mt-4">
-                  <CalendarIcon size={20} className="mr-2" />
-                  Confirm Inspection Date
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        );
-
-      case 'Repairs Needed':
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Required Repairs</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {repairItems.map((item) => (
-                  <Card key={item.id} className="border-l-4 border-l-destructive">
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-semibold">{item.area}</h3>
-                        <Badge className={getPriorityColor(item.priority)}>
-                          {item.priority}
-                        </Badge>
-                      </div>
-                      <p className="font-medium mb-1">{item.issue}</p>
-                      <p className="text-sm text-muted-foreground mb-3">{item.description}</p>
-                      
-                      <div className="flex space-x-2 mb-3">
-                        {item.photos.map((photo, index) => (
-                          <img 
-                            key={index}
-                            src={photo} 
-                            alt={`Repair ${item.id}`}
-                            className="w-20 h-16 object-cover rounded border"
-                          />
-                        ))}
-                      </div>
-                      
-                      <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
-                          <Camera size={16} className="mr-1" />
-                          Upload Fix Photo
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          View Tutorial
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Button className="w-full">
-              <CalendarIcon size={20} className="mr-2" />
-              Schedule Re-inspection
-            </Button>
           </div>
         );
 
