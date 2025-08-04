@@ -28,7 +28,7 @@ export function InstallationDetails() {
       materials: ['Deck Cleaner & Primer', 'Safety Equipment', 'Surface Preparation Tools'],
       videoUrl: '/api/video/deck-prep',
       documents: ['Carlisle Deck Preparation Guide.pdf', 'Safety Checklist.pdf'],
-      specs: ['https://www.carlisle.com/specs/deck-preparation']
+      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Detail&limit=100&q=deck+preparation']
     },
     {
       id: 2,
@@ -38,7 +38,7 @@ export function InstallationDetails() {
       materials: ['FAST Adhesive Primer', 'Application Rollers', 'Spray Equipment'],
       videoUrl: '/api/video/fast-adhesive-application',
       documents: ['FAST Adhesive Application Guide.pdf', 'FAST Technical Data Sheet.pdf'],
-      specs: ['https://www.carlisle.com/specs/fast-adhesive']
+      specs: ['https://www.carlislesyntec.com/Document-Viewer/flexible-fast-adhesive-product-data-sheet-pds/rw1957auuUyaOyb-gEUuiA']
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ export function InstallationDetails() {
       materials: ['SecurShield Base Sheet', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Sealing Tape'],
       videoUrl: '/api/video/securshield-base',
       documents: ['SecurShield Installation Guide.pdf', 'Fastening Pattern Specifications.pdf'],
-      specs: ['https://www.carlisle.com/specs/securshield-base']
+      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield']
     },
     {
       id: 4,
@@ -58,7 +58,7 @@ export function InstallationDetails() {
       materials: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Insulation Fasteners'],
       videoUrl: '/api/video/securshield-hd-bottom',
       documents: ['SecurShield HD Installation Manual.pdf', 'R-Value Performance Chart.pdf'],
-      specs: ['https://www.carlisle.com/specs/securshield-hd']
+      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+HD']
     },
     {
       id: 5,
@@ -68,7 +68,7 @@ export function InstallationDetails() {
       materials: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Pressure-Sensitive Joint Tape'],
       videoUrl: '/api/video/securshield-hd-top',
       documents: ['SecurShield HD Installation Manual.pdf', 'Joint Sealing Best Practices.pdf'],
-      specs: ['https://www.carlisle.com/specs/securshield-hd']
+      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+HD']
     },
     {
       id: 6,
@@ -78,7 +78,7 @@ export function InstallationDetails() {
       materials: ['SecurShield Cover Board', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Joint Tape'],
       videoUrl: '/api/video/securshield-cover-board',
       documents: ['SecurShield Cover Board Installation.pdf', 'Membrane Protection Guidelines.pdf'],
-      specs: ['https://www.carlisle.com/specs/securshield-cover-board']
+      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+cover+board']
     },
     {
       id: 7,
@@ -88,7 +88,7 @@ export function InstallationDetails() {
       materials: ['Sure-Seal EPDM 60 mil', 'Pressure-Sensitive Seaming Tape', 'Sure-Weld Splicing Cement', 'Sure-Seal Lap Sealant'],
       videoUrl: '/api/video/sure-seal-epdm',
       documents: ['Sure-Seal Installation Manual.pdf', 'EPDM Seaming Procedures.pdf', 'Carlisle Warranty Information.pdf'],
-      specs: ['https://www.carlisle.com/specs/sure-seal-epdm']
+      specs: ['https://www.carlislesyntec.com/Search?q=sure-seal&tabFilter=document-tab&system_type=EPDM&media_type=Product+Data+Sheet%7CMembrane']
     }
   ];
 
