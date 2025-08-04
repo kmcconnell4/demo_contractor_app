@@ -185,7 +185,7 @@ export function JobDetails() {
                           </div>
                         </div>
                         <Badge className={material.status === 'delivered' ? 'bg-success text-success-foreground' : 'bg-warning text-warning-foreground'}>
-                          {material.status}
+                          {material.status.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}
                         </Badge>
                       </div>
                     </CardContent>
