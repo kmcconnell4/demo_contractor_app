@@ -4,7 +4,6 @@ import { Onboarding } from './pages/Onboarding';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { Search } from './pages/Search';
-import { Create } from './pages/Create';
 import { Messages } from './pages/Messages';
 import { Settings } from './pages/Settings';
 import { JobDetails } from './pages/JobDetails';
@@ -47,7 +46,6 @@ function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/create" element={<Create />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/job/:id" element={<JobDetails />} />

@@ -22,8 +22,8 @@ import {
 
 export function Settings() {
   const [profile, setProfile] = useState({
-    name: 'John Contractor',
-    email: 'john@contractor.com',
+    name: 'Chris Contractor',
+    email: 'chris@contractor.com',
     phone: '+1 (555) 123-4567',
     company: 'Elite Roofing Solutions',
     location: 'Carlisle, PA'

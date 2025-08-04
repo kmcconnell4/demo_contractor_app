@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Search, Calendar, MapPin, User } from 'lucide-react';
+import { Search, Calendar, MapPin } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
@@ -113,14 +112,9 @@ export function Home() {
       {/* Header */}
       <div className="bg-gradient-primary safe-top">
         <div className="p-4 pb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-xl font-bold text-white">Good morning!</h1>
-              <p className="text-white/80">Ready to manage your projects?</p>
-            </div>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
-              <User size={24} />
-            </Button>
+          <div className="mb-4">
+            <h1 className="text-xl font-bold text-white">Good morning Chris!</h1>
+            <p className="text-white/80">Ready to manage your projects?</p>
           </div>
           
           {/* Search Bar */}
