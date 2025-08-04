@@ -19,18 +19,18 @@ export function Home() {
   // Mock data for jobs
   const jobs = {
     pending: [
-      { id: '7', title: 'New Construction Project', location: 'Seattle, WA', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
+      { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA 17013', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
     ],
     inProgress: [
-      { id: '1', title: 'Downtown Office Complex', location: 'Seattle, WA', status: getJobStatus('1', 'Installation'), progress: 65 },
-      { id: '2', title: 'Retail Shopping Center', location: 'Portland, OR', status: getJobStatus('2', 'Installation'), progress: 40 },
-      { id: '3', title: 'Manufacturing Plant', location: 'Tacoma, WA', status: getJobStatus('3', 'Pending Inspection'), dueDate: '2024-08-15' },
-      { id: '4', title: 'Warehouse Facility', location: 'Spokane, WA', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
-      { id: '8', title: 'Hospital Renovation', location: 'Tacoma, WA', status: getJobStatus('8', 'Repairs needed'), dueDate: '2024-08-10' },
+      { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA 19106', status: getJobStatus('1', 'Installation'), progress: 65 },
+      { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA 17055', status: getJobStatus('2', 'Installation'), progress: 40 },
+      { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA 17015', status: getJobStatus('3', 'Pending Inspection'), dueDate: '2024-08-15' },
+      { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA 19422', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
+      { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA 19107', status: getJobStatus('8', 'Repairs needed'), dueDate: '2024-08-10' },
     ],
     completed: [
-      { id: '5', title: 'Tech Campus Building A', location: 'Bellevue, WA', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
-      { id: '6', title: 'Medical Center', location: 'Everett, WA', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
+      { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA 17011', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
+      { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA 17822', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
     ]
   };
 

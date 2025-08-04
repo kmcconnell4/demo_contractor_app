@@ -41,7 +41,7 @@ export function JobDetails() {
   const job = {
     id,
     title: 'Downtown Office Complex',
-    location: 'Seattle, WA',
+    location: '450 Market Street, Philadelphia, PA 19106',
     status: getJobStatus(),
     progress: 65,
     area: '25,000 sq ft',

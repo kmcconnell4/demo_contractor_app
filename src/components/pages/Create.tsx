@@ -144,7 +144,7 @@ export function Create() {
                 <Label htmlFor="location">Location *</Label>
                 <Input
                   id="location"
-                  placeholder="e.g., 123 Main St, Seattle, WA"
+                  placeholder="e.g., 123 Market St, Philadelphia, PA"
                   value={formData.location}
                   onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
                 />

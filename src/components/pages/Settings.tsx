@@ -26,7 +26,7 @@ export function Settings() {
     email: 'john@contractor.com',
     phone: '+1 (555) 123-4567',
     company: 'Elite Roofing Solutions',
-    location: 'Seattle, WA'
+    location: 'Carlisle, PA'
   });
 
   const [preferences, setPreferences] = useState({
