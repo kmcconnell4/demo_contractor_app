@@ -244,7 +244,7 @@ export function JobDetails() {
                   onClick={() => navigate(`/job/${id}/schedule-inspection`)}
                 >
                   <CalendarIcon size={20} className="mr-2" />
-                  Schedule Inspection
+                  Request Inspection
                 </Button>
                 <div className="grid grid-cols-2 gap-3">
                   <Button variant="outline">
@@ -253,7 +253,7 @@ export function JobDetails() {
                   </Button>
                   <Button variant="outline">
                     <Package size={20} className="mr-2" />
-                    Materials
+                    Products
                   </Button>
                 </div>
               </CardContent>
