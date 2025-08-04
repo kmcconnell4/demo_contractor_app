@@ -12,7 +12,6 @@ import { InstallationDetails } from './pages/InstallationDetails';
 import { ScheduleInspection } from './pages/ScheduleInspection';
 import { ProductDetails } from './pages/ProductDetails';
 import { BottomNavigation } from './navigation/BottomNavigation';
-import { VoiceCommandButton } from './navigation/VoiceCommandButton';
 
 function AppRoutes() {
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -59,7 +58,6 @@ function AppRoutes() {
       </div>
 
       {!hideNavigation && <BottomNavigation />}
-      {!hideNavigation && <VoiceCommandButton />}
     </div>
   );
 }
