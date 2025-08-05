@@ -129,7 +129,7 @@ export function Messages() {
         {!selectedChat ? (
           /* Chat List */
           <div className="h-full overflow-y-auto">
-            <div className="p-4 space-y-3">
+            <div className="p-4 space-y-3 pb-20">
               {chats
                 .filter(chat => 
                   chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

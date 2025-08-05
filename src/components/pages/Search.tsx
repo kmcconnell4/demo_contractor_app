@@ -151,7 +151,7 @@ export function Search() {
       </div>
 
       {/* Results */}
-      <div className="p-4">
+      <div className="p-4 pb-20">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="all">All</TabsTrigger>

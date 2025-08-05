@@ -100,7 +100,7 @@ export function ScheduleInspection() {
         </div>
       </div>
 
-      <div className="p-4 space-y-6">
+      <div className="p-4 space-y-6 pb-20">
         {/* Date Selection */}
         <Card>
           <CardHeader>

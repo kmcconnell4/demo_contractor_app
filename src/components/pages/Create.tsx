@@ -122,7 +122,7 @@ export function Create() {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 pb-20">
         {/* Step 1: Project Details */}
         {step === 1 && (
           <Card>

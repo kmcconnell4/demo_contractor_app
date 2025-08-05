@@ -336,7 +336,7 @@ export function JobDetails() {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 pb-20">
         {renderContent()}
       </div>
     </div>

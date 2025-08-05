@@ -80,7 +80,7 @@ export function Settings() {
         </div>
       </div>
 
-      <div className="p-4 space-y-6">
+      <div className="p-4 space-y-6 pb-20">
         {/* Profile Section */}
         <SettingsSection icon={User} title="Profile">
           <div className="flex items-center space-x-4">
