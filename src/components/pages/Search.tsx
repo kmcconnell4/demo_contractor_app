@@ -192,7 +192,7 @@ export function Search() {
                             </Badge>
                           )}
                           {'status' in item && (
-                            <Badge className={`text-xs ${getStatusColor(item.status)}`}>
+                            <Badge className={`text-xs ${getStatusColor(item.status)} pointer-events-none`}>
                               {item.status}
                             </Badge>
                           )}

@@ -148,7 +148,7 @@ export function Messages() {
                           {chat.avatar ? (
                             <AvatarImage src={chat.avatar} alt={chat.name} />
                           ) : (
-                            <AvatarFallback className="bg-primary text-primary-foreground">
+                            <AvatarFallback>
                               {chat.type === 'group' ? '👥' : chat.type === 'support' ? '🛠️' : getAvatarFallback(chat.name)}
                             </AvatarFallback>
                           )}

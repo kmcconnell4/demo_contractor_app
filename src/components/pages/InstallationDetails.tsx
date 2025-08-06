@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { 
   ArrowLeft, 
   CheckCircle, 
@@ -12,7 +13,9 @@ import {
   AlertTriangle,
   Play,
   File,
-  Package
+  Package,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react';
 
 export function InstallationDetails() {
@@ -25,7 +28,7 @@ export function InstallationDetails() {
       name: 'Deck Preparation',
       description: 'Clean and prepare the roof deck surface',
       status: 'complete',
-      materials: ['Deck Cleaner & Primer', 'Safety Equipment', 'Surface Preparation Tools'],
+      products: ['Deck Cleaner & Primer', 'Safety Equipment', 'Surface Preparation Tools'],
       videoUrl: '/api/video/deck-prep',
       documents: ['Carlisle Deck Preparation Guide.pdf', 'Safety Checklist.pdf'],
       specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Detail&limit=100&q=deck+preparation']
@@ -35,7 +38,7 @@ export function InstallationDetails() {
       name: 'FAST Adhesive Application',
       description: 'Apply FAST Adhesive system to ensure proper membrane adhesion',
       status: 'complete',
-      materials: ['FAST Adhesive Primer', 'Application Rollers', 'Spray Equipment'],
+      products: ['FAST Adhesive Primer', 'Application Rollers', 'Spray Equipment'],
       videoUrl: '/api/video/fast-adhesive-application',
       documents: ['FAST Adhesive Application Guide.pdf', 'FAST Technical Data Sheet.pdf'],
       specs: ['https://www.carlislesyntec.com/Document-Viewer/flexible-fast-adhesive-product-data-sheet-pds/rw1957auuUyaOyb-gEUuiA']
@@ -45,7 +48,7 @@ export function InstallationDetails() {
       name: 'SecurShield Base Installation',
       description: 'Install SecurShield base layer for membrane foundation',
       status: 'in-progress',
-      materials: ['SecurShield Base Sheet', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Sealing Tape'],
+      products: ['SecurShield Base Sheet', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Sealing Tape'],
       videoUrl: '/api/video/securshield-base',
       documents: ['SecurShield Installation Guide.pdf', 'Fastening Pattern Specifications.pdf'],
       specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield']
@@ -55,7 +58,7 @@ export function InstallationDetails() {
       name: 'Bottom SecurShield HD Insulation',
       description: 'Install first layer of SecurShield HD polyiso insulation',
       status: 'pending',
-      materials: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Insulation Fasteners'],
+      products: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Insulation Fasteners'],
       videoUrl: '/api/video/securshield-hd-bottom',
       documents: ['SecurShield HD Installation Manual.pdf', 'R-Value Performance Chart.pdf'],
       specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+HD']
@@ -65,7 +68,7 @@ export function InstallationDetails() {
       name: 'Top SecurShield HD Insulation',
       description: 'Install second layer of SecurShield HD with offset joints',
       status: 'pending',
-      materials: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Pressure-Sensitive Joint Tape'],
+      products: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Pressure-Sensitive Joint Tape'],
       videoUrl: '/api/video/securshield-hd-top',
       documents: ['SecurShield HD Installation Manual.pdf', 'Joint Sealing Best Practices.pdf'],
       specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+HD']
@@ -75,7 +78,7 @@ export function InstallationDetails() {
       name: 'SecurShield Cover Board',
       description: 'Install SecurShield cover board for membrane protection',
       status: 'pending',
-      materials: ['SecurShield Cover Board', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Joint Tape'],
+      products: ['SecurShield Cover Board', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Joint Tape'],
       videoUrl: '/api/video/securshield-cover-board',
       documents: ['SecurShield Cover Board Installation.pdf', 'Membrane Protection Guidelines.pdf'],
       specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+cover+board']
@@ -85,12 +88,29 @@ export function InstallationDetails() {
       name: 'Sure-Seal EPDM Installation',
       description: 'Install Sure-Seal EPDM membrane with proper seaming',
       status: 'pending',
-      materials: ['Sure-Seal EPDM 60 mil', 'Pressure-Sensitive Seaming Tape', 'Sure-Weld Splicing Cement', 'Sure-Seal Lap Sealant'],
+      products: ['Sure-Seal EPDM 60 mil', 'Pressure-Sensitive Seaming Tape', 'Sure-Weld Splicing Cement', 'Sure-Seal Lap Sealant'],
       videoUrl: '/api/video/sure-seal-epdm',
       documents: ['Sure-Seal Installation Manual.pdf', 'EPDM Seaming Procedures.pdf', 'Carlisle Warranty Information.pdf'],
       specs: ['https://www.carlislesyntec.com/Search?q=sure-seal&tabFilter=document-tab&system_type=EPDM&media_type=Product+Data+Sheet%7CMembrane']
     }
   ];
+
+  // Initialize collapsed state - complete steps are collapsed by default
+  const [collapsedSteps, setCollapsedSteps] = useState<Record<number, boolean>>(() => {
+    const initialState: Record<number, boolean> = {};
+    installationSteps.forEach(step => {
+      // Complete steps start collapsed, others start expanded
+      initialState[step.id] = step.status === 'complete';
+    });
+    return initialState;
+  });
+
+  const toggleStep = (stepId: number) => {
+    setCollapsedSteps(prev => ({
+      ...prev,
+      [stepId]: !prev[stepId]
+    }));
+  };
 
   const getStepStatusColor = (status: string) => {
     switch (status) {
@@ -116,7 +136,7 @@ export function InstallationDetails() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary safe-top">
+      <div className="bg-gradient-primary-two-color safe-top">
         <div className="p-4">
           <div className="flex items-center space-x-3 mb-4">
             <Button 
@@ -150,65 +170,77 @@ export function InstallationDetails() {
       <div className="p-4 pb-20">
         <div className="space-y-4">
           {installationSteps.map((step) => (
-            <Card 
-              key={step.id}
-              className={`transition-material ${
-                step.status === 'in-progress' 
-                  ? 'border-warning bg-warning/5' 
-                  : step.status === 'complete' 
-                    ? 'border-success bg-success/5' 
-                    : ''
-              }`}
+            <Collapsible 
+              key={step.id} 
+              open={!collapsedSteps[step.id]}
+              onOpenChange={() => toggleStep(step.id)}
             >
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg flex items-center space-x-3">
-                    {getStepIcon(step.status)}
-                    <span>Step {step.id}: {step.name}</span>
-                  </CardTitle>
-                  <Badge 
-                    className={
-                      step.status === 'complete' 
-                        ? 'bg-success text-success-foreground'
-                        : step.status === 'in-progress'
-                          ? 'bg-warning text-warning-foreground'
-                          : 'bg-muted text-muted-foreground'
-                    }
-                  >
-                    {step.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </Badge>
-                </div>
-                <p className="text-muted-foreground">{step.description}</p>
-              </CardHeader>
+              <Card 
+                className={`transition-material ${
+                  step.status === 'in-progress' 
+                    ? 'border-warning bg-warning/5' 
+                    : step.status === 'complete' 
+                      ? 'border-success bg-success/5' 
+                      : ''
+                }`}
+              >
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="pb-3 cursor-pointer hover:bg-muted/20 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg flex items-center space-x-3">
+                        {getStepIcon(step.status)}
+                        <span>Step {step.id}: {step.name}</span>
+                      </CardTitle>
+                      <div className="flex items-center space-x-2">
+                        <Badge 
+                          className={`${
+                            step.status === 'complete' 
+                              ? 'bg-success text-success-foreground'
+                              : step.status === 'in-progress'
+                                ? 'bg-warning text-warning-foreground'
+                                : 'bg-muted text-muted-foreground'
+                          } pointer-events-none`}
+                        >
+                          {step.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </Badge>
+                        {collapsedSteps[step.id] ? (
+                          <ChevronRight size={20} className="text-muted-foreground" />
+                        ) : (
+                          <ChevronDown size={20} className="text-muted-foreground" />
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-muted-foreground">{step.description}</p>
+                  </CardHeader>
+                </CollapsibleTrigger>
 
-              <CardContent>
-                <Tabs defaultValue="materials" className="space-y-4">
+                <CollapsibleContent>
+                  <CardContent>
+                <Tabs defaultValue="products" className="space-y-4">
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="materials">Materials</TabsTrigger>
+                    <TabsTrigger value="products">Products</TabsTrigger>
                     <TabsTrigger value="video">Video</TabsTrigger>
                     <TabsTrigger value="docs">Documents</TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="materials" className="space-y-3">
-                    <h4 className="font-semibold text-sm">Required Materials:</h4>
-                    <div className="space-y-2">
-                      {step.materials.map((material, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-muted/20 rounded">
-                          <div className="flex items-center space-x-2">
-                            <Package size={16} className="text-primary" />
-                            <span className="text-sm">{material}</span>
-                          </div>
-                          {step.specs && (
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="text-xs"
-                              onClick={() => window.open(step.specs[0], '_blank')}
-                            >
-                              Specs
-                            </Button>
-                          )}
-                        </div>
+                  <TabsContent value="products" className="space-y-3">
+                    <div className="grid grid-cols-1 gap-3">
+                      {step.products.map((product, index) => (
+                        <Card key={index} className="cursor-pointer hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex space-x-4">
+                              <img 
+                                src="/placeholder.jpg" 
+                                alt={product} 
+                                className="w-12 h-12 object-cover rounded-lg bg-muted"
+                              />
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-sm">{product}</h3>
+                                <p className="text-xs text-muted-foreground">Carlisle product required for this installation step</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
                       ))}
                     </div>
                     {step.specs && (
@@ -236,16 +268,22 @@ export function InstallationDetails() {
                   </TabsContent>
 
                   <TabsContent value="docs" className="space-y-3">
-                    <h4 className="font-semibold text-sm">Documentation:</h4>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {step.documents.map((doc, index) => (
-                        <div key={index} className="flex items-center space-x-2 p-2 bg-muted/20 rounded">
-                          <File size={16} className="text-accent" />
-                          <span className="text-sm flex-1">{doc}</span>
-                          <Button variant="ghost" size="sm">
-                            View
-                          </Button>
-                        </div>
+                        <Card key={index} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <File size={20} className="text-accent" />
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-sm">{doc}</h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">Technical</Badge>
+                                  <span className="text-xs text-muted-foreground">PDF</span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
                       ))}
                     </div>
                   </TabsContent>
@@ -266,8 +304,10 @@ export function InstallationDetails() {
                     </Button>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
           ))}
         </div>
       </div>

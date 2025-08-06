@@ -33,17 +33,13 @@ export function Settings() {
     language: 'en',
     notifications: true,
     emailAlerts: true,
-    pushNotifications: true,
-    darkMode: false
+    pushNotifications: true
   });
 
   const languages = [
     { value: 'en', label: 'English' },
     { value: 'es', label: 'Español' },
-    { value: 'fr', label: 'Français' },
-    { value: 'de', label: 'Deutsch' },
-    { value: 'it', label: 'Italiano' },
-    { value: 'pt', label: 'Português' },
+    { value: 'fr-ca', label: 'Français (Canada)' },
   ];
 
   const handleLogout = () => {
@@ -52,16 +48,14 @@ export function Settings() {
     window.location.reload();
   };
 
-  const SettingsSection = ({ icon: Icon, title, children }: { 
-    icon: React.ElementType; 
+  const SettingsSection = ({ title, children }: { 
     title: string; 
     children: React.ReactNode; 
   }) => (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <Icon size={20} />
-          <span>{title}</span>
+        <CardTitle>
+          {title}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -73,7 +67,7 @@ export function Settings() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary safe-top">
+      <div className="bg-gradient-primary-two-color safe-top">
         <div className="p-4">
           <h1 className="text-xl font-bold text-white">Settings</h1>
           <p className="text-white/80">Manage your account and preferences</p>
@@ -82,12 +76,12 @@ export function Settings() {
 
       <div className="p-4 space-y-6 pb-20">
         {/* Profile Section */}
-        <SettingsSection icon={User} title="Profile">
+        <SettingsSection title="Profile">
           <div className="flex items-center space-x-4">
             <div className="relative">
               <Avatar className="h-20 w-20">
                 <AvatarImage src="/api/placeholder/80/80" alt={profile.name} />
-                <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+                <AvatarFallback className="text-xl">
                   {profile.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
@@ -153,14 +147,7 @@ export function Settings() {
                 onChange={(e) => setProfile(prev => ({ ...prev, location: e.target.value }))}
               />
             </div>
-          </div>
 
-          <Button className="w-full">Update Profile</Button>
-        </SettingsSection>
-
-        {/* Language & Preferences */}
-        <SettingsSection icon={Globe} title="Language & Preferences">
-          <div className="space-y-4">
             <div className="space-y-2">
               <Label>Language</Label>
               <Select 
@@ -179,22 +166,13 @@ export function Settings() {
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Dark Mode</Label>
-                <p className="text-sm text-muted-foreground">Switch to dark theme</p>
-              </div>
-              <Switch
-                checked={preferences.darkMode}
-                onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, darkMode: checked }))}
-              />
-            </div>
           </div>
+
+          <Button className="w-full">Update Profile</Button>
         </SettingsSection>
 
-        {/* Notifications */}
-        <SettingsSection icon={Bell} title="Notifications">
+        {/* Communications */}
+        <SettingsSection title="Communications">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
@@ -232,7 +210,7 @@ export function Settings() {
         </SettingsSection>
 
         {/* Security */}
-        <SettingsSection icon={Shield} title="Security">
+        <SettingsSection title="Security">
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-start">
               <span>Change Password</span>
@@ -247,7 +225,7 @@ export function Settings() {
         </SettingsSection>
 
         {/* About */}
-        <SettingsSection icon={Info} title="About">
+        <SettingsSection title="About">
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-muted-foreground">App Version</span>

@@ -81,7 +81,7 @@ export function ScheduleInspection() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary safe-top">
+      <div className="bg-gradient-primary-two-color safe-top">
         <div className="p-4">
           <div className="flex items-center space-x-3 mb-4">
             <Button 
@@ -93,7 +93,7 @@ export function ScheduleInspection() {
               <ArrowLeft size={24} />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-white">Schedule Inspection</h1>
+              <h1 className="text-xl font-bold text-white">Request Inspection</h1>
               <p className="text-white/80 text-sm">Select your preferred dates and times</p>
             </div>
           </div>
@@ -113,19 +113,21 @@ export function ScheduleInspection() {
             </p>
           </CardHeader>
           <CardContent>
-            <Calendar
-              mode="single"
-              selected={undefined}
-              onSelect={handleDateSelect}
-              disabled={(date) => date < new Date() || date < new Date(Date.now() - 86400000)}
-              className="rounded-md border pointer-events-auto"
-              modifiers={{
-                selected: isDateSelected
-              }}
-              modifiersClassNames={{
-                selected: 'bg-primary text-primary-foreground'
-              }}
-            />
+            <div className="flex justify-center">
+              <Calendar
+                mode="single"
+                selected={undefined}
+                onSelect={handleDateSelect}
+                disabled={(date) => date < new Date() || date < new Date(Date.now() - 86400000)}
+                className="rounded-md border pointer-events-auto"
+                modifiers={{
+                  selected: isDateSelected
+                }}
+                modifiersClassNames={{
+                  selected: 'bg-primary text-primary-foreground'
+                }}
+              />
+            </div>
             
             {selectedDates.length > 0 && (
               <div className="mt-4">
@@ -198,8 +200,7 @@ export function ScheduleInspection() {
         {/* Submit Button */}
         <div className="pt-4">
           <Button onClick={handleSubmit} className="w-full h-12">
-            <CalendarIcon size={20} className="mr-2" />
-            Schedule Inspection
+            Request Inspection
           </Button>
         </div>
       </div>

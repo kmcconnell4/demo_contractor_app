@@ -34,6 +34,13 @@ export function Login({ onLogin }: LoginProps) {
     <div className="h-full bg-gradient-primary flex items-center justify-center p-4 safe-top safe-bottom">
       <Card className="w-full max-w-md elevation-3">
         <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/carlisle-logo.svg" 
+              alt="Carlisle Logo" 
+              className="h-12 w-auto"
+            />
+          </div>
           <CardTitle className="text-2xl font-bold text-primary">
             Welcome Back
           </CardTitle>

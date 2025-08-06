@@ -57,7 +57,7 @@ export function Home() {
         <div className="space-y-3">
           <div className="flex justify-between items-start">
             <h3 className="font-semibold text-card-foreground">{job.title}</h3>
-            <Badge className={getStatusColor(job.status)}>
+            <Badge className={`${getStatusColor(job.status)} pointer-events-none`}>
               {job.status}
             </Badge>
           </div>
@@ -110,7 +110,7 @@ export function Home() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary safe-top">
+      <div className="bg-gradient-primary-two-color safe-top">
         <div className="p-4 pb-6">
           <div className="mb-4">
             <h1 className="text-xl font-bold text-white">Good morning Chris!</h1>
