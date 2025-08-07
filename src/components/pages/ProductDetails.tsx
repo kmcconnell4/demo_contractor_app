@@ -158,11 +158,11 @@ export function ProductDetails() {
         <Card>
           <CardContent className="p-0">
             <Tabs defaultValue="specs" className="space-y-0">
-              <TabsList className="grid w-full grid-cols-4 rounded-none border-b">
-                <TabsTrigger value="specs">Specs</TabsTrigger>
-                <TabsTrigger value="benefits">Benefits</TabsTrigger>
-                <TabsTrigger value="install">Install</TabsTrigger>
-                <TabsTrigger value="docs">Docs</TabsTrigger>
+              <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                <TabsTrigger value="specs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Specs</TabsTrigger>
+                <TabsTrigger value="benefits" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Benefits</TabsTrigger>
+                <TabsTrigger value="install" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Install</TabsTrigger>
+                <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Docs</TabsTrigger>
               </TabsList>
 
               <TabsContent value="specs" className="p-4 space-y-4">

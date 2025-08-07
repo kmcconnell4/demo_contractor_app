@@ -217,10 +217,10 @@ export function InstallationDetails() {
                 <CollapsibleContent>
                   <CardContent>
                 <Tabs defaultValue="products" className="space-y-4">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="products">Products</TabsTrigger>
-                    <TabsTrigger value="video">Video</TabsTrigger>
-                    <TabsTrigger value="docs">Documents</TabsTrigger>
+                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                    <TabsTrigger value="products" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Products</TabsTrigger>
+                    <TabsTrigger value="video" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Video</TabsTrigger>
+                    <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Documents</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="products" className="space-y-3">

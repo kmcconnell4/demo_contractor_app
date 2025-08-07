@@ -422,11 +422,11 @@ export function JobDetails() {
                   <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                 </div>
                 <Tabs defaultValue="all" className="space-y-4">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="project">Project</TabsTrigger>
-                  <TabsTrigger value="data">Data Sheets</TabsTrigger>
-                  <TabsTrigger value="safety">Safety</TabsTrigger>
+                <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                  <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
+                  <TabsTrigger value="project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                  <TabsTrigger value="data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Data Sheets</TabsTrigger>
+                  <TabsTrigger value="safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="all" className="space-y-3">
@@ -700,11 +700,11 @@ export function JobDetails() {
                     <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                   </div>
                   <Tabs defaultValue="all" className="space-y-4">
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="project">Project</TabsTrigger>
-                    <TabsTrigger value="data">Data Sheets</TabsTrigger>
-                    <TabsTrigger value="safety">Safety</TabsTrigger>
+                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                    <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
+                    <TabsTrigger value="project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                    <TabsTrigger value="data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Data Sheets</TabsTrigger>
+                    <TabsTrigger value="safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="all" className="space-y-3">
@@ -1127,11 +1127,11 @@ export function JobDetails() {
                     <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                   </div>
                   <Tabs defaultValue="all" className="space-y-4">
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="project">Project</TabsTrigger>
-                    <TabsTrigger value="data">Data Sheets</TabsTrigger>
-                    <TabsTrigger value="safety">Safety</TabsTrigger>
+                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                    <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
+                    <TabsTrigger value="project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                    <TabsTrigger value="data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Data Sheets</TabsTrigger>
+                    <TabsTrigger value="safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="all" className="space-y-3">

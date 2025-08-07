@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Search, Calendar, MapPin, Heart, CloudSun } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Search, Calendar, MapPin, Heart, CloudSun, AlertTriangle, Clock, CheckCircle } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
@@ -66,6 +68,50 @@ export function Home() {
       { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA 17822', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
       { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA 19107', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
     ]
+  };
+
+  // Mock data for alerts
+  const alerts = [
+    {
+      id: 'alert-1',
+      type: 'warning',
+      title: 'Weather Alert',
+      message: 'Heavy rain expected tomorrow. Review outdoor installation schedules.',
+      icon: AlertTriangle,
+      color: 'text-red-500'
+    },
+    {
+      id: 'alert-2',
+      type: 'info',
+      title: 'Material Delivery',
+      message: 'Roofing materials for Downtown Office Complex arriving Thursday.',
+      icon: Clock,
+      color: 'text-yellow-500'
+    },
+    {
+      id: 'alert-3',
+      type: 'success',
+      title: 'Inspection Complete',
+      message: 'Manufacturing Plant passed final safety inspection.',
+      icon: CheckCircle,
+      color: 'text-green-500'
+    }
+  ];
+
+  // Get favorited jobs
+  const getFavoriteJobs = () => {
+    const allJobs = [...jobs.pending, ...jobs.inProgress, ...jobs.completed];
+    return allJobs.filter(job => isFavorite(job.id));
+  };
+
+  // Get alert color based on type
+  const getAlertColor = (type: string) => {
+    switch (type) {
+      case 'warning': return 'text-red-500';
+      case 'info': return 'text-blue-500';
+      case 'success': return 'text-green-500';
+      default: return 'text-yellow-500';
+    }
   };
 
   const handleSearch = () => {
@@ -175,7 +221,7 @@ export function Home() {
               </Avatar>
               <div className="flex-1 ml-4">
                 <h1 className="text-xl font-bold text-white">{getGreeting()}</h1>
-                <div className="flex items-center text-white/80 text-sm mt-1">
+                <div className="flex items-center text-white/80 text-sm">
                   <span>Carlisle, PA • 72°F</span>
                   <CloudSun size={16} className="ml-2" />
                 </div>
@@ -199,52 +245,97 @@ export function Home() {
 
       {/* Job Dashboard */}
       <div className="p-4 space-y-6 pb-20">
-        {/* In Progress */}
+        {/* Timely Alerts Carousel */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">In Progress</h2>
-            <Badge variant="secondary">{jobs.inProgress.length}</Badge>
-          </div>
-          <div className="space-y-3">
-            {jobs.inProgress.map((job) => (
-              <JobCard key={job.id} job={job} section="inProgress" />
-            ))}
-          </div>
+          <Carousel className="w-full">
+            <CarouselContent>
+              {alerts.map((alert) => {
+                const IconComponent = alert.icon;
+                return (
+                  <CarouselItem key={alert.id}>
+                    <div className={`p-4 rounded-lg border-l-4 ${
+                      alert.type === 'warning' ? 'bg-red-50 border-l-red-500 text-red-800' :
+                      alert.type === 'info' ? 'bg-blue-50 border-l-blue-500 text-blue-800' :
+                      'bg-green-50 border-l-green-500 text-green-800'
+                    }`}>
+                      <div className="flex items-start space-x-3">
+                        <IconComponent size={20} className={
+                          alert.type === 'warning' ? 'text-red-500' :
+                          alert.type === 'info' ? 'text-blue-500' :
+                          'text-green-500'
+                        } />
+                        <div className="flex-1">
+                          <h3 className="font-semibold">{alert.title}</h3>
+                          <p className="text-sm mt-1 opacity-90">{alert.message}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
 
-        {/* Pending */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">Pending</h2>
-            <Badge variant="secondary">{jobs.pending.length}</Badge>
+        {/* Favorited Jobs */}
+        {getFavoriteJobs().length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold">Favorite Jobs</h2>
+              <Badge variant="secondary">{getFavoriteJobs().length}</Badge>
+            </div>
+            <div className="space-y-3">
+              {getFavoriteJobs().map((job) => (
+                <JobCard key={job.id} job={job} section="favorites" />
+              ))}
+            </div>
           </div>
-          <div className="space-y-3">
-            {jobs.pending.map((job) => (
-              <JobCard key={job.id} job={job} section="pending" />
-            ))}
-          </div>
-        </div>
+        )}
 
-        {/* Completed */}
+        {/* Job Status Tabs */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">Recently Completed</h2>
-            <Badge variant="secondary">{jobs.completed.length}</Badge>
-          </div>
-          <div className="space-y-3">
-            {jobs.completed.map((job) => (
-              <JobCard key={job.id} job={job} section="completed" />
-            ))}
-          </div>
-          <div className="mt-4">
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => navigate('/search?tab=jobs&status=complete')}
-            >
-              View all jobs
-            </Button>
-          </div>
+          <h2 className="text-lg font-semibold mb-3">My Jobs</h2>
+          <Tabs defaultValue="inProgress" className="w-full">
+            <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+              <TabsTrigger 
+                value="inProgress" 
+                className="flex items-center space-x-2 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary"
+              >
+                <span>In Progress</span>
+                <Badge variant="secondary" className="ml-2">{jobs.inProgress.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="completed" 
+                className="flex items-center space-x-2 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary"
+              >
+                <span>Completed</span>
+                <Badge variant="secondary" className="ml-2">{jobs.completed.length}</Badge>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="inProgress" className="space-y-3 mt-4">
+              {jobs.inProgress.map((job) => (
+                <JobCard key={job.id} job={job} section="inProgress" />
+              ))}
+            </TabsContent>
+            
+            <TabsContent value="completed" className="space-y-3 mt-4">
+              {jobs.completed.map((job) => (
+                <JobCard key={job.id} job={job} section="completed" />
+              ))}
+              <div className="mt-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => navigate('/search?tab=jobs&status=complete')}
+                >
+                  View all completed jobs
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
