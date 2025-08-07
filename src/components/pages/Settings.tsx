@@ -80,7 +80,7 @@ export function Settings() {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <Avatar className="h-20 w-20">
-                <AvatarImage src="/api/placeholder/80/80" alt={profile.name} />
+                <AvatarImage src="/Chris-profile.jpeg" alt={profile.name} />
                 <AvatarFallback className="text-xl">
                   {profile.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>

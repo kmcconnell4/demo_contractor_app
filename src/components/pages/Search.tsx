@@ -12,9 +12,9 @@ export function Search() {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const [isVoiceActive, setIsVoiceActive] = useState(searchParams.get('voice') === 'true');
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'all');
   const [sortBy, setSortBy] = useState('relevance');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(searchParams.get('status') || 'all');
 
   // Mock search results
   const mockResults = {
@@ -66,7 +66,7 @@ export function Search() {
     switch (type) {
       case 'document': return <File size={20} className="text-accent" />;
       case 'product': return <Package size={20} className="text-primary" />;
-      case 'job': return <Briefcase size={20} className="text-success" />;
+      case 'job': return <Briefcase size={20} className="text-[#008ce6]" />;
       default: return <File size={20} />;
     }
   };
@@ -89,6 +89,20 @@ export function Search() {
       }, 2000);
     }
   }, [isVoiceActive]);
+
+  useEffect(() => {
+    // Handle URL parameter changes
+    const status = searchParams.get('status');
+    const tab = searchParams.get('tab');
+    
+    if (status) {
+      setFilterStatus(status);
+    }
+    
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   return (
     <div className="h-full bg-background">

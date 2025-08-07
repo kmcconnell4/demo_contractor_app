@@ -100,6 +100,7 @@ export function JobDetails() {
   ];
 
   const contacts = [
+    { name: 'Chris Contractor', role: 'Contractor', phone: '(555) 123-4567' },
     { name: 'John Smith', role: 'Project Manager', phone: '(555) 123-4567' },
     { name: 'Mike Johnson', role: 'Lead Installer', phone: '(555) 234-5678' },
     { name: 'Sarah Wilson', role: 'Sales Rep', phone: '(555) 345-6789' },
@@ -955,6 +956,9 @@ export function JobDetails() {
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-8 w-8">
+                        {contact.name === 'Chris Contractor' && (
+                          <AvatarImage src="/Chris-profile.jpeg" alt={contact.name} />
+                        )}
                         <AvatarFallback className="bg-gray-200 text-gray-600 text-sm font-medium">
                           {contact.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Calendar, MapPin } from 'lucide-react';
@@ -169,6 +170,15 @@ export function Home() {
             {jobs.completed.map((job) => (
               <JobCard key={job.id} job={job} section="completed" />
             ))}
+          </div>
+          <div className="mt-4">
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => navigate('/search?tab=jobs&status=complete')}
+            >
+              View all jobs
+            </Button>
           </div>
         </div>
       </div>
