@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Calendar, MapPin, Heart } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Search, Calendar, MapPin, Heart, CloudSun } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
@@ -147,11 +148,25 @@ export function Home() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top">
+      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="p-4 pb-6">
           <div className="mb-4">
-            <h1 className="text-xl font-bold text-white">Good morning Chris!</h1>
-            <p className="text-white/80">Ready to manage your projects?</p>
+            <div className="flex items-center justify-between">
+              <Avatar 
+                className="h-10 w-10 cursor-pointer" 
+                onClick={() => navigate('/settings')}
+              >
+                <AvatarImage src="/Chris-profile.jpeg" alt="Chris Profile" />
+                <AvatarFallback className="bg-white/20 text-white">C</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 ml-4">
+                <h1 className="text-xl font-bold text-white">Good morning Chris!</h1>
+                <div className="flex items-center text-white/80 text-sm mt-1">
+                  <span>Carlisle, PA • 72°F</span>
+                  <CloudSun size={16} className="ml-2" />
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Search Bar */}
@@ -161,7 +176,7 @@ export function Home() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60"
+              className="pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60 rounded-full"
             />
             <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" />
           </div>
