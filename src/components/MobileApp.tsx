@@ -6,6 +6,7 @@ import { Home } from './pages/Home';
 import { Search } from './pages/Search';
 import { Messages } from './pages/Messages';
 import { Settings } from './pages/Settings';
+import { Profile } from './pages/Profile';
 import { JobDetails } from './pages/JobDetails';
 import { InstallationDetails } from './pages/InstallationDetails';
 import { ScheduleInspection } from './pages/ScheduleInspection';
@@ -26,7 +27,7 @@ function AppRoutes() {
   }, []);
 
   // Hide navigation on specific pages
-  const hideNavigation = ['/', '/login', '/onboarding'].includes(location.pathname) || 
+  const hideNavigation = ['/', '/login', '/onboarding', '/profile'].includes(location.pathname) || 
                         location.pathname.startsWith('/job/') || 
                         location.pathname.startsWith('/installation/') || 
                         location.pathname.startsWith('/product/');
@@ -48,6 +49,7 @@ function AppRoutes() {
           <Route path="/search" element={<Search />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/job/:id" element={<JobDetails />} />
             <Route path="/job/:id/schedule-inspection" element={<ScheduleInspection />} />
             <Route path="/installation/:id/:area" element={<InstallationDetails />} />

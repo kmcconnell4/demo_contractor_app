@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -13,11 +12,10 @@ import {
   Bell, 
   Shield, 
   Info, 
-  LogOut, 
-  Camera,
-  Mail,
-  Phone,
-  MapPin
+  LogOut,
+  ChevronRight,
+  Key,
+  HelpCircle
 } from 'lucide-react';
 
 export function Settings() {
@@ -75,179 +73,92 @@ export function Settings() {
       </div>
 
       <div className="p-4 space-y-6 pb-20">
-        {/* Profile Section */}
-        <SettingsSection title="Profile">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Avatar className="h-20 w-20">
+        {/* Profile Link */}
+        <Card className="cursor-pointer transition-material hover:elevation-2" onClick={() => window.location.href = '/profile'}>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-16 w-16">
                 <AvatarImage src="/Chris-profile.jpeg" alt={profile.name} />
-                <AvatarFallback className="text-xl">
+                <AvatarFallback className="text-lg">
                   {profile.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
-              <Button
-                size="icon"
-                className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full"
-              >
-                <Camera size={16} />
-              </Button>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg">{profile.name}</h3>
-              <p className="text-muted-foreground">{profile.company}</p>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={profile.name}
-                onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value }))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={profile.email}
-                onChange={(e) => setProfile(prev => ({ ...prev, email: e.target.value }))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={profile.phone}
-                onChange={(e) => setProfile(prev => ({ ...prev, phone: e.target.value }))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="company">Company</Label>
-              <Input
-                id="company"
-                value={profile.company}
-                onChange={(e) => setProfile(prev => ({ ...prev, company: e.target.value }))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
-                value={profile.location}
-                onChange={(e) => setProfile(prev => ({ ...prev, location: e.target.value }))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Language</Label>
-              <Select 
-                value={preferences.language} 
-                onValueChange={(value) => setPreferences(prev => ({ ...prev, language: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {languages.map((lang) => (
-                    <SelectItem key={lang.value} value={lang.value}>
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Button className="w-full">Update Profile</Button>
-        </SettingsSection>
-
-        {/* Communications */}
-        <SettingsSection title="Communications">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Push Notifications</Label>
-                <p className="text-sm text-muted-foreground">Receive notifications on your device</p>
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg">{profile.name}</h3>
+                <p className="text-muted-foreground">View profile</p>
               </div>
-              <Switch
-                checked={preferences.pushNotifications}
-                onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, pushNotifications: checked }))}
-              />
+              <ChevronRight size={20} className="text-muted-foreground" />
             </div>
+          </CardContent>
+        </Card>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Email Alerts</Label>
-                <p className="text-sm text-muted-foreground">Get updates via email</p>
-              </div>
-              <Switch
-                checked={preferences.emailAlerts}
-                onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, emailAlerts: checked }))}
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Job Notifications</Label>
-                <p className="text-sm text-muted-foreground">Updates about your projects</p>
-              </div>
-              <Switch
-                checked={preferences.notifications}
-                onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, notifications: checked }))}
-              />
-            </div>
-          </div>
-        </SettingsSection>
-
-        {/* Security */}
-        <SettingsSection title="Security">
+        {/* Settings */}
+        <SettingsSection title="Settings">
           <div className="space-y-3">
-            <Button variant="outline" className="w-full justify-start">
-              <span>Change Password</span>
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <span>Two-Factor Authentication</span>
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <span>Privacy Settings</span>
-            </Button>
-          </div>
-        </SettingsSection>
+            <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/notifications'}>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <Bell size={20} className="text-muted-foreground" />
+                  <div className="flex-1">
+                    <h4 className="font-medium">Notifications</h4>
+                    <p className="text-sm text-muted-foreground">Manage your notification preferences</p>
+                  </div>
+                  <ChevronRight size={16} className="text-muted-foreground" />
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* About */}
-        <SettingsSection title="About">
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">App Version</span>
-              <span>1.0.0</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Build</span>
-              <span>2024.07.30</span>
-            </div>
-            <Separator />
-            <Button variant="outline" className="w-full justify-start">
-              <span>Terms of Service</span>
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <span>Privacy Policy</span>
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <span>Contact Support</span>
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <span>Rate App</span>
-            </Button>
+            <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/language'}>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <Globe size={20} className="text-muted-foreground" />
+                  <div className="flex-1">
+                    <h4 className="font-medium">Language</h4>
+                    <p className="text-sm text-muted-foreground">Change your language preferences</p>
+                  </div>
+                  <ChevronRight size={16} className="text-muted-foreground" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/change-password'}>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <Key size={20} className="text-muted-foreground" />
+                  <div className="flex-1">
+                    <h4 className="font-medium">Change password</h4>
+                    <p className="text-sm text-muted-foreground">Update your account password</p>
+                  </div>
+                  <ChevronRight size={16} className="text-muted-foreground" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/about'}>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <Info size={20} className="text-muted-foreground" />
+                  <div className="flex-1">
+                    <h4 className="font-medium">About</h4>
+                    <p className="text-sm text-muted-foreground">App information and version details</p>
+                  </div>
+                  <ChevronRight size={16} className="text-muted-foreground" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/support'}>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <HelpCircle size={20} className="text-muted-foreground" />
+                  <div className="flex-1">
+                    <h4 className="font-medium">Support</h4>
+                    <p className="text-sm text-muted-foreground">Get help and contact support</p>
+                  </div>
+                  <ChevronRight size={16} className="text-muted-foreground" />
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </SettingsSection>
 
@@ -255,11 +166,10 @@ export function Settings() {
         <Card>
           <CardContent className="p-4">
             <Button 
-              variant="destructive" 
+              variant="default" 
               className="w-full"
               onClick={handleLogout}
             >
-              <LogOut size={20} className="mr-2" />
               Sign Out
             </Button>
           </CardContent>

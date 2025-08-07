@@ -10,7 +10,7 @@ export function BottomNavigation() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-surface border-t border-border safe-bottom z-40">
+    <nav className="fixed bottom-0 left-0 right-0 bg-surface/75 backdrop-blur-sm border-t border-border safe-bottom z-40">
       <div className="flex justify-around items-center h-16 px-2">
         {navItems.map(({ path, icon: Icon, label }) => (
           <NavLink
