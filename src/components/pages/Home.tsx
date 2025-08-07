@@ -6,8 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Search, Calendar, MapPin, Heart, CloudSun, AlertTriangle, Clock, CheckCircle } from 'lucide-react';
+import { Search, Calendar, MapPin, Star, CloudSun } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
@@ -70,48 +69,10 @@ export function Home() {
     ]
   };
 
-  // Mock data for alerts
-  const alerts = [
-    {
-      id: 'alert-1',
-      type: 'warning',
-      title: 'Weather Alert',
-      message: 'Heavy rain expected tomorrow. Review outdoor installation schedules.',
-      icon: AlertTriangle,
-      color: 'text-red-500'
-    },
-    {
-      id: 'alert-2',
-      type: 'info',
-      title: 'Material Delivery',
-      message: 'Roofing materials for Downtown Office Complex arriving Thursday.',
-      icon: Clock,
-      color: 'text-yellow-500'
-    },
-    {
-      id: 'alert-3',
-      type: 'success',
-      title: 'Inspection Complete',
-      message: 'Manufacturing Plant passed final safety inspection.',
-      icon: CheckCircle,
-      color: 'text-green-500'
-    }
-  ];
-
   // Get favorited jobs
   const getFavoriteJobs = () => {
     const allJobs = [...jobs.pending, ...jobs.inProgress, ...jobs.completed];
     return allJobs.filter(job => isFavorite(job.id));
-  };
-
-  // Get alert color based on type
-  const getAlertColor = (type: string) => {
-    switch (type) {
-      case 'warning': return 'text-red-500';
-      case 'info': return 'text-blue-500';
-      case 'success': return 'text-green-500';
-      default: return 'text-yellow-500';
-    }
   };
 
   const handleSearch = () => {
@@ -137,27 +98,27 @@ export function Home() {
       <CardContent className="p-4">
         <div className="space-y-3">
           <div className="flex justify-between items-start">
-            <h3 className="font-semibold text-card-foreground">{job.title}</h3>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 flex-1">
+              <h3 className="font-semibold text-card-foreground">{job.title}</h3>
               <Button 
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 p-0 hover:bg-transparent"
+                className="h-6 w-6 p-0 hover:bg-transparent"
                 onClick={(e) => toggleFavorite(job.id, e)}
               >
-                <Heart 
-                  size={18} 
+                <Star 
+                  size={16} 
                   className={`transition-colors ${
                     isFavorite(job.id) 
-                      ? 'fill-red-500 text-red-500 hover:text-[#00509e] hover:fill-[#00509e]' 
+                      ? 'fill-yellow-500 text-yellow-500 hover:text-[#00509e] hover:fill-[#00509e]' 
                       : 'text-muted-foreground hover:text-[#00509e]'
                   }`} 
                 />
               </Button>
-              <Badge className={`${getStatusColor(job.status)} pointer-events-none`}>
-                {job.status}
-              </Badge>
             </div>
+            <Badge className={`${getStatusColor(job.status)} pointer-events-none`}>
+              {job.status}
+            </Badge>
           </div>
           
           <div className="flex items-center text-sm text-muted-foreground">
@@ -165,32 +126,10 @@ export function Home() {
             {job.location}
           </div>
           
-          {job.progress && (
-            <div className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span>Progress</span>
-                <span>{job.progress}%</span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div 
-                  className="bg-primary h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${job.progress}%` }}
-                />
-              </div>
-            </div>
-          )}
-          
           {job.dueDate && (
             <div className="flex items-center text-sm text-muted-foreground">
               <Calendar size={16} className="mr-1" />
               Due: {new Date(job.dueDate).toLocaleDateString()}
-            </div>
-          )}
-          
-          {job.startDate && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Calendar size={16} className="mr-1" />
-              Starts: {new Date(job.startDate).toLocaleDateString()}
             </div>
           )}
           
@@ -245,40 +184,6 @@ export function Home() {
 
       {/* Job Dashboard */}
       <div className="p-4 space-y-6 pb-20">
-        {/* Timely Alerts Carousel */}
-        <div>
-          <Carousel className="w-full">
-            <CarouselContent>
-              {alerts.map((alert) => {
-                const IconComponent = alert.icon;
-                return (
-                  <CarouselItem key={alert.id}>
-                    <div className={`p-4 rounded-lg border-l-4 ${
-                      alert.type === 'warning' ? 'bg-red-50 border-l-red-500 text-red-800' :
-                      alert.type === 'info' ? 'bg-blue-50 border-l-blue-500 text-blue-800' :
-                      'bg-green-50 border-l-green-500 text-green-800'
-                    }`}>
-                      <div className="flex items-start space-x-3">
-                        <IconComponent size={20} className={
-                          alert.type === 'warning' ? 'text-red-500' :
-                          alert.type === 'info' ? 'text-blue-500' :
-                          'text-green-500'
-                        } />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{alert.title}</h3>
-                          <p className="text-sm mt-1 opacity-90">{alert.message}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
-
         {/* Favorited Jobs */}
         {getFavoriteJobs().length > 0 && (
           <div>

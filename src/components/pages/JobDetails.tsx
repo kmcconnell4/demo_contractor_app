@@ -8,6 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator
+} from '@/components/ui/dropdown-menu';
 import { 
   ArrowLeft, 
   Search, 
@@ -24,7 +31,12 @@ import {
   ChevronDown,
   ChevronRight,
   ShoppingCart,
-  Heart
+  Star,
+  MoreVertical,
+  Edit,
+  Archive,
+  Trash2,
+  Share
 } from 'lucide-react';
 
 export function JobDetails() {
@@ -60,19 +72,64 @@ export function JobDetails() {
     if (storedStatus) return storedStatus;
     
     // Default status based on job ID
-    return id === '1' ? 'Installation' : id === '3' ? 'Complete' : id === '7' ? 'Complete' : 'Awarded';
+    return id === '1' ? 'Installation' : id === '3' ? 'Complete' : id === '7' ? 'Pending' : id === '4' ? 'Awarded' : 'Installation';
   };
 
-  // Mock job data based on status
+  // Mock job data based on ID
+  const getJobData = () => {
+    const jobs = {
+      '1': {
+        title: 'Downtown Office Complex',
+        location: '450 Market Street, Philadelphia, PA 19106',
+        area: '25,000 sq ft',
+        startDate: '2024-07-15',
+        estimatedCompletion: '2024-08-30',
+        progress: 65
+      },
+      '2': {
+        title: 'Retail Shopping Center', 
+        location: '2750 Cumberland Parkway, Mechanicsburg, PA 17055',
+        area: '15,000 sq ft',
+        startDate: '2024-07-20',
+        estimatedCompletion: '2024-09-15',
+        progress: 40
+      },
+      '3': {
+        title: 'Manufacturing Plant',
+        location: '1500 Industrial Boulevard, Carlisle, PA 17015',
+        area: '50,000 sq ft',
+        startDate: '2024-06-01',
+        estimatedCompletion: '2024-08-15',
+        progress: 100
+      },
+      '4': {
+        title: 'Warehouse Facility',
+        location: '890 Norristown Road, Blue Bell, PA 19422',
+        area: '30,000 sq ft',
+        startDate: '2024-08-20',
+        estimatedCompletion: '2024-10-15',
+        progress: 0
+      },
+      '7': {
+        title: 'New Construction Project',
+        location: '123 Commerce Drive, Carlisle, PA 17013',
+        area: '18,000 sq ft',
+        startDate: '2024-08-25',
+        estimatedCompletion: '2024-11-30',
+        progress: 0
+      }
+    };
+    
+    return jobs[id] || jobs['1']; // Default to job 1 if not found
+  };
+
+  const jobData = getJobData();
+
+  // Mock job data
   const job = {
     id,
-    title: 'Downtown Office Complex',
-    location: '450 Market Street, Philadelphia, PA 19106',
-    status: getJobStatus(),
-    progress: 65,
-    area: '25,000 sq ft',
-    startDate: '2024-07-15',
-    estimatedCompletion: '2024-08-30'
+    ...jobData,
+    status: getJobStatus()
   };
 
   const roofAreas = [
@@ -439,9 +496,6 @@ export function JobDetails() {
                             <div className="flex-1">
                               <h3 className="font-semibold">{doc.name}</h3>
                               <p className="text-sm text-muted-foreground">{doc.size}</p>
-                              {doc.link && (
-                                <p className="text-xs text-primary mt-1">View Specification Sheet</p>
-                              )}
                             </div>
                           </div>
                         </CardContent>
@@ -560,31 +614,6 @@ export function JobDetails() {
       case 'Installation':
         return (
           <div className="space-y-6">
-            {/* Progress */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Progress</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Overall Progress</span>
-                      <span>{job.progress}%</span>
-                    </div>
-                    <Progress value={job.progress} className="h-3" />
-                  </div>
-                  <Button 
-                    className="w-full bg-success hover:bg-success/90 text-success-foreground"
-                    onClick={() => navigate(`/job/${id}/schedule-inspection`)}
-                  >
-                    <CheckCircle size={20} className="mr-2 text-white" />
-                    Mark complete and request inspection
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Roof Areas */}
             <Card>
               <CardHeader>
@@ -1144,9 +1173,6 @@ export function JobDetails() {
                               <div className="flex-1">
                                 <h3 className="font-semibold">{doc.name}</h3>
                                 <p className="text-sm text-muted-foreground">{doc.size}</p>
-                                {doc.link && (
-                                  <p className="text-xs text-primary mt-1">View Specification Sheet</p>
-                                )}
                               </div>
                             </div>
                           </CardContent>
@@ -1267,39 +1293,113 @@ export function JobDetails() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top">
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-4">
+      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
+        <div className="p-4 pb-6">
+          <div className="flex items-center space-x-3 mb-6">
             <Button variant="ghost" size="icon" onClick={() => navigate('/home')} className="text-white hover:bg-white/20">
               <ArrowLeft size={24} />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-white">{job.title}</h1>
-              <div className="flex items-center space-x-3 mt-1">
-                <div className="flex items-center text-white/80">
-                  <MapPin size={16} className="mr-1" />
-                  <span className="text-sm">{job.location}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <h1 className="text-xl font-bold text-white">{job.title}</h1>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => toggleFavorite(job.id)} 
+                    className="h-6 w-6 p-0 hover:bg-transparent"
+                  >
+                    <Star 
+                      size={20} 
+                      className={`transition-colors ${
+                        isFavorite(job.id) 
+                          ? "fill-yellow-500 text-yellow-500 hover:text-[#00509e] hover:fill-[#00509e]" 
+                          : "text-white/80 hover:text-[#00509e]"
+                      }`} 
+                    />
+                  </Button>
                 </div>
-                <Badge className={`${getStatusColor(job.status)} pointer-events-none`}>
-                  {job.status}
-                </Badge>
+                
+                {/* Manage Job Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-8 w-8 p-0 text-white/80 hover:bg-white/20 hover:text-white"
+                    >
+                      <MoreVertical size={20} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <CheckCircle size={16} className="mr-2" />
+                      Mark complete
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      <CalendarIcon size={16} className="mr-2" />
+                      Request inspection
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Share size={16} className="mr-2" />
+                      Share job
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="flex items-center text-white/80 mt-1">
+                <MapPin size={16} className="mr-1" />
+                <span className="text-sm">{job.location}</span>
+              </div>
+              
+              {/* Job Progress Tracker */}
+              <div className="mt-6 mb-1">
+                <div className="flex items-center justify-between">
+                  {['Pending', 'Awarded', 'Installation', 'Complete'].map((status, index) => {
+                    const isActive = job.status === status;
+                    const isCompleted = ['Pending', 'Awarded', 'Installation', 'Complete'].indexOf(job.status) > index;
+                    const isCurrentOrPast = isActive || isCompleted;
+                    
+                    return (
+                      <div key={status} className="flex-1 flex items-center">
+                        <div className="flex flex-col items-center">
+                          {/* Status Circle */}
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                            isCompleted 
+                              ? 'bg-white border-white' 
+                              : isActive 
+                                ? 'bg-white border-white' 
+                                : 'bg-transparent border-white/40'
+                          }`}>
+                            {isCompleted ? (
+                              <CheckCircle size={14} className="text-[#00509e]" />
+                            ) : isActive ? (
+                              <div className="w-2 h-2 bg-[#00509e] rounded-full animate-pulse" />
+                            ) : (
+                              <div className="w-2 h-2 bg-white/40 rounded-full" />
+                            )}
+                          </div>
+                          
+                          {/* Status Label */}
+                          <span className={`text-xs mt-1 font-medium transition-colors ${
+                            isCurrentOrPast ? 'text-white' : 'text-white/60'
+                          }`}>
+                            {status}
+                          </span>
+                        </div>
+                        
+                        {/* Connecting Line */}
+                        {index < 3 && (
+                          <div className={`flex-1 h-0.5 mx-2 transition-colors ${
+                            isCompleted ? 'bg-white' : 'bg-white/30'
+                          }`} />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => toggleFavorite(job.id)} 
-              className="text-white hover:bg-transparent"
-            >
-              <Heart 
-                size={24} 
-                className={`transition-colors ${
-                  isFavorite(job.id) 
-                    ? "fill-red-500 text-red-500 hover:text-[#00509e] hover:fill-[#00509e]" 
-                    : "text-white hover:text-[#00509e]"
-                }`} 
-              />
-            </Button>
           </div>
         </div>
       </div>
