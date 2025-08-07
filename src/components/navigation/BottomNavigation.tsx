@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Search, MessageCircle, Settings } from 'lucide-react';
+import { Home, Search, MessageCircle, Menu } from 'lucide-react';
 
 export function BottomNavigation() {
   const navItems = [
     { path: '/home', icon: Home, label: 'Home' },
     { path: '/search', icon: Search, label: 'Search' },
     { path: '/messages', icon: MessageCircle, label: 'Messages' },
-    { path: '/settings', icon: Settings, label: 'Settings' },
+    { path: '/settings', icon: Menu, label: 'Settings' },
   ];
 
   return (

@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search as SearchIcon, Filter, Mic, MicOff, File, Package, Briefcase } from 'lucide-react';
+import { Search as SearchIcon, Filter, Mic, MicOff, File, Package, Briefcase, Heart } from 'lucide-react';
 
 export function Search() {
   const [searchParams] = useSearchParams();
@@ -15,6 +15,25 @@ export function Search() {
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'all');
   const [sortBy, setSortBy] = useState('relevance');
   const [filterStatus, setFilterStatus] = useState(searchParams.get('status') || 'all');
+  
+  // Favorites state management
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const stored = localStorage.getItem('favorite_jobs');
+    return stored ? JSON.parse(stored) : [];
+  });
+  
+  const toggleFavorite = (jobId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setFavorites(prev => {
+      const newFavorites = prev.includes(jobId)
+        ? prev.filter(id => id !== jobId)
+        : [...prev, jobId];
+      localStorage.setItem('favorite_jobs', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
+  
+  const isFavorite = (jobId: string) => favorites.includes(jobId);
 
   // Mock search results
   const mockResults = {
@@ -228,6 +247,23 @@ export function Search() {
                           </p>
                         )}
                       </div>
+                      {item.type === 'job' && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => toggleFavorite(item.id.toString(), e)}
+                          className="shrink-0 h-8 w-8 hover:bg-transparent"
+                        >
+                          <Heart
+                            size={16}
+                            className={`transition-colors ${
+                              isFavorite(item.id.toString()) 
+                                ? "fill-red-500 text-red-500 hover:text-[#00509e] hover:fill-[#00509e]" 
+                                : "text-muted-foreground hover:text-[#00509e]"
+                            }`}
+                          />
+                        </Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

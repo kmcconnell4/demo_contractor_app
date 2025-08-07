@@ -23,7 +23,8 @@ import {
   Clock,
   ChevronDown,
   ChevronRight,
-  ShoppingCart
+  ShoppingCart,
+  Heart
 } from 'lucide-react';
 
 export function JobDetails() {
@@ -34,6 +35,24 @@ export function JobDetails() {
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showAllOrders, setShowAllOrders] = useState(false);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  
+  // Favorites state management
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const stored = localStorage.getItem('favorite_jobs');
+    return stored ? JSON.parse(stored) : [];
+  });
+  
+  const toggleFavorite = (jobId: string) => {
+    setFavorites(prev => {
+      const newFavorites = prev.includes(jobId)
+        ? prev.filter(id => id !== jobId)
+        : [...prev, jobId];
+      localStorage.setItem('favorite_jobs', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
+  
+  const isFavorite = (jobId: string) => favorites.includes(jobId);
 
   // Check if job status has been updated in localStorage
   const getJobStatus = () => {
@@ -371,7 +390,7 @@ export function JobDetails() {
                 {!showAllOrders && orders.length > 5 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
-                      Show more ({orders.length - 5} more orders)
+                      Show more
                     </Button>
                   </div>
                 )}
@@ -649,7 +668,7 @@ export function JobDetails() {
                   {!showAllOrders && orders.length > 5 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
-                        Show more ({orders.length - 5} more orders)
+                        Show more
                       </Button>
                     </div>
                   )}
@@ -1076,7 +1095,7 @@ export function JobDetails() {
                   {!showAllOrders && orders.length > 5 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
-                        Show more ({orders.length - 5} more orders)
+                        Show more
                       </Button>
                     </div>
                   )}
@@ -1266,6 +1285,21 @@ export function JobDetails() {
                 </Badge>
               </div>
             </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => toggleFavorite(job.id)} 
+              className="text-white hover:bg-transparent"
+            >
+              <Heart 
+                size={24} 
+                className={`transition-colors ${
+                  isFavorite(job.id) 
+                    ? "fill-red-500 text-red-500 hover:text-[#00509e] hover:fill-[#00509e]" 
+                    : "text-white hover:text-[#00509e]"
+                }`} 
+              />
+            </Button>
           </div>
         </div>
       </div>

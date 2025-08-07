@@ -4,11 +4,30 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Search, Calendar, MapPin } from 'lucide-react';
+import { Search, Calendar, MapPin, Heart } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Favorites state management
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const stored = localStorage.getItem('favorite_jobs');
+    return stored ? JSON.parse(stored) : [];
+  });
+  
+  const toggleFavorite = (jobId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setFavorites(prev => {
+      const newFavorites = prev.includes(jobId)
+        ? prev.filter(id => id !== jobId)
+        : [...prev, jobId];
+      localStorage.setItem('favorite_jobs', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
+  
+  const isFavorite = (jobId: string) => favorites.includes(jobId);
 
   // Helper function to get updated job status
   const getJobStatus = (jobId: string, defaultStatus: string) => {
@@ -58,9 +77,26 @@ export function Home() {
         <div className="space-y-3">
           <div className="flex justify-between items-start">
             <h3 className="font-semibold text-card-foreground">{job.title}</h3>
-            <Badge className={`${getStatusColor(job.status)} pointer-events-none`}>
-              {job.status}
-            </Badge>
+            <div className="flex items-center space-x-2">
+              <Button 
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 p-0 hover:bg-transparent"
+                onClick={(e) => toggleFavorite(job.id, e)}
+              >
+                <Heart 
+                  size={18} 
+                  className={`transition-colors ${
+                    isFavorite(job.id) 
+                      ? 'fill-red-500 text-red-500 hover:text-[#00509e] hover:fill-[#00509e]' 
+                      : 'text-muted-foreground hover:text-[#00509e]'
+                  }`} 
+                />
+              </Button>
+              <Badge className={`${getStatusColor(job.status)} pointer-events-none`}>
+                {job.status}
+              </Badge>
+            </div>
           </div>
           
           <div className="flex items-center text-sm text-muted-foreground">
