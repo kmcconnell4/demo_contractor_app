@@ -36,6 +36,20 @@ export function Home() {
     return storedStatus || defaultStatus;
   };
 
+  // Dynamic greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    const name = "Chris";
+    
+    if (hour < 12) {
+      return `Good morning, ${name}!`;
+    } else if (hour < 17) {
+      return `Good afternoon, ${name}!`;
+    } else {
+      return `Good evening, ${name}!`;
+    }
+  };
+
   // Mock data for jobs
   const jobs = {
     pending: [
@@ -154,13 +168,13 @@ export function Home() {
             <div className="flex items-center justify-between">
               <Avatar 
                 className="h-10 w-10 cursor-pointer" 
-                onClick={() => navigate('/settings')}
+                onClick={() => navigate('/profile')}
               >
                 <AvatarImage src="/Chris-profile.jpeg" alt="Chris Profile" />
                 <AvatarFallback className="bg-white/20 text-white">C</AvatarFallback>
               </Avatar>
               <div className="flex-1 ml-4">
-                <h1 className="text-xl font-bold text-white">Good morning Chris!</h1>
+                <h1 className="text-xl font-bold text-white">{getGreeting()}</h1>
                 <div className="flex items-center text-white/80 text-sm mt-1">
                   <span>Carlisle, PA • 72°F</span>
                   <CloudSun size={16} className="ml-2" />

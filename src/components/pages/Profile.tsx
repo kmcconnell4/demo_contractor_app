@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
@@ -23,36 +22,28 @@ export function Profile() {
     location: 'Carlisle, PA'
   });
 
-  const [preferences, setPreferences] = useState({
-    language: 'en'
-  });
-
-  const languages = [
-    { value: 'en', label: 'English' },
-    { value: 'es', label: 'Español' },
-    { value: 'fr-ca', label: 'Français (Canada)' },
-  ];
-
   return (
     <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top">
         <div className="p-4">
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/settings')} className="text-white hover:bg-white/20">
-              <ArrowLeft size={24} />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/settings')} className="text-white hover:bg-white/20">
+                <ArrowLeft size={24} />
+              </Button>
+              <h1 className="text-xl font-bold text-white">Edit Profile</h1>
+            </div>
+            <Button variant="ghost" className="text-white hover:bg-white/20">
+              Save
             </Button>
-            <h1 className="text-xl font-bold text-white">Profile</h1>
           </div>
         </div>
       </div>
 
       <div className="p-4 space-y-6 pb-20">
         <Card>
-          <CardHeader>
-            <CardTitle>Profile</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-4">
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <Avatar className="h-20 w-20">
@@ -123,28 +114,7 @@ export function Profile() {
                   onChange={(e) => setProfile(prev => ({ ...prev, location: e.target.value }))}
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label>Language</Label>
-                <Select 
-                  value={preferences.language} 
-                  onValueChange={(value) => setPreferences(prev => ({ ...prev, language: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {languages.map((lang) => (
-                      <SelectItem key={lang.value} value={lang.value}>
-                        {lang.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
-
-            <Button className="w-full">Update Profile</Button>
           </CardContent>
         </Card>
       </div>

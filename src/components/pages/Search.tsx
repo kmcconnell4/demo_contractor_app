@@ -134,7 +134,7 @@ export function Search() {
                 placeholder="Search documents, products, or jobs..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-10 pr-12 h-12"
+                className="pl-10 pr-12 h-12 rounded-full"
               />
               <SearchIcon size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Button
