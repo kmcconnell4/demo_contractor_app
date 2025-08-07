@@ -46,7 +46,6 @@ export function JobDetails() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showAllOrders, setShowAllOrders] = useState(false);
-  const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
   
   // Favorites state management
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -359,14 +358,29 @@ export function JobDetails() {
     }
   };
 
-  const toggleOrderExpansion = (orderId: string) => {
-    const newExpanded = new Set(expandedOrders);
-    if (newExpanded.has(orderId)) {
-      newExpanded.delete(orderId);
-    } else {
-      newExpanded.add(orderId);
+  // Helper function to get product images based on product names
+  const getProductImages = (products: any[]) => {
+    const productImageMap: { [key: string]: string } = {
+      'Sure-Seal EPDM Membrane': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Membranes/EPDM/sure-seal-epdm-membrane.jpg',
+      'SecurShield HD Polyiso': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Insulation/securshield-hd-polyiso.jpg',
+      'FAST Adhesive': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Adhesives/fast-adhesive.jpg',
+      'Sure-Seal Lap Sealant': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Sealants/sure-seal-lap-sealant.jpg',
+      'Pressure-Sensitive Walkway': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Accessories/walkway-pads.jpg',
+      'Sure-Weld Splicing': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Adhesives/sure-weld-splicing-cement.jpg',
+      'Seam Tape': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Accessories/seam-tape.jpg',
+      'Edge Metal': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Accessories/edge-metal.jpg',
+      'Heavy-Duty Fasteners': 'https://www.carlislesyntec.com/-/media/Project/SynTec/Images/Products/Accessories/fasteners.jpg'
+    };
+
+    // Get the first matching product image, fallback to a generic product image
+    for (const product of products.slice(0, 3)) { // Show up to 3 product images
+      for (const [key, image] of Object.entries(productImageMap)) {
+        if (product.name.includes(key)) {
+          return image;
+        }
+      }
     }
-    setExpandedOrders(newExpanded);
+    return '/placeholder.jpg'; // Fallback to placeholder
   };
 
   // Comprehensive documents array for Installation case with categories
@@ -403,12 +417,22 @@ export function JobDetails() {
             <CardContent>
               <div className="space-y-3">
                 {(showAllOrders ? orders : orders.slice(0, 5)).map((order) => (
-                  <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => toggleOrderExpansion(order.id)}>
+                  <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
-                            <Package size={20} className="text-primary" />
+                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                              <img 
+                                src={getProductImages(order.products)} 
+                                alt="Product preview"
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = '/placeholder.jpg';
+                                }}
+                              />
+                            </div>
                             <div>
                               <h3 className="font-semibold">{order.orderNumber}</h3>
                               <p className="text-sm text-muted-foreground">
@@ -416,30 +440,8 @@ export function JobDetails() {
                               </p>
                             </div>
                           </div>
-                          <Badge className={`${getOrderStatusColor(order.status)} pointer-events-none`}>
-                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                          </Badge>
+                          <ChevronRight size={20} className="text-muted-foreground" />
                         </div>
-
-                        {expandedOrders.has(order.id) && (
-                          <div className="border-t pt-3 mt-3">
-                            <div className="space-y-2 mb-3">
-                              {order.products.map((product, index) => (
-                                <div key={index} className="flex justify-between items-center text-sm">
-                                  <div className="flex-1">
-                                    <p className="font-medium">{product.name}</p>
-                                    <p className="text-muted-foreground">Qty: {product.quantity} @ {product.unitPrice}</p>
-                                  </div>
-                                  <span className="font-semibold">{product.total}</span>
-                                </div>
-                              ))}
-                            </div>
-                            <div className="flex justify-between items-center pt-2 border-t">
-                              <span className="text-sm font-semibold">Order Total</span>
-                              <span className="text-sm font-semibold">{order.totalAmount}</span>
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -653,12 +655,22 @@ export function JobDetails() {
               <CardContent>
                 <div className="space-y-3">
                   {(showAllOrders ? orders : orders.slice(0, 5)).map((order) => (
-                    <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => toggleOrderExpansion(order.id)}>
+                    <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
                       <CardContent className="p-4">
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <Package size={20} className="text-primary" />
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                                <img 
+                                  src={getProductImages(order.products)} 
+                                  alt="Product preview"
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = '/placeholder.jpg';
+                                  }}
+                                />
+                              </div>
                               <div>
                                 <h3 className="font-semibold">{order.orderNumber}</h3>
                                 <p className="text-sm text-muted-foreground">
@@ -666,30 +678,8 @@ export function JobDetails() {
                                 </p>
                               </div>
                             </div>
-                            <Badge className={`${getOrderStatusColor(order.status)} pointer-events-none`}>
-                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                            </Badge>
+                            <ChevronRight size={20} className="text-muted-foreground" />
                           </div>
-
-                          {expandedOrders.has(order.id) && (
-                            <div className="border-t pt-3 mt-3">
-                              <div className="space-y-2 mb-3">
-                                {order.products.map((product, index) => (
-                                  <div key={index} className="flex justify-between items-center text-sm">
-                                    <div className="flex-1">
-                                      <p className="font-medium">{product.name}</p>
-                                      <p className="text-muted-foreground">Qty: {product.quantity} @ {product.unitPrice}</p>
-                                    </div>
-                                    <span className="font-semibold">{product.total}</span>
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="flex justify-between items-center pt-2 border-t">
-                                <span className="text-sm font-semibold">Order Total</span>
-                                <span className="text-sm font-semibold">{order.totalAmount}</span>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </CardContent>
                     </Card>
@@ -1080,12 +1070,22 @@ export function JobDetails() {
               <CardContent>
                 <div className="space-y-3">
                   {(showAllOrders ? orders : orders.slice(0, 5)).map((order) => (
-                    <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => toggleOrderExpansion(order.id)}>
+                    <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
                       <CardContent className="p-4">
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <Package size={20} className="text-primary" />
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                                <img 
+                                  src={getProductImages(order.products)} 
+                                  alt="Product preview"
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = '/placeholder.jpg';
+                                  }}
+                                />
+                              </div>
                               <div>
                                 <h3 className="font-semibold">{order.orderNumber}</h3>
                                 <p className="text-sm text-muted-foreground">
@@ -1093,30 +1093,8 @@ export function JobDetails() {
                                 </p>
                               </div>
                             </div>
-                            <Badge className={`${getOrderStatusColor(order.status)} pointer-events-none`}>
-                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                            </Badge>
+                            <ChevronRight size={20} className="text-muted-foreground" />
                           </div>
-
-                          {expandedOrders.has(order.id) && (
-                            <div className="border-t pt-3 mt-3">
-                              <div className="space-y-2 mb-3">
-                                {order.products.map((product, index) => (
-                                  <div key={index} className="flex justify-between items-center text-sm">
-                                    <div className="flex-1">
-                                      <p className="font-medium">{product.name}</p>
-                                      <p className="text-muted-foreground">Qty: {product.quantity} @ {product.unitPrice}</p>
-                                    </div>
-                                    <span className="font-semibold">{product.total}</span>
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="flex justify-between items-center pt-2 border-t">
-                                <span className="text-sm font-semibold">Order Total</span>
-                                <span className="text-sm font-semibold">{order.totalAmount}</span>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </CardContent>
                     </Card>

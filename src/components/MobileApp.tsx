@@ -11,6 +11,7 @@ import { JobDetails } from './pages/JobDetails';
 import { InstallationDetails } from './pages/InstallationDetails';
 import { ScheduleInspection } from './pages/ScheduleInspection';
 import { ProductDetails } from './pages/ProductDetails';
+import { OrderDetails } from './pages/OrderDetails';
 import { BottomNavigation } from './navigation/BottomNavigation';
 
 function AppRoutes() {
@@ -30,7 +31,8 @@ function AppRoutes() {
   const hideNavigation = ['/', '/login', '/onboarding', '/profile'].includes(location.pathname) || 
                         location.pathname.startsWith('/job/') || 
                         location.pathname.startsWith('/installation/') || 
-                        location.pathname.startsWith('/product/');
+                        location.pathname.startsWith('/product/') ||
+                        location.pathname.startsWith('/order/');
 
   if (isFirstTime) {
     return <Onboarding onComplete={() => setIsFirstTime(false)} />;
@@ -54,6 +56,7 @@ function AppRoutes() {
             <Route path="/job/:id/schedule-inspection" element={<ScheduleInspection />} />
             <Route path="/installation/:id/:area" element={<InstallationDetails />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
         </Routes>
       </div>
 
