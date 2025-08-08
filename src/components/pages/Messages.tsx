@@ -110,7 +110,7 @@ export function Messages() {
       {/* Header */}
       <div className="bg-surface border-b border-border safe-top">
         <div className="p-4">
-          <h1 className="text-xl font-bold mb-3">Messages</h1>
+          <h1 className="text-2xl font-bold mb-3">Messages</h1>
           
           {/* Search */}
           <div className="relative">
@@ -197,7 +197,7 @@ export function Messages() {
                     ←
                   </Button>
                   <div>
-                    <h2 className="font-semibold">
+                    <h2 className="text-xl font-semibold">
                       {chats.find(c => c.id === selectedChat)?.name}
                     </h2>
                     <p className="text-xs text-muted-foreground">

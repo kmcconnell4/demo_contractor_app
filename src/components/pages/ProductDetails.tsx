@@ -90,7 +90,7 @@ export function ProductDetails() {
               <ArrowLeft size={24} />
             </Button>
             <div>
-              <h1 className="text-xl font-bold">Product Details</h1>
+              <h1 className="text-2xl font-bold">Product Details</h1>
               <p className="text-sm text-muted-foreground">{product.category}</p>
             </div>
           </div>
@@ -115,7 +115,7 @@ export function ProductDetails() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h2 className="text-xl font-bold">{product.name}</h2>
+                    <h2 className="text-xl font-semibold">{product.name}</h2>
                     <p className="text-muted-foreground">{product.manufacturer}</p>
                   </div>
                   <Badge className="bg-primary text-primary-foreground">
@@ -141,7 +141,7 @@ export function ProductDetails() {
 
               {/* Features */}
               <div className="space-y-2">
-                <h3 className="font-semibold">Key Features</h3>
+                <h2 className="text-xl font-semibold">Key Features</h2>
                 <div className="flex flex-wrap gap-2">
                   {product.features.map((feature, index) => (
                     <Badge key={index} variant="secondary" className="text-xs">
@@ -166,10 +166,10 @@ export function ProductDetails() {
               </TabsList>
 
               <TabsContent value="specs" className="p-4 space-y-4">
-                <h3 className="font-semibold flex items-center">
+                <h2 className="text-xl font-semibold flex items-center">
                   <Thermometer size={20} className="mr-2" />
                   Technical Specifications
-                </h3>
+                </h2>
                 <div className="space-y-1">
                   <SpecRow label="Thickness" value={product.specifications.thickness} />
                   <SpecRow label="Width" value={product.specifications.width} />
@@ -182,10 +182,10 @@ export function ProductDetails() {
               </TabsContent>
 
               <TabsContent value="benefits" className="p-4 space-y-4">
-                <h3 className="font-semibold flex items-center">
+                <h2 className="text-xl font-semibold flex items-center">
                   <Shield size={20} className="mr-2" />
                   Features & Benefits
-                </h3>
+                </h2>
                 <div className="space-y-3">
                   {product.benefits.map((benefit, index) => (
                     <div key={index} className="flex items-start space-x-2">
@@ -197,10 +197,10 @@ export function ProductDetails() {
               </TabsContent>
 
               <TabsContent value="install" className="p-4 space-y-4">
-                <h3 className="font-semibold flex items-center">
+                <h2 className="text-xl font-semibold flex items-center">
                   <Zap size={20} className="mr-2" />
                   Installation Instructions
-                </h3>
+                </h2>
                 <div className="space-y-3">
                   {product.installationSteps.map((step, index) => (
                     <div key={index} className="flex items-start space-x-3">
@@ -226,10 +226,10 @@ export function ProductDetails() {
               </TabsContent>
 
               <TabsContent value="docs" className="p-4 space-y-4">
-                <h3 className="font-semibold flex items-center">
+                <h2 className="text-xl font-semibold flex items-center">
                   <Download size={20} className="mr-2" />
                   Documentation
-                </h3>
+                </h2>
                 <div className="space-y-3">
                   {product.documents.map((doc, index) => (
                     <Button key={index} variant="outline" className="w-full justify-between">

@@ -93,7 +93,7 @@ export function ScheduleInspection() {
               <ArrowLeft size={24} />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-white">Request Inspection</h1>
+              <h1 className="text-2xl font-bold text-white">Request Inspection</h1>
               <p className="text-white/80 text-sm">Select your preferred dates and times</p>
             </div>
           </div>

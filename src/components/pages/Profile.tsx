@@ -32,7 +32,7 @@ export function Profile() {
               <Button variant="ghost" size="icon" onClick={() => navigate('/settings')} className="text-white hover:bg-white/20">
                 <ArrowLeft size={24} />
               </Button>
-              <h1 className="text-xl font-bold text-white">Edit Profile</h1>
+              <h1 className="text-2xl font-bold text-white">Edit Profile</h1>
             </div>
             <Button variant="ghost" className="text-white hover:bg-white/20">
               Save

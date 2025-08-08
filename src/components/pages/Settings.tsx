@@ -67,7 +67,7 @@ export function Settings() {
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="p-4">
-          <h1 className="text-xl font-bold text-white">Settings</h1>
+          <h1 className="text-2xl font-bold text-white">Settings</h1>
           <p className="text-white/80">Manage your account and preferences</p>
         </div>
       </div>

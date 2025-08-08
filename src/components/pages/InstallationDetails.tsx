@@ -146,7 +146,7 @@ export function InstallationDetails() {
               <ArrowLeft size={24} />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-white">Roof Area {area}</h1>
+              <h1 className="text-2xl font-bold text-white">Roof Area {area}</h1>
               <p className="text-white/80 text-sm">
                 {completedSteps} of {installationSteps.length} steps completed
               </p>

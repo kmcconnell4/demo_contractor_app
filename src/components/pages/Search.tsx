@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search as SearchIcon, Filter, Mic, MicOff, File, Package, Briefcase, Heart } from 'lucide-react';
+import { Search as SearchIcon, Filter, Mic, MicOff, File, Package, Briefcase, Heart, Star } from 'lucide-react';
 
 export function Search() {
   const [searchParams] = useSearchParams();
@@ -48,9 +48,23 @@ export function Search() {
       { id: 6, type: 'product', title: 'TPO Membrane 45 mil', category: 'Membrane', code: 'TPO-45-WHT' },
     ],
     jobs: [
-      { id: 7, type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation' },
-      { id: 8, type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Pending' },
-      { id: 9, type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete' },
+      // Pending jobs
+      { id: 7, type: 'job', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: 'Pending' },
+      
+      // In Progress jobs
+      { id: 2, type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Installation' },
+      { id: 9, type: 'job', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: 'Installation' },
+      { id: 1, type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation' },
+      { id: 10, type: 'job', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: 'Installation' },
+      { id: 4, type: 'job', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: 'Awarded' },
+      { id: 11, type: 'job', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: 'Installation' },
+      { id: 12, type: 'job', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: 'Installation' },
+      
+      // Completed jobs
+      { id: 8, type: 'job', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: 'Complete' },
+      { id: 3, type: 'job', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: 'Complete' },
+      { id: 6, type: 'job', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: 'Complete' },
+      { id: 5, type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete' },
     ]
   };
 
@@ -228,55 +242,59 @@ export function Search() {
                     <div className="flex items-start space-x-3">
                       {getItemIcon(item.type)}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-card-foreground truncate">
-                          {item.title}
-                        </h3>
-                        
-                        <div className="flex items-center space-x-2 mt-1">
-                          {'category' in item && (
-                            <Badge variant="outline" className="text-xs">
-                              {item.category}
-                            </Badge>
-                          )}
-                          {'status' in item && (
-                            <Badge variant="outline" className="text-xs">
-                              {item.status}
-                            </Badge>
-                          )}
-                          {'location' in item && (
-                            <span className="text-sm text-muted-foreground">
-                              {item.location.replace(/, [A-Z]{2} \d{5}/, '')}
-                            </span>
-                          )}
-                          {'code' in item && (
-                            <span className="text-sm text-muted-foreground">
-                              {item.code}
-                            </span>
-                          )}
-                          {'size' in item && (
-                            <span className="text-sm text-muted-foreground">
-                              {item.size}
-                            </span>
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-semibold text-card-foreground truncate">
+                            {item.title}
+                          </h3>
+                          {item.type === 'job' && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => toggleFavorite(item.id.toString(), e)}
+                              className="shrink-0 h-6 w-6 hover:bg-transparent"
+                            >
+                              <Star
+                                size={14}
+                                className={`transition-colors ${
+                                  isFavorite(item.id.toString()) 
+                                    ? "fill-yellow-500 text-yellow-500" 
+                                    : "text-muted-foreground hover:text-yellow-500"
+                                }`}
+                              />
+                            </Button>
                           )}
                         </div>
+                        
+                        <div className="flex items-start justify-between mt-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {'status' in item && (
+                              <Badge variant="outline" className="text-xs">
+                                {item.status}
+                              </Badge>
+                            )}
+                            {'category' in item && (
+                              <Badge variant="outline" className="text-xs">
+                                {item.category}
+                              </Badge>
+                            )}
+                            {'location' in item && (
+                              <span className="text-sm text-muted-foreground leading-relaxed">
+                                {item.location.replace(/, [A-Z]{2} \d{5}/, '')}
+                              </span>
+                            )}
+                            {'code' in item && (
+                              <span className="text-sm text-muted-foreground">
+                                {item.code}
+                              </span>
+                            )}
+                            {'size' in item && (
+                              <span className="text-sm text-muted-foreground">
+                                {item.size}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      {item.type === 'job' && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={(e) => toggleFavorite(item.id.toString(), e)}
-                          className="shrink-0 h-8 w-8 hover:bg-transparent"
-                        >
-                          <Heart
-                            size={16}
-                            className={`transition-colors ${
-                              isFavorite(item.id.toString()) 
-                                ? "fill-red-500 text-red-500 hover:text-[#00509e] hover:fill-[#00509e]" 
-                                : "text-muted-foreground hover:text-[#00509e]"
-                            }`}
-                          />
-                        </Button>
-                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -286,9 +304,9 @@ export function Search() {
             {getFilteredResults().length === 0 && (
               <div className="text-center py-12">
                 <SearchIcon size={48} className="mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium text-muted-foreground">
+                <h2 className="text-xl font-semibold text-muted-foreground">
                   No results found
-                </h3>
+                </h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   Try adjusting your search terms or filters
                 </p>

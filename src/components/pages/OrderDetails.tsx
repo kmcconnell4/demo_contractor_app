@@ -85,7 +85,7 @@ export function OrderDetails() {
               <ArrowLeft size={24} />
             </Button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-white">Order Details</h1>
+              <h1 className="text-2xl font-bold text-white">Order Details</h1>
               <div className="flex items-center space-x-2">
                 <p className="text-white/80 text-sm">{order.orderNumber}</p>
                 <span className="text-white/60 text-sm">•</span>
