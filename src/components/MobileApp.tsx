@@ -28,11 +28,7 @@ function AppRoutes() {
   }, []);
 
   // Hide navigation on specific pages
-  const hideNavigation = ['/', '/login', '/onboarding', '/profile'].includes(location.pathname) || 
-                        location.pathname.startsWith('/job/') || 
-                        location.pathname.startsWith('/installation/') || 
-                        location.pathname.startsWith('/product/') ||
-                        location.pathname.startsWith('/order/');
+  const hideNavigation = ['/', '/login', '/onboarding'].includes(location.pathname);
 
   if (isFirstTime) {
     return <Onboarding onComplete={() => setIsFirstTime(false)} />;

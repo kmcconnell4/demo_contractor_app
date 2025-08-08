@@ -80,10 +80,10 @@ export function OrderDetails() {
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="p-4 pb-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-white hover:bg-white/20">
-              <ArrowLeft size={24} />
-            </Button>
+          <div className="flex items-start space-x-3 mb-4">
+            <button onClick={() => navigate(-1)} className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white mt-1">
+              <ArrowLeft size={20} />
+            </button>
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-white">Order Details</h1>
               <div className="flex items-center space-x-2">

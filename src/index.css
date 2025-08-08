@@ -160,7 +160,7 @@
   
   /* Mobile safe areas */
   .safe-top {
-    padding-top: calc(env(safe-area-inset-top) + 1rem);
+    padding-top: calc(env(safe-area-inset-top) + 2rem);
   }
   
   .safe-bottom {
@@ -203,5 +203,18 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;             /* Chrome, Safari and Opera */
+  }
+  
+  /* Global heading spacing */
+  h1, h2 {
+    padding-top: 1.5rem; /* pt-6 equivalent */
+  }
+  
+  /* Exception for headings in specific containers that already have their own spacing */
+  .bg-gradient-primary-two-color h1,
+  .bg-gradient-primary-two-color h2,
+  header h1,
+  header h2 {
+    padding-top: 0;
   }
 }

@@ -98,10 +98,10 @@ export function Create() {
       {/* Header */}
       <div className="bg-surface border-b border-border safe-top">
         <div className="p-4">
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/home')}>
-              <ArrowLeft size={24} />
-            </Button>
+          <div className="flex items-start space-x-3">
+            <button onClick={() => navigate('/home')} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors mt-1">
+              <ArrowLeft size={20} />
+            </button>
             <div>
               <h1 className="text-2xl font-bold">Request Quote</h1>
               <p className="text-sm text-muted-foreground">Step {step} of 4</p>
