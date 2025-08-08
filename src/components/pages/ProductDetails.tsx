@@ -97,7 +97,7 @@ export function ProductDetails() {
         </div>
       </div>
 
-      <div className="p-4 space-y-6 pb-20">
+      <div className="p-4 space-y-8 pb-20">
         {/* Product Header */}
         <Card>
           <CardContent className="p-4">

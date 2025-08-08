@@ -81,7 +81,7 @@ export function ScheduleInspection() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top">
+      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="p-4">
           <div className="flex items-center space-x-3 mb-4">
             <Button 
@@ -100,7 +100,7 @@ export function ScheduleInspection() {
         </div>
       </div>
 
-      <div className="p-4 space-y-6 pb-20">
+      <div className="pt-8 px-4 space-y-8 pb-20">
         {/* Date Selection */}
         <Card>
           <CardHeader>

@@ -408,7 +408,7 @@ export function JobDetails() {
     switch (job.status) {
       case 'Awarded':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
           {/* Orders */}
           <Card>
             <CardHeader>
@@ -615,7 +615,7 @@ export function JobDetails() {
 
       case 'Installation':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Roof Areas */}
             <Card>
               <CardHeader>
@@ -1382,7 +1382,7 @@ export function JobDetails() {
         </div>
       </div>
 
-      <div className="p-4 pb-20">
+      <div className="pt-8 px-4 pb-20">
         {renderContent()}
       </div>
     </div>

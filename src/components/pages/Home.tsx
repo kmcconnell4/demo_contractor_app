@@ -159,7 +159,7 @@ export function Home() {
                 <AvatarFallback className="bg-white/20 text-white">C</AvatarFallback>
               </Avatar>
               <div className="flex-1 ml-4">
-                <h1 className="text-xl font-bold text-white">{getGreeting()}</h1>
+                <h1 className="text-2xl font-bold text-white">{getGreeting()}</h1>
                 <div className="flex items-center text-white/80 text-sm">
                   <span>Carlisle, PA • 72°F</span>
                   <CloudSun size={16} className="ml-2" />
@@ -183,65 +183,167 @@ export function Home() {
       </div>
 
       {/* Job Dashboard */}
-      <div className="p-4 space-y-6 pb-20">
+      <div className="pt-8 px-4 space-y-8 pb-20">
         {/* Favorited Jobs */}
         {getFavoriteJobs().length > 0 && (
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">Favorite Jobs</h2>
-              <Badge variant="secondary">{getFavoriteJobs().length}</Badge>
+            <div className="mb-3">
+              <h2 className="text-lg font-semibold">Favorites</h2>
             </div>
-            <div className="space-y-3">
+            <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {getFavoriteJobs().map((job) => (
-                <JobCard key={job.id} job={job} section="favorites" />
+                <Card 
+                  key={job.id}
+                  className="cursor-pointer transition-material hover:elevation-2 min-w-[280px] flex-shrink-0"
+                  onClick={() => navigate(`/job/${job.id}`)}
+                >
+                  <div className="relative">
+                    <img 
+                      src="/placeholder.jpg" 
+                      alt={job.title}
+                      className="w-full h-40 object-cover rounded-t-lg"
+                    />
+                    <Button 
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8 bg-white/80 hover:bg-white backdrop-blur-sm"
+                      onClick={(e) => toggleFavorite(job.id, e)}
+                    >
+                      <Star 
+                        size={16} 
+                        className={`transition-colors ${
+                          isFavorite(job.id) 
+                            ? 'fill-yellow-500 text-yellow-500' 
+                            : 'text-gray-600'
+                        }`} 
+                      />
+                    </Button>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-card-foreground mb-1">{job.title}</h3>
+                    <div className="flex items-center text-sm text-muted-foreground mb-2">
+                      <MapPin size={14} className="mr-1 flex-shrink-0" />
+                      <p>{job.location}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-xs">
+                        {getJobStatus(job.id, job.status)}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
         )}
 
-        {/* Job Status Tabs */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3">My Jobs</h2>
-          <Tabs defaultValue="inProgress" className="w-full">
-            <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-              <TabsTrigger 
-                value="inProgress" 
-                className="flex items-center space-x-2 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary"
-              >
-                <span>In Progress</span>
-                <Badge variant="secondary" className="ml-2">{jobs.inProgress.length}</Badge>
-              </TabsTrigger>
-              <TabsTrigger 
-                value="completed" 
-                className="flex items-center space-x-2 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary"
-              >
-                <span>Completed</span>
-                <Badge variant="secondary" className="ml-2">{jobs.completed.length}</Badge>
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="inProgress" className="space-y-3 mt-4">
+        {/* In Progress Jobs */}
+        {jobs.inProgress.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold">In Progress</h2>
+              <button className="text-sm text-primary font-medium">View all jobs</button>
+            </div>
+            <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {jobs.inProgress.map((job) => (
-                <JobCard key={job.id} job={job} section="inProgress" />
-              ))}
-            </TabsContent>
-            
-            <TabsContent value="completed" className="space-y-3 mt-4">
-              {jobs.completed.map((job) => (
-                <JobCard key={job.id} job={job} section="completed" />
-              ))}
-              <div className="mt-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => navigate('/search?tab=jobs&status=complete')}
+                <Card 
+                  key={job.id}
+                  className="cursor-pointer transition-material hover:elevation-2 min-w-[280px] flex-shrink-0"
+                  onClick={() => navigate(`/job/${job.id}`)}
                 >
-                  View all completed jobs
-                </Button>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+                  <div className="relative">
+                    <img 
+                      src="/placeholder.jpg" 
+                      alt={job.title}
+                      className="w-full h-40 object-cover rounded-t-lg"
+                    />
+                    <Button 
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8 bg-white/80 hover:bg-white backdrop-blur-sm"
+                      onClick={(e) => toggleFavorite(job.id, e)}
+                    >
+                      <Star 
+                        size={16} 
+                        className={`transition-colors ${
+                          isFavorite(job.id) 
+                            ? 'fill-yellow-500 text-yellow-500' 
+                            : 'text-gray-600'
+                        }`} 
+                      />
+                    </Button>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-card-foreground mb-1">{job.title}</h3>
+                    <div className="flex items-center text-sm text-muted-foreground mb-2">
+                      <MapPin size={14} className="mr-1 flex-shrink-0" />
+                      <p>{job.location}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-xs">
+                        {getJobStatus(job.id, job.status)}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Recently Completed Jobs */}
+        {jobs.completed.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold">Recently Completed</h2>
+              <button className="text-sm text-primary font-medium">View all jobs</button>
+            </div>
+            <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+              {jobs.completed.map((job) => (
+                <Card 
+                  key={job.id}
+                  className="cursor-pointer transition-material hover:elevation-2 min-w-[280px] flex-shrink-0"
+                  onClick={() => navigate(`/job/${job.id}`)}
+                >
+                  <div className="relative">
+                    <img 
+                      src="/placeholder.jpg" 
+                      alt={job.title}
+                      className="w-full h-40 object-cover rounded-t-lg"
+                    />
+                    <Button 
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8 bg-white/80 hover:bg-white backdrop-blur-sm"
+                      onClick={(e) => toggleFavorite(job.id, e)}
+                    >
+                      <Star 
+                        size={16} 
+                        className={`transition-colors ${
+                          isFavorite(job.id) 
+                            ? 'fill-yellow-500 text-yellow-500' 
+                            : 'text-gray-600'
+                        }`} 
+                      />
+                    </Button>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-card-foreground mb-1">{job.title}</h3>
+                    <div className="flex items-center text-sm text-muted-foreground mb-2">
+                      <MapPin size={14} className="mr-1 flex-shrink-0" />
+                      <p>{job.location}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-xs">
+                        {getJobStatus(job.id, job.status)}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

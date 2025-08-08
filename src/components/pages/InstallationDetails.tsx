@@ -155,7 +155,7 @@ export function InstallationDetails() {
         </div>
       </div>
 
-      <div className="p-4 pb-20">
+      <div className="pt-8 px-4 pb-20">
         <div className="space-y-4">
           {installationSteps.map((step) => (
             <Collapsible 

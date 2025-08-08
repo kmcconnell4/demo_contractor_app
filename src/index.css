@@ -12,7 +12,7 @@
     --primary-foreground: 0 0% 100%;
     
     /* Surface colors */
-    --background: 0 0% 98%;
+    --background: 213 50% 96%;
     --surface: 0 0% 100%;
     --surface-variant: 220 15% 96%;
     --foreground: 213 15% 15%;
@@ -75,7 +75,7 @@
   }
 
   .dark {
-    --background: 213 25% 8%;
+    --background: 213 35% 12%;
     --surface: 213 20% 12%;
     --surface-variant: 213 15% 16%;
     --foreground: 0 0% 95%;
@@ -160,7 +160,7 @@
   
   /* Mobile safe areas */
   .safe-top {
-    padding-top: env(safe-area-inset-top);
+    padding-top: calc(env(safe-area-inset-top) + 1rem);
   }
   
   .safe-bottom {
@@ -193,5 +193,15 @@
   /* Gradient backgrounds */
   .bg-gradient-primary-two-color {
     background: var(--gradient-primary-two-color);
+  }
+  
+  /* Hide scrollbars for horizontal scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari and Opera */
   }
 }

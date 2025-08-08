@@ -106,7 +106,7 @@ export function OrderDetails() {
         </div>
       </div>
 
-      <div className="p-4 pb-20 space-y-6">
+      <div className="pt-8 px-4 pb-20 space-y-8">
         {/* Order Information */}
         <Card>
           <CardHeader>

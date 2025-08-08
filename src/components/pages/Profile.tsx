@@ -41,7 +41,7 @@ export function Profile() {
         </div>
       </div>
 
-      <div className="p-4 space-y-6 pb-20">
+      <div className="p-4 space-y-8 pb-20">
         <Card>
           <CardContent className="space-y-4 pt-4">
             <div className="flex items-center space-x-4">

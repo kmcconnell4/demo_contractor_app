@@ -82,20 +82,34 @@ export function Search() {
   };
 
   const getItemIcon = (type: string) => {
+    const iconColor = "#012b64";
+    const containerClass = "w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0";
+    
     switch (type) {
-      case 'document': return <File size={20} className="text-accent" />;
-      case 'product': return <Package size={20} className="text-primary" />;
-      case 'job': return <Briefcase size={20} className="text-[#008ce6]" />;
-      default: return <File size={20} />;
-    }
-  };
-
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'Installation': return 'bg-warning text-warning-foreground';
-      case 'Pending': return 'bg-accent text-accent-foreground';
-      case 'Complete': return 'bg-success text-success-foreground';
-      default: return 'bg-muted text-muted-foreground';
+      case 'document': 
+        return (
+          <div className={containerClass}>
+            <File size={24} style={{ color: iconColor }} />
+          </div>
+        );
+      case 'product': 
+        return (
+          <div className={containerClass}>
+            <Package size={24} style={{ color: iconColor }} />
+          </div>
+        );
+      case 'job': 
+        return (
+          <div className={containerClass}>
+            <Briefcase size={24} style={{ color: iconColor }} />
+          </div>
+        );
+      default: 
+        return (
+          <div className={containerClass}>
+            <File size={24} style={{ color: iconColor }} />
+          </div>
+        );
     }
   };
 
@@ -225,9 +239,14 @@ export function Search() {
                             </Badge>
                           )}
                           {'status' in item && (
-                            <Badge className={`text-xs ${getStatusColor(item.status)} pointer-events-none`}>
+                            <Badge variant="outline" className="text-xs">
                               {item.status}
                             </Badge>
+                          )}
+                          {'location' in item && (
+                            <span className="text-sm text-muted-foreground">
+                              {item.location.replace(/, [A-Z]{2} \d{5}/, '')}
+                            </span>
                           )}
                           {'code' in item && (
                             <span className="text-sm text-muted-foreground">
@@ -240,12 +259,6 @@ export function Search() {
                             </span>
                           )}
                         </div>
-                        
-                        {'location' in item && (
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {item.location}
-                          </p>
-                        )}
                       </div>
                       {item.type === 'job' && (
                         <Button

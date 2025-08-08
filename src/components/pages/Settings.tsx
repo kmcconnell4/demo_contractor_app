@@ -65,14 +65,14 @@ export function Settings() {
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top">
+      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="p-4">
           <h1 className="text-xl font-bold text-white">Settings</h1>
           <p className="text-white/80">Manage your account and preferences</p>
         </div>
       </div>
 
-      <div className="p-4 space-y-6 pb-20">
+      <div className="pt-8 px-4 space-y-8 pb-20">
         {/* Profile Link */}
         <Card className="cursor-pointer transition-material hover:elevation-2" onClick={() => window.location.href = '/profile'}>
           <CardContent className="p-4">
