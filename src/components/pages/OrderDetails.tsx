@@ -24,7 +24,7 @@ export function OrderDetails() {
     supplier: 'Carlisle SynTec',
     totalAmount: '$12,450.00',
     productCount: 5,
-    shippingAddress: '450 Market Street, Philadelphia, PA 19106',
+    shippingAddress: '450 Market Street, Philadelphia, PA',
     trackingNumber: 'UPS1234567890',
     estimatedDelivery: '2024-07-20',
     products: [

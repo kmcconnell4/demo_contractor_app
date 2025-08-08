@@ -79,7 +79,7 @@ export function JobDetails() {
     const jobs = {
       '1': {
         title: 'Downtown Office Complex',
-        location: '450 Market Street, Philadelphia, PA 19106',
+        location: '450 Market Street, Philadelphia, PA',
         area: '25,000 sq ft',
         startDate: '2024-07-15',
         estimatedCompletion: '2024-08-30',
@@ -87,7 +87,7 @@ export function JobDetails() {
       },
       '2': {
         title: 'Retail Shopping Center', 
-        location: '2750 Cumberland Parkway, Mechanicsburg, PA 17055',
+        location: '2750 Cumberland Parkway, Mechanicsburg, PA',
         area: '15,000 sq ft',
         startDate: '2024-07-20',
         estimatedCompletion: '2024-09-15',
@@ -95,7 +95,7 @@ export function JobDetails() {
       },
       '3': {
         title: 'Manufacturing Plant',
-        location: '1500 Industrial Boulevard, Carlisle, PA 17015',
+        location: '1500 Industrial Boulevard, Carlisle, PA',
         area: '50,000 sq ft',
         startDate: '2024-06-01',
         estimatedCompletion: '2024-08-15',
@@ -103,7 +103,7 @@ export function JobDetails() {
       },
       '4': {
         title: 'Warehouse Facility',
-        location: '890 Norristown Road, Blue Bell, PA 19422',
+        location: '890 Norristown Road, Blue Bell, PA',
         area: '30,000 sq ft',
         startDate: '2024-08-20',
         estimatedCompletion: '2024-10-15',
@@ -111,7 +111,7 @@ export function JobDetails() {
       },
       '7': {
         title: 'New Construction Project',
-        location: '123 Commerce Drive, Carlisle, PA 17013',
+        location: '123 Commerce Drive, Carlisle, PA',
         area: '18,000 sq ft',
         startDate: '2024-08-25',
         estimatedCompletion: '2024-11-30',

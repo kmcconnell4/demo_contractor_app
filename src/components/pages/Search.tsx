@@ -48,9 +48,9 @@ export function Search() {
       { id: 6, type: 'product', title: 'TPO Membrane 45 mil', category: 'Membrane', code: 'TPO-45-WHT' },
     ],
     jobs: [
-      { id: 7, type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA 19106', status: 'Installation' },
-      { id: 8, type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA 17055', status: 'Pending' },
-      { id: 9, type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA 17011', status: 'Complete' },
+      { id: 7, type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation' },
+      { id: 8, type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Pending' },
+      { id: 9, type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete' },
     ]
   };
 

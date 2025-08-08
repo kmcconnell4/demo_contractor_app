@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Calendar, MapPin, Star, CloudSun } from 'lucide-react';
+import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
@@ -31,6 +31,30 @@ export function Home() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
+  // Helper function to get job image based on title
+  const getJobImage = (title: string) => {
+    const lowerTitle = title.toLowerCase();
+    
+    if (lowerTitle.includes('office')) {
+      return '/Job pictures/Office building 1.jpeg';
+    } else if (lowerTitle.includes('warehouse')) {
+      return '/Job pictures/Warehouse 1.jpeg';
+    } else if (lowerTitle.includes('hospital') || lowerTitle.includes('medical')) {
+      return '/Job pictures/Hospital 1.jpeg';
+    } else if (lowerTitle.includes('manufacturing') || lowerTitle.includes('plant')) {
+      return '/Job pictures/Warehouse 2.jpeg';
+    } else if (lowerTitle.includes('retail') || lowerTitle.includes('shopping')) {
+      return '/Job pictures/Shopping center 1.jpeg';
+    } else if (lowerTitle.includes('tech') || lowerTitle.includes('campus')) {
+      return '/Job pictures/Office building 3.jpeg';
+    } else if (lowerTitle.includes('construction')) {
+      return '/Job pictures/Skyscraper.jpeg';
+    } else {
+      // Default fallback for other job types
+      return '/Job pictures/Office building 1.jpeg';
+    }
+  };
+
   // Helper function to get updated job status
   const getJobStatus = (jobId: string, defaultStatus: string) => {
     const storedStatus = localStorage.getItem(`job_status_${jobId}`);
@@ -54,18 +78,22 @@ export function Home() {
   // Mock data for jobs
   const jobs = {
     pending: [
-      { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA 17013', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
+      { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
     ],
     inProgress: [
-      { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA 19106', status: getJobStatus('1', 'Installation'), progress: 65 },
-      { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA 17055', status: getJobStatus('2', 'Installation'), progress: 40 },
-      { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA 19422', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
+      { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: getJobStatus('2', 'Installation'), progress: 40 },
+      { id: '9', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: getJobStatus('9', 'Installation'), progress: 75 },
+      { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: getJobStatus('1', 'Installation'), progress: 65 },
+      { id: '10', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: getJobStatus('10', 'Installation'), progress: 30 },
+      { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
+      { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: getJobStatus('11', 'Installation'), progress: 85 },
+      { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: getJobStatus('12', 'Installation'), progress: 20 },
     ],
     completed: [
-      { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA 17015', status: getJobStatus('3', 'Complete'), completedDate: '2024-08-15' },
-      { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA 17011', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
-      { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA 17822', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
-      { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA 19107', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
+      { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
+      { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: getJobStatus('3', 'Complete'), completedDate: '2024-08-15' },
+      { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
+      { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
     ]
   };
 
@@ -184,25 +212,90 @@ export function Home() {
 
       {/* Job Dashboard */}
       <div className="pt-8 px-4 space-y-8 pb-20">
+        {/* Alerts Section */}
+        <div>
+          <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+            {/* Inspection Alert */}
+            <div className="w-full max-w-[calc(100vw-2rem)] flex-shrink-0 bg-blue-100 rounded-lg p-3 border border-blue-200">
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
+                  <Clock size={18} className="text-[#012b64]" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Inspection reminder</h3>
+                  <p className="text-xs text-[#012b64]/80 leading-relaxed">
+                    You have an inspection scheduled at 4PM today at 450 Market Street
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Maintenance Alert */}
+            <div className="w-full max-w-[calc(100vw-2rem)] flex-shrink-0 bg-blue-100 rounded-lg p-3 border border-blue-200">
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
+                  <Wrench size={18} className="text-[#012b64]" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Maintenance Reminder</h3>
+                  <p className="text-xs text-[#012b64]/80 leading-relaxed">
+                    Equipment inspection due for Warehouse Facility project.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Safety Alert */}
+            <div className="w-full max-w-[calc(100vw-2rem)] flex-shrink-0 bg-blue-100 rounded-lg p-3 border border-blue-200">
+              <div className="flex items-start space-x-3">
+                <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
+                  <AlertTriangle size={18} className="text-[#012b64]" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Safety Notice</h3>
+                  <p className="text-xs text-[#012b64]/80 leading-relaxed">
+                    New safety protocols in effect. Review updated guidelines.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Carousel Indicators */}
+          <div className="flex justify-center space-x-2 mt-2">
+            <div className="w-2 h-2 bg-[#012b64] rounded-full"></div>
+            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+          </div>
+        </div>
+
         {/* Favorited Jobs */}
         {getFavoriteJobs().length > 0 && (
-          <div>
+          <div className="-mt-2">
             <div className="mb-3">
-              <h2 className="text-lg font-semibold">Favorites</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">Favorites</h2>
+                <Badge variant="secondary" className="text-xs bg-[#dbeafe] text-[#012b64] hover:bg-[#dbeafe]">
+                  {getFavoriteJobs().length}
+                </Badge>
+              </div>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {getFavoriteJobs().map((job) => (
                 <Card 
                   key={job.id}
-                  className="cursor-pointer transition-material hover:elevation-2 min-w-[280px] flex-shrink-0"
+                  className="cursor-pointer transition-material hover:elevation-2 w-[280px] flex-shrink-0"
                   onClick={() => navigate(`/job/${job.id}`)}
                 >
                   <div className="relative">
                     <img 
-                      src="/placeholder.jpg" 
+                      src={getJobImage(job.title)} 
                       alt={job.title}
                       className="w-full h-40 object-cover rounded-t-lg"
                     />
+                    <Badge variant="outline" className="absolute top-2 left-2 text-xs bg-white/90 backdrop-blur-sm">
+                      {getJobStatus(job.id, job.status)}
+                    </Badge>
                     <Button 
                       variant="ghost"
                       size="icon"
@@ -221,14 +314,9 @@ export function Home() {
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-semibold text-card-foreground mb-1">{job.title}</h3>
-                    <div className="flex items-center text-sm text-muted-foreground mb-2">
-                      <MapPin size={14} className="mr-1 flex-shrink-0" />
-                      <p>{job.location}</p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
-                        {getJobStatus(job.id, job.status)}
-                      </Badge>
+                    <div className="flex items-start text-sm text-muted-foreground">
+                      <MapPin size={14} className="mr-1 flex-shrink-0 mt-0.5" />
+                      <p className="leading-relaxed">{job.location}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -237,26 +325,83 @@ export function Home() {
           </div>
         )}
 
+        {/* Browse for Documents */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-semibold">Browse for documents</h2>
+            <button className="text-sm text-primary font-medium">View all</button>
+          </div>
+          <div className="flex space-x-6 overflow-x-auto scrollbar-hide pb-2 pt-2">
+            {/* Safety Data Sheets */}
+            <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
+                <Shield size={28} className="text-[#00509e]" />
+              </div>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">Safety<br />Data Sheets</span>
+            </div>
+            
+            {/* Product Data Sheets */}
+            <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
+                <FileText size={28} className="text-[#00509e]" />
+              </div>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">Product<br />Data Sheets</span>
+            </div>
+            
+            {/* Assembly Letters */}
+            <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
+                <Clipboard size={28} className="text-[#00509e]" />
+              </div>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">Assembly<br />Letters</span>
+            </div>
+            
+            {/* Warranty */}
+            <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
+                <FileCheck size={28} className="text-[#00509e]" />
+              </div>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">Warranty</span>
+            </div>
+            
+            {/* Other Documents */}
+            <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
+                <FolderOpen size={28} className="text-[#00509e]" />
+              </div>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">Other<br />Documents</span>
+            </div>
+          </div>
+        </div>
+
         {/* In Progress Jobs */}
         {jobs.inProgress.length > 0 && (
-          <div>
+          <div className="pt-4">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">In Progress</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">In Progress</h2>
+                <Badge variant="secondary" className="text-xs bg-[#dbeafe] text-[#012b64] hover:bg-[#dbeafe]">
+                  {jobs.inProgress.length}
+                </Badge>
+              </div>
               <button className="text-sm text-primary font-medium">View all jobs</button>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {jobs.inProgress.map((job) => (
                 <Card 
                   key={job.id}
-                  className="cursor-pointer transition-material hover:elevation-2 min-w-[280px] flex-shrink-0"
+                  className="cursor-pointer transition-material hover:elevation-2 w-[280px] flex-shrink-0"
                   onClick={() => navigate(`/job/${job.id}`)}
                 >
                   <div className="relative">
                     <img 
-                      src="/placeholder.jpg" 
+                      src={getJobImage(job.title)} 
                       alt={job.title}
                       className="w-full h-40 object-cover rounded-t-lg"
                     />
+                    <Badge variant="outline" className="absolute top-2 left-2 text-xs bg-white/90 backdrop-blur-sm">
+                      {getJobStatus(job.id, job.status)}
+                    </Badge>
                     <Button 
                       variant="ghost"
                       size="icon"
@@ -275,14 +420,9 @@ export function Home() {
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-semibold text-card-foreground mb-1">{job.title}</h3>
-                    <div className="flex items-center text-sm text-muted-foreground mb-2">
-                      <MapPin size={14} className="mr-1 flex-shrink-0" />
-                      <p>{job.location}</p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
-                        {getJobStatus(job.id, job.status)}
-                      </Badge>
+                    <div className="flex items-start text-sm text-muted-foreground">
+                      <MapPin size={14} className="mr-1 flex-shrink-0 mt-0.5" />
+                      <p className="leading-relaxed">{job.location}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -295,22 +435,30 @@ export function Home() {
         {jobs.completed.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">Recently Completed</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">Recently Completed</h2>
+                <Badge variant="secondary" className="text-xs bg-[#dbeafe] text-[#012b64] hover:bg-[#dbeafe]">
+                  {jobs.completed.length}
+                </Badge>
+              </div>
               <button className="text-sm text-primary font-medium">View all jobs</button>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {jobs.completed.map((job) => (
                 <Card 
                   key={job.id}
-                  className="cursor-pointer transition-material hover:elevation-2 min-w-[280px] flex-shrink-0"
+                  className="cursor-pointer transition-material hover:elevation-2 w-[280px] flex-shrink-0"
                   onClick={() => navigate(`/job/${job.id}`)}
                 >
                   <div className="relative">
                     <img 
-                      src="/placeholder.jpg" 
+                      src={getJobImage(job.title)} 
                       alt={job.title}
                       className="w-full h-40 object-cover rounded-t-lg"
                     />
+                    <Badge variant="outline" className="absolute top-2 left-2 text-xs bg-white/90 backdrop-blur-sm">
+                      {getJobStatus(job.id, job.status)}
+                    </Badge>
                     <Button 
                       variant="ghost"
                       size="icon"
@@ -329,14 +477,9 @@ export function Home() {
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-semibold text-card-foreground mb-1">{job.title}</h3>
-                    <div className="flex items-center text-sm text-muted-foreground mb-2">
-                      <MapPin size={14} className="mr-1 flex-shrink-0" />
-                      <p>{job.location}</p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
-                        {getJobStatus(job.id, job.status)}
-                      </Badge>
+                    <div className="flex items-start text-sm text-muted-foreground">
+                      <MapPin size={14} className="mr-1 flex-shrink-0 mt-0.5" />
+                      <p className="leading-relaxed">{job.location}</p>
                     </div>
                   </CardContent>
                 </Card>
