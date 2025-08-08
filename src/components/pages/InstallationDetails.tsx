@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { 
   ArrowLeft, 
@@ -131,14 +130,13 @@ export function InstallationDetails() {
   };
 
   const completedSteps = installationSteps.filter(step => step.status === 'complete').length;
-  const progressPercentage = (completedSteps / installationSteps.length) * 100;
 
   return (
     <div className="h-full bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top">
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-4">
+      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
+        <div className="p-4 pb-6">
+          <div className="flex items-center space-x-3">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -149,20 +147,10 @@ export function InstallationDetails() {
             </Button>
             <div className="flex-1">
               <h1 className="text-xl font-bold text-white">Roof Area {area}</h1>
-              <p className="text-white/80 text-sm">Installation Progress</p>
+              <p className="text-white/80 text-sm">
+                {completedSteps} of {installationSteps.length} steps completed
+              </p>
             </div>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="bg-white/10 rounded-lg p-3">
-            <div className="flex justify-between text-white text-sm mb-2">
-              <span>Progress</span>
-              <span>{Math.round(progressPercentage)}%</span>
-            </div>
-            <Progress value={progressPercentage} className="h-2 bg-white/20" />
-            <p className="text-white/80 text-xs mt-1">
-              {completedSteps} of {installationSteps.length} steps completed
-            </p>
           </div>
         </div>
       </div>
