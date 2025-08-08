@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,7 +16,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { 
   ArrowLeft, 
-  Search, 
   File, 
   Package, 
   Calendar as CalendarIcon, 
@@ -42,7 +40,6 @@ import {
 export function JobDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showAllOrders, setShowAllOrders] = useState(false);
@@ -395,15 +392,6 @@ export function JobDetails() {
     { id: 8, name: 'Sure-Weld Splicing Cement SDS', category: 'Safety', type: 'pdf', size: '0.7 MB' },
   ];
 
-  // Filter documents based on search query
-  const filterDocuments = (docs: any[], query: string) => {
-    if (!query.trim()) return docs;
-    return docs.filter(doc => 
-      doc.name.toLowerCase().includes(query.toLowerCase()) ||
-      (doc.category && doc.category.toLowerCase().includes(query.toLowerCase()))
-    );
-  };
-
   const renderContent = () => {
     switch (job.status) {
       case 'Awarded':
@@ -416,7 +404,7 @@ export function JobDetails() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {(showAllOrders ? orders : orders.slice(0, 5)).map((order) => (
+                {(showAllOrders ? orders : orders.slice(0, 3)).map((order) => (
                   <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
                     <CardContent className="p-4">
                       <div className="space-y-3">
@@ -446,14 +434,14 @@ export function JobDetails() {
                     </CardContent>
                   </Card>
                 ))}
-                {!showAllOrders && orders.length > 5 && (
+                {!showAllOrders && orders.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
                       Show more
                     </Button>
                   </div>
                 )}
-                {showAllOrders && orders.length > 5 && (
+                {showAllOrders && orders.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllOrders(false)}>
                       Show less
@@ -470,107 +458,24 @@ export function JobDetails() {
               <CardTitle>Documents</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="relative">
-                  <Input
-                    placeholder="Search documents..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 rounded-full"
-                  />
-                  <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                </div>
-                <Tabs defaultValue="all" className="space-y-4">
-                <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                  <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
-                  <TabsTrigger value="project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                  <TabsTrigger value="data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Data Sheets</TabsTrigger>
-                  <TabsTrigger value="safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="all" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocuments(documents, searchQuery).map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-center space-x-3">
-                            <File size={24} className="text-accent" />
-                            <div className="flex-1">
-                              <h3 className="font-semibold">{doc.name}</h3>
-                              <p className="text-sm text-muted-foreground">{doc.size}</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                    {filterDocuments(documents, searchQuery).length === 0 && searchQuery && (
-                      <div className="text-center py-8 text-muted-foreground">
-                        <File size={48} className="mx-auto mb-2 opacity-50" />
-                        <p>No documents found matching "{searchQuery}"</p>
+              <div className="space-y-3">
+                {documents.map((doc) => (
+                  <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                    <CardContent className="p-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <File size={24} style={{ color: "#012b64" }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-card-foreground truncate">
+                            {doc.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">{doc.size}</p>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="project" className="space-y-3">
-                  <div className="space-y-3">
-                    <Card className="cursor-pointer hover:elevation-2">
-                      <CardContent className="p-4">
-                        <div className="flex items-center space-x-3">
-                          <File size={24} className="text-accent" />
-                          <div className="flex-1">
-                            <h3 className="font-semibold">Sure-Seal EPDM Installation Manual</h3>
-                            <p className="text-sm text-muted-foreground">2.4 MB</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card className="cursor-pointer hover:elevation-2">
-                      <CardContent className="p-4">
-                        <div className="flex items-center space-x-3">
-                          <File size={24} className="text-accent" />
-                          <div className="flex-1">
-                            <h3 className="font-semibold">Carlisle Warranty Certificate</h3>
-                            <p className="text-sm text-muted-foreground">0.8 MB</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="data" className="space-y-3">
-                  <div className="space-y-3">
-                    <Card className="cursor-pointer hover:elevation-2">
-                      <CardContent className="p-4">
-                        <div className="flex items-center space-x-3">
-                          <File size={24} className="text-accent" />
-                          <div className="flex-1">
-                            <h3 className="font-semibold">Sure-Weld TPO Specification Sheet</h3>
-                            <p className="text-sm text-muted-foreground">1.8 MB</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="safety" className="space-y-3">
-                  <div className="space-y-3">
-                    <Card className="cursor-pointer hover:elevation-2">
-                      <CardContent className="p-4">
-                        <div className="flex items-center space-x-3">
-                          <File size={24} className="text-accent" />
-                          <div className="flex-1">
-                            <h3 className="font-semibold">FAST Adhesive Safety Data Sheet</h3>
-                            <p className="text-sm text-muted-foreground">1.1 MB</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -654,7 +559,7 @@ export function JobDetails() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(showAllOrders ? orders : orders.slice(0, 5)).map((order) => (
+                  {(showAllOrders ? orders : orders.slice(0, 3)).map((order) => (
                     <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
                       <CardContent className="p-4">
                         <div className="space-y-3">
@@ -684,14 +589,14 @@ export function JobDetails() {
                       </CardContent>
                     </Card>
                   ))}
-                  {!showAllOrders && orders.length > 5 && (
+                  {!showAllOrders && orders.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
                         Show more
                       </Button>
                     </div>
                   )}
-                  {showAllOrders && orders.length > 5 && (
+                  {showAllOrders && orders.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(false)}>
                         Show less
@@ -708,178 +613,27 @@ export function JobDetails() {
                 <CardTitle>Documents</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search documents..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 rounded-full"
-                    />
-                    <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                  </div>
-                  <Tabs defaultValue="all" className="space-y-4">
-                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                    <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
-                    <TabsTrigger value="project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                    <TabsTrigger value="data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Data Sheets</TabsTrigger>
-                    <TabsTrigger value="safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="all" className="space-y-3">
-                    <div className="space-y-3">
-                      {filterDocuments(installationDocuments, searchQuery).map((doc) => (
-                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex items-start space-x-3">
-                              <File size={20} className="text-accent" />
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-card-foreground">{doc.name}</h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
-                                </div>
-                              </div>
+                <div className="space-y-3">
+                  {installationDocuments.map((doc) => (
+                    <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                      <CardContent className="p-4">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <File size={24} style={{ color: "#012b64" }} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-card-foreground truncate">
+                              {doc.name}
+                            </h3>
+                            <div className="flex items-center space-x-2 mt-1">
+                              <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                              <span className="text-sm text-muted-foreground">{doc.size}</span>
                             </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                      {filterDocuments(installationDocuments, searchQuery).length === 0 && searchQuery && (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <File size={48} className="mx-auto mb-2 opacity-50" />
-                          <p>No documents found matching "{searchQuery}"</p>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="project" className="space-y-3">
-                    <div className="space-y-3">
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">Assembly Letter - Downtown Office Complex</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Project</Badge>
-                                <span className="text-sm text-muted-foreground">1.2 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">Submittal Package - EPDM Roofing System</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Project</Badge>
-                                <span className="text-sm text-muted-foreground">3.4 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="data" className="space-y-3">
-                    <div className="space-y-3">
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">Sure-Seal EPDM Membrane Data Sheet</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Data Sheet</Badge>
-                                <span className="text-sm text-muted-foreground">2.1 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">SecurShield HD Polyiso Insulation Data Sheet</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Data Sheet</Badge>
-                                <span className="text-sm text-muted-foreground">1.8 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">FAST Adhesive Product Data Sheet</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Data Sheet</Badge>
-                                <span className="text-sm text-muted-foreground">1.5 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="safety" className="space-y-3">
-                    <div className="space-y-3">
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">FAST Adhesive Safety Data Sheet</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Safety</Badge>
-                                <span className="text-sm text-muted-foreground">0.8 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">Sure-Seal Lap Sealant SDS</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Safety</Badge>
-                                <span className="text-sm text-muted-foreground">0.6 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <File size={20} className="text-accent" />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground">Sure-Weld Splicing Cement SDS</h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">Safety</Badge>
-                                <span className="text-sm text-muted-foreground">0.7 MB</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-                </Tabs>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -1069,7 +823,7 @@ export function JobDetails() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(showAllOrders ? orders : orders.slice(0, 5)).map((order) => (
+                  {(showAllOrders ? orders : orders.slice(0, 3)).map((order) => (
                     <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
                       <CardContent className="p-4">
                         <div className="space-y-3">
@@ -1099,14 +853,14 @@ export function JobDetails() {
                       </CardContent>
                     </Card>
                   ))}
-                  {!showAllOrders && orders.length > 5 && (
+                  {!showAllOrders && orders.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
                         Show more
                       </Button>
                     </div>
                   )}
-                  {showAllOrders && orders.length > 5 && (
+                  {showAllOrders && orders.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(false)}>
                         Show less
@@ -1123,107 +877,24 @@ export function JobDetails() {
                 <CardTitle>Documents</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search documents..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 rounded-full"
-                    />
-                    <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-                  </div>
-                  <Tabs defaultValue="all" className="space-y-4">
-                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                    <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
-                    <TabsTrigger value="project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                    <TabsTrigger value="data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Data Sheets</TabsTrigger>
-                    <TabsTrigger value="safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="all" className="space-y-3">
-                    <div className="space-y-3">
-                      {filterDocuments(documents, searchQuery).map((doc) => (
-                        <Card key={doc.id} className="cursor-pointer hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex items-center space-x-3">
-                              <File size={24} className="text-accent" />
-                              <div className="flex-1">
-                                <h3 className="font-semibold">{doc.name}</h3>
-                                <p className="text-sm text-muted-foreground">{doc.size}</p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                      {filterDocuments(documents, searchQuery).length === 0 && searchQuery && (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <File size={48} className="mx-auto mb-2 opacity-50" />
-                          <p>No documents found matching "{searchQuery}"</p>
+                <div className="space-y-3">
+                  {documents.map((doc) => (
+                    <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                      <CardContent className="p-4">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <File size={24} style={{ color: "#012b64" }} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-card-foreground truncate">
+                              {doc.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground mt-1">{doc.size}</p>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="project" className="space-y-3">
-                    <div className="space-y-3">
-                      <Card className="cursor-pointer hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-center space-x-3">
-                            <File size={24} className="text-accent" />
-                            <div className="flex-1">
-                              <h3 className="font-semibold">Sure-Seal EPDM Installation Manual</h3>
-                              <p className="text-sm text-muted-foreground">2.4 MB</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card className="cursor-pointer hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-center space-x-3">
-                            <File size={24} className="text-accent" />
-                            <div className="flex-1">
-                              <h3 className="font-semibold">Carlisle Warranty Certificate</h3>
-                              <p className="text-sm text-muted-foreground">0.8 MB</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="data" className="space-y-3">
-                    <div className="space-y-3">
-                      <Card className="cursor-pointer hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-center space-x-3">
-                            <File size={24} className="text-accent" />
-                            <div className="flex-1">
-                              <h3 className="font-semibold">Sure-Weld TPO Specification Sheet</h3>
-                              <p className="text-sm text-muted-foreground">1.8 MB</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="safety" className="space-y-3">
-                    <div className="space-y-3">
-                      <Card className="cursor-pointer hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-center space-x-3">
-                            <File size={24} className="text-accent" />
-                            <div className="flex-1">
-                              <h3 className="font-semibold">FAST Adhesive Safety Data Sheet</h3>
-                              <p className="text-sm text-muted-foreground">1.1 MB</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
-                </Tabs>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </CardContent>
             </Card>

@@ -214,7 +214,8 @@
   .bg-gradient-primary-two-color h1,
   .bg-gradient-primary-two-color h2,
   header h1,
-  header h2 {
+  header h2,
+  .home-page h2 {
     padding-top: 0;
   }
 }

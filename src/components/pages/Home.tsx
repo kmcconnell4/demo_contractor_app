@@ -214,7 +214,7 @@ export function Home() {
       </div>
 
       {/* Job Dashboard */}
-      <div className="pt-8 px-4 space-y-8 pb-20">
+      <div className="home-page pt-8 px-4 space-y-8 pb-20">
         {/* Alerts Section */}
         <div>
           {/* Inspection Alert */}
