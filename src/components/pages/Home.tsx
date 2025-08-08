@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen } from 'lucide-react';
+import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen, Bell } from 'lucide-react';
 
 export function Home() {
   const navigate = useNavigate();
@@ -193,6 +193,9 @@ export function Home() {
                   <CloudSun size={16} className="ml-2" />
                 </div>
               </div>
+              <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                <Bell size={20} className="text-white" />
+              </button>
             </div>
           </div>
           
@@ -214,58 +217,19 @@ export function Home() {
       <div className="pt-8 px-4 space-y-8 pb-20">
         {/* Alerts Section */}
         <div>
-          <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
-            {/* Inspection Alert */}
-            <div className="w-full max-w-[calc(100vw-2rem)] flex-shrink-0 bg-blue-100 rounded-lg p-3 border border-blue-200">
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
-                  <Clock size={18} className="text-[#012b64]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Inspection reminder</h3>
-                  <p className="text-xs text-[#012b64]/80 leading-relaxed">
-                    You have an inspection scheduled at 4PM today at 450 Market Street
-                  </p>
-                </div>
+          {/* Inspection Alert */}
+          <div className="w-full max-w-[calc(100vw-2rem)] bg-blue-100 rounded-lg p-3 border border-blue-200">
+            <div className="flex items-start space-x-3">
+              <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
+                <Clock size={18} className="text-[#012b64]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Inspection reminder</h3>
+                <p className="text-xs text-[#012b64]/80 leading-relaxed">
+                  You have an inspection scheduled at 4PM today at 450 Market Street
+                </p>
               </div>
             </div>
-            
-            {/* Maintenance Alert */}
-            <div className="w-full max-w-[calc(100vw-2rem)] flex-shrink-0 bg-blue-100 rounded-lg p-3 border border-blue-200">
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
-                  <Wrench size={18} className="text-[#012b64]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Maintenance Reminder</h3>
-                  <p className="text-xs text-[#012b64]/80 leading-relaxed">
-                    Equipment inspection due for Warehouse Facility project.
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Safety Alert */}
-            <div className="w-full max-w-[calc(100vw-2rem)] flex-shrink-0 bg-blue-100 rounded-lg p-3 border border-blue-200">
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-200 rounded-full p-1.5 flex-shrink-0">
-                  <AlertTriangle size={18} className="text-[#012b64]" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Safety Notice</h3>
-                  <p className="text-xs text-[#012b64]/80 leading-relaxed">
-                    New safety protocols in effect. Review updated guidelines.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Carousel Indicators */}
-          <div className="flex justify-center space-x-2 mt-2">
-            <div className="w-2 h-2 bg-[#012b64] rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
           </div>
         </div>
 
@@ -275,7 +239,7 @@ export function Home() {
             <div className="mb-3">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold">Favorites</h2>
-                <Badge variant="secondary" className="text-xs bg-[#dbeafe] text-[#012b64] hover:bg-[#dbeafe]">
+                <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
                   {getFavoriteJobs().length}
                 </Badge>
               </div>
@@ -380,7 +344,7 @@ export function Home() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold">In Progress</h2>
-                <Badge variant="secondary" className="text-xs bg-[#dbeafe] text-[#012b64] hover:bg-[#dbeafe]">
+                <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
                   {jobs.inProgress.length}
                 </Badge>
               </div>
@@ -437,7 +401,7 @@ export function Home() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold">Recently Completed</h2>
-                <Badge variant="secondary" className="text-xs bg-[#dbeafe] text-[#012b64] hover:bg-[#dbeafe]">
+                <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
                   {jobs.completed.length}
                 </Badge>
               </div>
