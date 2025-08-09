@@ -136,10 +136,10 @@ export function JobDetails() {
   ];
 
   const documents = [
-    { id: 1, name: 'Sure-Seal EPDM Installation Manual', type: 'pdf', size: '2.4 MB', link: 'https://www.carlisle.com/docs/sure-seal-installation-guide' },
-    { id: 2, name: 'FAST Adhesive Safety Data Sheet', type: 'pdf', size: '1.1 MB', link: 'https://www.carlisle.com/docs/fast-adhesive-sds' },
-    { id: 3, name: 'Carlisle Warranty Certificate', type: 'pdf', size: '0.8 MB', link: 'https://www.carlisle.com/warranty' },
-    { id: 4, name: 'Sure-Weld TPO Specification Sheet', type: 'pdf', size: '1.8 MB', link: 'https://www.carlisle.com/docs/sure-weld-tpo-specs' },
+    { id: 1, name: 'Sure-Seal EPDM Installation Manual', category: 'Project', type: 'pdf', size: '2.4 MB', link: 'https://www.carlisle.com/docs/sure-seal-installation-guide' },
+    { id: 2, name: 'FAST Adhesive Safety Data Sheet', category: 'Safety', type: 'pdf', size: '1.1 MB', link: 'https://www.carlisle.com/docs/fast-adhesive-sds' },
+    { id: 3, name: 'Carlisle Warranty Certificate', category: 'Project', type: 'pdf', size: '0.8 MB', link: 'https://www.carlisle.com/warranty' },
+    { id: 4, name: 'Sure-Weld TPO Specification Sheet', category: 'Data Sheet', type: 'pdf', size: '1.8 MB', link: 'https://www.carlisle.com/docs/sure-weld-tpo-specs' },
   ];
 
   const materials = [
@@ -392,6 +392,12 @@ export function JobDetails() {
     { id: 8, name: 'Sure-Weld Splicing Cement SDS', category: 'Safety', type: 'pdf', size: '0.7 MB' },
   ];
 
+  // Filter documents by category
+  const filterDocumentsByCategory = (docs: any[], category: string) => {
+    if (category === 'all') return docs;
+    return docs.filter(doc => doc.category === category);
+  };
+
   const renderContent = () => {
     switch (job.status) {
       case 'Awarded':
@@ -458,25 +464,88 @@ export function JobDetails() {
               <CardTitle>Documents</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {documents.map((doc) => (
-                  <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                    <CardContent className="p-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <File size={24} style={{ color: "#012b64" }} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-card-foreground truncate">
-                            {doc.name}
-                          </h3>
-                          <p className="text-sm text-muted-foreground mt-1">{doc.size}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <Tabs defaultValue="Project" className="space-y-4">
+                <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                  <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                  <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
+                  <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="Project" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(documents, 'Project').slice(0, 5).map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="Safety" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(documents, 'Safety').slice(0, 5).map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="Data Sheet" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(documents, 'Data Sheet').slice(0, 5).map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
 
@@ -487,7 +556,7 @@ export function JobDetails() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {(showAllHistory ? jobHistory : jobHistory.slice(0, 5)).map((entry) => (
+                {(showAllHistory ? jobHistory : jobHistory.slice(0, 3)).map((entry) => (
                   <div key={entry.id} className="pb-4 border-b border-border last:border-b-0 last:pb-0">
                     <div className="flex items-center space-x-2 mb-1">
                       <p className="font-semibold text-sm">{entry.action}</p>
@@ -498,14 +567,14 @@ export function JobDetails() {
                     <p className="text-xs text-muted-foreground">by {entry.user}</p>
                   </div>
                 ))}
-                {!showAllHistory && jobHistory.length > 5 && (
+                {!showAllHistory && jobHistory.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllHistory(true)}>
                       Show more
                     </Button>
                   </div>
                 )}
-                {showAllHistory && (
+                {showAllHistory && jobHistory.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllHistory(false)}>
                       Show less
@@ -613,130 +682,189 @@ export function JobDetails() {
                 <CardTitle>Documents</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {installationDocuments.map((doc) => (
-                    <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                      <CardContent className="p-4">
-                        <div className="flex items-start space-x-3">
-                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <File size={24} style={{ color: "#012b64" }} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-card-foreground truncate">
-                              {doc.name}
-                            </h3>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                              <span className="text-sm text-muted-foreground">{doc.size}</span>
+                <Tabs defaultValue="Project" className="space-y-4">
+                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                    <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                    <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
+                    <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="Project" className="space-y-3">
+                    <div className="space-y-3">
+                      {filterDocumentsByCategory(installationDocuments, 'Project').slice(0, 5).map((doc) => (
+                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <File size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-card-foreground truncate">
+                                  {doc.name}
+                                </h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="Safety" className="space-y-3">
+                    <div className="space-y-3">
+                      {filterDocumentsByCategory(installationDocuments, 'Safety').slice(0, 5).map((doc) => (
+                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <File size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-card-foreground truncate">
+                                  {doc.name}
+                                </h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="Data Sheet" className="space-y-3">
+                    <div className="space-y-3">
+                      {filterDocumentsByCategory(installationDocuments, 'Data Sheet').slice(0, 5).map((doc) => (
+                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <File size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-card-foreground truncate">
+                                  {doc.name}
+                                </h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
 
             {/* Products */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Products</CardTitle>
-                  <Button variant="outline" size="sm">
-                    View all products
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-4">
-                  {/* Sure-Seal EPDM Membrane */}
-                  <Card className="cursor-pointer hover:elevation-2">
-                    <CardContent className="p-4">
-                      <div className="flex space-x-4">
-                        <img 
-                          src="/placeholder.jpg" 
-                          alt="Sure-Seal EPDM Membrane" 
-                          className="w-16 h-16 object-cover rounded-lg bg-muted"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">Sure-Seal EPDM Membrane 60 mil</h3>
-                          <p className="text-sm text-muted-foreground">Premium single-ply roofing membrane with superior durability and weather resistance for long-lasting protection.</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+            <div>
+              <div className="flex items-baseline justify-between mb-4">
+                <h2 className="text-xl font-semibold">Products for this job</h2>
+                <button className="text-sm text-primary font-medium">View all products</button>
+              </div>
+              <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
+                {/* Sure Weld TPO Reinforced Membrane */}
+                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
+                  <div className="relative">
+                    <img 
+                      src="/Product images/Sure Weld TPO Reinforced Membrane.png" 
+                      alt="Sure Weld TPO Reinforced Membrane" 
+                      className="w-full h-32 object-cover rounded-t-lg"
+                    />
+                  </div>
+                  <CardContent className="p-3">
+                    <h3 className="font-semibold text-sm leading-tight">Sure Weld TPO Reinforced Membrane</h3>
+                    <p className="text-xs text-muted-foreground mt-1">Premium TPO roofing membrane</p>
+                  </CardContent>
+                </Card>
 
-                  {/* SecurShield HD Polyiso */}
-                  <Card className="cursor-pointer hover:elevation-2">
-                    <CardContent className="p-4">
-                      <div className="flex space-x-4">
-                        <img 
-                          src="/placeholder.jpg" 
-                          alt="SecurShield HD Polyiso Insulation" 
-                          className="w-16 h-16 object-cover rounded-lg bg-muted"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">SecurShield HD Polyiso Insulation 2"</h3>
-                          <p className="text-sm text-muted-foreground">High-performance polyisocyanurate insulation board providing excellent thermal efficiency and dimensional stability.</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                {/* SecurShield Polyiso Tapered Insulation */}
+                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
+                  <div className="relative">
+                    <img 
+                      src="/Product images/SecurShield Polyiso Tapered Insulation.png" 
+                      alt="SecurShield Polyiso Tapered Insulation" 
+                      className="w-full h-32 object-cover rounded-t-lg"
+                    />
+                  </div>
+                  <CardContent className="p-3">
+                    <h3 className="font-semibold text-sm leading-tight">SecurShield Polyiso Tapered Insulation</h3>
+                    <p className="text-xs text-muted-foreground mt-1">High-performance tapered insulation</p>
+                  </CardContent>
+                </Card>
 
-                  {/* FAST Adhesive */}
-                  <Card className="cursor-pointer hover:elevation-2">
-                    <CardContent className="p-4">
-                      <div className="flex space-x-4">
-                        <img 
-                          src="/placeholder.jpg" 
-                          alt="FAST Adhesive" 
-                          className="w-16 h-16 object-cover rounded-lg bg-muted"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">FAST Adhesive Primer</h3>
-                          <p className="text-sm text-muted-foreground">Quick-drying adhesive primer designed for optimal bonding of EPDM membrane systems to various substrates.</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                {/* CAV-GRIP III Adhesive Primer */}
+                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
+                  <div className="relative">
+                    <img 
+                      src="/Product images/CAV-GRIP III Adhesive Primer.png" 
+                      alt="CAV-GRIP III Adhesive Primer" 
+                      className="w-full h-32 object-cover rounded-t-lg"
+                    />
+                  </div>
+                  <CardContent className="p-3">
+                    <h3 className="font-semibold text-sm leading-tight">CAV-GRIP III Adhesive Primer</h3>
+                    <p className="text-xs text-muted-foreground mt-1">Advanced adhesive primer system</p>
+                  </CardContent>
+                </Card>
 
-                  {/* Sure-Seal Lap Sealant */}
-                  <Card className="cursor-pointer hover:elevation-2">
-                    <CardContent className="p-4">
-                      <div className="flex space-x-4">
-                        <img 
-                          src="/placeholder.jpg" 
-                          alt="Sure-Seal Lap Sealant" 
-                          className="w-16 h-16 object-cover rounded-lg bg-muted"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">Sure-Seal Lap Sealant</h3>
-                          <p className="text-sm text-muted-foreground">Premium sealant for creating watertight seals at membrane overlaps and around penetrations in EPDM systems.</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                {/* Sure-Flex PVC Pressure-Sensitive Cover Strip */}
+                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
+                  <div className="relative">
+                    <img 
+                      src="/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" 
+                      alt="Sure-Flex PVC Pressure-Sensitive Cover Strip" 
+                      className="w-full h-32 object-cover rounded-t-lg"
+                    />
+                  </div>
+                  <CardContent className="p-3">
+                    <h3 className="font-semibold text-sm leading-tight">Sure-Flex PVC Cover Strip</h3>
+                    <p className="text-xs text-muted-foreground mt-1">Pressure-sensitive cover strip</p>
+                  </CardContent>
+                </Card>
 
-                  {/* Walkway Pads */}
-                  <Card className="cursor-pointer hover:elevation-2">
-                    <CardContent className="p-4">
-                      <div className="flex space-x-4">
-                        <img 
-                          src="/placeholder.jpg" 
-                          alt="Pressure-Sensitive Walkway Pads" 
-                          className="w-16 h-16 object-cover rounded-lg bg-muted"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">Pressure-Sensitive Walkway Pads</h3>
-                          <p className="text-sm text-muted-foreground">Durable walkway protection pads that provide safe foot traffic areas while protecting the membrane surface.</p>
-                        </div>
+                {/* Sure-Weld TPO Walkway Rolls */}
+                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
+                  <div className="relative">
+                    <img 
+                      src="/Product images/Sure-Weld TPO Walkway Rolls.png" 
+                      alt="Sure-Weld TPO Walkway Rolls" 
+                      className="w-full h-32 object-cover rounded-t-lg"
+                    />
+                  </div>
+                  <CardContent className="p-3">
+                    <h3 className="font-semibold text-sm leading-tight">Sure-Weld TPO Walkway Rolls</h3>
+                    <p className="text-xs text-muted-foreground mt-1">Durable walkway protection rolls</p>
+                  </CardContent>
+                </Card>
+
+                {/* More products indicator card */}
+                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40 border-dashed border-2 border-muted-foreground/25">
+                  <CardContent className="p-3 h-full">
+                    <div className="h-32 flex flex-col items-center justify-center text-center space-y-2">
+                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                        <span className="text-lg font-semibold text-muted-foreground">+</span>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CardContent>
-            </Card>
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">View more</p>
+                        <p className="text-xs text-muted-foreground">12 total products</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
 
             {/* Contacts */}
             <Card>
@@ -775,7 +903,7 @@ export function JobDetails() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {(showAllHistory ? jobHistory : jobHistory.slice(0, 5)).map((entry) => (
+                  {(showAllHistory ? jobHistory : jobHistory.slice(0, 3)).map((entry) => (
                     <div key={entry.id} className="pb-4 border-b border-border last:border-b-0 last:pb-0">
                       <div className="flex items-center space-x-2 mb-1">
                         <p className="font-semibold text-sm">{entry.action}</p>
@@ -786,7 +914,7 @@ export function JobDetails() {
                       <p className="text-xs text-muted-foreground">by {entry.user}</p>
                     </div>
                   ))}
-                  {!showAllHistory && jobHistory.length > 5 && (
+                  {!showAllHistory && jobHistory.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllHistory(true)}>
                         Show more
@@ -871,42 +999,103 @@ export function JobDetails() {
               </CardContent>
             </Card>
 
-            {/* Documents */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Documents</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {documents.map((doc) => (
-                    <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                      <CardContent className="p-4">
-                        <div className="flex items-start space-x-3">
-                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <File size={24} style={{ color: "#012b64" }} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-card-foreground truncate">
-                              {doc.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground mt-1">{doc.size}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+          {/* Documents */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Documents</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="Project" className="space-y-4">
+                <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                  <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                  <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
+                  <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                </TabsList>
 
-            {/* History */}
+                <TabsContent value="Project" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(documents, 'Project').slice(0, 5).map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="Safety" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(documents, 'Safety').slice(0, 5).map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="Data Sheet" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(documents, 'Data Sheet').slice(0, 5).map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>            {/* History */}
             <Card>
               <CardHeader>
                 <CardTitle>History</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {(showAllHistory ? jobHistory : jobHistory.slice(0, 5)).map((entry) => (
+                  {(showAllHistory ? jobHistory : jobHistory.slice(0, 3)).map((entry) => (
                     <div key={entry.id} className="pb-4 border-b border-border last:border-b-0 last:pb-0">
                       <div className="flex items-center space-x-2 mb-1">
                         <p className="font-semibold text-sm">{entry.action}</p>
@@ -917,7 +1106,7 @@ export function JobDetails() {
                       <p className="text-xs text-muted-foreground">by {entry.user}</p>
                     </div>
                   ))}
-                  {!showAllHistory && jobHistory.length > 5 && (
+                  {!showAllHistory && jobHistory.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllHistory(true)}>
                         Show more

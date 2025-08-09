@@ -295,7 +295,7 @@ export function Home() {
             <h2 className="text-xl font-semibold">Browse for documents</h2>
             <button className="text-sm text-primary font-medium">View all</button>
           </div>
-          <div className="flex space-x-6 overflow-x-auto scrollbar-hide pb-2 pt-2">
+          <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2 pt-2">
             {/* Safety Data Sheets */}
             <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
