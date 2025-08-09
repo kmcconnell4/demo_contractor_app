@@ -62,6 +62,30 @@ export function JobDetails() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
+  // Helper function to get job image based on title
+  const getJobImage = (title: string) => {
+    const lowerTitle = title.toLowerCase();
+    
+    if (lowerTitle.includes('office')) {
+      return '/Job pictures/Office building 1.jpeg';
+    } else if (lowerTitle.includes('warehouse')) {
+      return '/Job pictures/Warehouse 1.jpeg';
+    } else if (lowerTitle.includes('hospital') || lowerTitle.includes('medical')) {
+      return '/Job pictures/Hospital 1.jpeg';
+    } else if (lowerTitle.includes('manufacturing') || lowerTitle.includes('plant')) {
+      return '/Job pictures/Warehouse 2.jpeg';
+    } else if (lowerTitle.includes('retail') || lowerTitle.includes('shopping')) {
+      return '/Job pictures/Shopping center 1.jpeg';
+    } else if (lowerTitle.includes('tech') || lowerTitle.includes('campus')) {
+      return '/Job pictures/Office building 3.jpeg';
+    } else if (lowerTitle.includes('construction')) {
+      return '/Job pictures/Skyscraper.jpeg';
+    } else {
+      // Default fallback for other job types
+      return '/Job pictures/Office building 1.jpeg';
+    }
+  };
+
   // Check if job status has been updated in localStorage
   const getJobStatus = () => {
     const storedStatus = localStorage.getItem(`job_status_${id}`);
@@ -587,362 +611,18 @@ export function JobDetails() {
           </div>
         );
 
-      case 'Installation':
-        return (
-          <div className="space-y-8">
-            {/* Roof Areas */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Installation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  {roofAreas.map((area) => (
-                    <Card 
-                      key={area.id} 
-                      className="cursor-pointer hover:elevation-2"
-                      onClick={() => navigate(`/installation/${job.id}/${area.id}`)}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold">{area.name}</h3>
-                          <div className={`${getAreaStatusColor(area.status)}`}>
-                            {area.status === 'complete' && <CheckCircle size={20} />}
-                            {area.status === 'in-progress' && <Clock size={20} />}
-                            {area.status === 'pending' && <AlertTriangle size={20} />}
-                          </div>
-                        </div>
-                        <Progress value={area.progress} className="h-2" />
-                        <p className="text-xs text-muted-foreground mt-1 capitalize">{area.status.replace('-', ' ')}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Orders */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Orders</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {(showAllOrders ? orders : orders.slice(0, 3)).map((order) => (
-                    <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
-                      <CardContent className="p-4">
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                                <img 
-                                  src={getProductImages(order.products)} 
-                                  alt="Product preview"
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = '/placeholder.jpg';
-                                  }}
-                                />
-                              </div>
-                              <div>
-                                <h3 className="font-semibold">{order.orderNumber}</h3>
-                                <p className="text-sm text-muted-foreground">
-                                  {order.status === 'delivered' ? 'Delivered' : 'Placed on'} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? 'product' : 'products'}
-                                </p>
-                              </div>
-                            </div>
-                            <ChevronRight size={20} className="text-muted-foreground" />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                  {!showAllOrders && orders.length > 3 && (
-                    <div className="pt-2">
-                      <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
-                        Show more
-                      </Button>
-                    </div>
-                  )}
-                  {showAllOrders && orders.length > 3 && (
-                    <div className="pt-2">
-                      <Button variant="outline" size="sm" onClick={() => setShowAllOrders(false)}>
-                        Show less
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Documents */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Documents</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="Project" className="space-y-4">
-                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                    <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                    <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
-                    <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="Project" className="space-y-3">
-                    <div className="space-y-3">
-                      {filterDocumentsByCategory(installationDocuments, 'Project').slice(0, 5).map((doc) => (
-                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex items-start space-x-3">
-                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                <File size={24} style={{ color: "#012b64" }} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-card-foreground truncate">
-                                  {doc.name}
-                                </h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="Safety" className="space-y-3">
-                    <div className="space-y-3">
-                      {filterDocumentsByCategory(installationDocuments, 'Safety').slice(0, 5).map((doc) => (
-                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex items-start space-x-3">
-                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                <File size={24} style={{ color: "#012b64" }} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-card-foreground truncate">
-                                  {doc.name}
-                                </h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="Data Sheet" className="space-y-3">
-                    <div className="space-y-3">
-                      {filterDocumentsByCategory(installationDocuments, 'Data Sheet').slice(0, 5).map((doc) => (
-                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex items-start space-x-3">
-                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                <File size={24} style={{ color: "#012b64" }} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-card-foreground truncate">
-                                  {doc.name}
-                                </h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-
-            {/* Products */}
-            <div>
-              <div className="flex items-baseline justify-between mb-4">
-                <h2 className="text-xl font-semibold">Products for this job</h2>
-                <button className="text-sm text-primary font-medium">View all products</button>
-              </div>
-              <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
-                {/* Sure Weld TPO Reinforced Membrane */}
-                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
-                  <div className="relative">
-                    <img 
-                      src="/Product images/Sure Weld TPO Reinforced Membrane.png" 
-                      alt="Sure Weld TPO Reinforced Membrane" 
-                      className="w-full h-32 object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-semibold text-sm leading-tight">Sure Weld TPO Reinforced Membrane</h3>
-                    <p className="text-xs text-muted-foreground mt-1">Premium TPO roofing membrane</p>
-                  </CardContent>
-                </Card>
-
-                {/* SecurShield Polyiso Tapered Insulation */}
-                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
-                  <div className="relative">
-                    <img 
-                      src="/Product images/SecurShield Polyiso Tapered Insulation.png" 
-                      alt="SecurShield Polyiso Tapered Insulation" 
-                      className="w-full h-32 object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-semibold text-sm leading-tight">SecurShield Polyiso Tapered Insulation</h3>
-                    <p className="text-xs text-muted-foreground mt-1">High-performance tapered insulation</p>
-                  </CardContent>
-                </Card>
-
-                {/* CAV-GRIP III Adhesive Primer */}
-                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
-                  <div className="relative">
-                    <img 
-                      src="/Product images/CAV-GRIP III Adhesive Primer.png" 
-                      alt="CAV-GRIP III Adhesive Primer" 
-                      className="w-full h-32 object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-semibold text-sm leading-tight">CAV-GRIP III Adhesive Primer</h3>
-                    <p className="text-xs text-muted-foreground mt-1">Advanced adhesive primer system</p>
-                  </CardContent>
-                </Card>
-
-                {/* Sure-Flex PVC Pressure-Sensitive Cover Strip */}
-                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
-                  <div className="relative">
-                    <img 
-                      src="/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" 
-                      alt="Sure-Flex PVC Pressure-Sensitive Cover Strip" 
-                      className="w-full h-32 object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-semibold text-sm leading-tight">Sure-Flex PVC Cover Strip</h3>
-                    <p className="text-xs text-muted-foreground mt-1">Pressure-sensitive cover strip</p>
-                  </CardContent>
-                </Card>
-
-                {/* Sure-Weld TPO Walkway Rolls */}
-                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40">
-                  <div className="relative">
-                    <img 
-                      src="/Product images/Sure-Weld TPO Walkway Rolls.png" 
-                      alt="Sure-Weld TPO Walkway Rolls" 
-                      className="w-full h-32 object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-semibold text-sm leading-tight">Sure-Weld TPO Walkway Rolls</h3>
-                    <p className="text-xs text-muted-foreground mt-1">Durable walkway protection rolls</p>
-                  </CardContent>
-                </Card>
-
-                {/* More products indicator card */}
-                <Card className="cursor-pointer hover:elevation-2 flex-shrink-0 w-40 border-dashed border-2 border-muted-foreground/25">
-                  <CardContent className="p-3 h-full">
-                    <div className="h-32 flex flex-col items-center justify-center text-center space-y-2">
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <span className="text-lg font-semibold text-muted-foreground">+</span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">View more</p>
-                        <p className="text-xs text-muted-foreground">12 total products</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
-            {/* Contacts */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Contacts</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {contacts.map((contact, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-8 w-8">
-                        {contact.name === 'Chris Contractor' && (
-                          <AvatarImage src="/Chris-profile.jpeg" alt={contact.name} />
-                        )}
-                        <AvatarFallback className="bg-gray-200 text-gray-600 text-sm font-medium">
-                          {contact.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold">{contact.name}</p>
-                        <p className="text-sm text-muted-foreground">{contact.role}</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="icon">
-                      <Phone size={20} />
-                    </Button>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* History */}
-            <Card>
-              <CardHeader>
-                <CardTitle>History</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {(showAllHistory ? jobHistory : jobHistory.slice(0, 3)).map((entry) => (
-                    <div key={entry.id} className="pb-4 border-b border-border last:border-b-0 last:pb-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <p className="font-semibold text-sm">{entry.action}</p>
-                        <span className="text-xs text-muted-foreground">•</span>
-                        <p className="text-xs text-muted-foreground">{entry.timestamp}</p>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-1">{entry.description}</p>
-                      <p className="text-xs text-muted-foreground">by {entry.user}</p>
-                    </div>
-                  ))}
-                  {!showAllHistory && jobHistory.length > 3 && (
-                    <div className="pt-2">
-                      <Button variant="outline" size="sm" onClick={() => setShowAllHistory(true)}>
-                        Show more
-                      </Button>
-                    </div>
-                  )}
-                  {showAllHistory && (
-                    <div className="pt-2">
-                      <Button variant="outline" size="sm" onClick={() => setShowAllHistory(false)}>
-                        Show less
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        );
-
       default:
         return (
           <div className="space-y-4">
-            <Card>
-              <CardContent className="p-8 text-center">
-                <h3 className="text-lg font-semibold mb-2">Job Complete</h3>
-                <p className="text-muted-foreground">All work has been completed and approved.</p>
-              </CardContent>
-            </Card>
+            {/* Only show Job Complete section if status is not Installation */}
+            {job.status !== 'Installation' && (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <h3 className="text-lg font-semibold mb-2">Job Complete</h3>
+                  <p className="text-muted-foreground">All work has been completed and approved.</p>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Orders */}
             <Card>
@@ -1129,120 +809,154 @@ export function JobDetails() {
   };
 
   return (
-    <div className="h-full bg-background">
-      {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
-        <div className="p-4 pb-6">
-          <div className="flex items-start space-x-3 mb-6">
-            <button onClick={() => navigate('/home')} className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white mt-1">
-              <ArrowLeft size={20} />
-            </button>
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <h1 className="text-2xl font-bold text-white">{job.title}</h1>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => toggleFavorite(job.id)} 
-                    className="h-6 w-6 p-0 hover:bg-transparent"
-                  >
-                    <Star 
-                      size={20} 
-                      className={`transition-colors ${
-                        isFavorite(job.id) 
-                          ? "fill-yellow-500 text-yellow-500 hover:text-[#00509e] hover:fill-[#00509e]" 
-                          : "text-white/80 hover:text-[#00509e]"
-                      }`} 
-                    />
-                  </Button>
-                </div>
-                
-                {/* Manage Job Dropdown */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 p-0 text-white/80 hover:bg-white/20 hover:text-white"
-                    >
-                      <MoreVertical size={20} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem className="cursor-pointer">
-                      <CheckCircle size={16} className="mr-2" />
-                      Mark complete
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      <CalendarIcon size={16} className="mr-2" />
-                      Request inspection
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      <Share size={16} className="mr-2" />
-                      Share job
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="flex items-center text-white/80 mt-1">
-                <MapPin size={16} className="mr-1" />
-                <span className="text-sm">{job.location}</span>
-              </div>
-              
-              {/* Job Progress Tracker */}
-              <div className="mt-6 mb-1">
-                <div className="flex items-center justify-between">
-                  {['Pending', 'Awarded', 'Installation', 'Complete'].map((status, index) => {
-                    const isActive = job.status === status;
-                    const isCompleted = ['Pending', 'Awarded', 'Installation', 'Complete'].indexOf(job.status) > index;
-                    const isCurrentOrPast = isActive || isCompleted;
-                    
-                    return (
-                      <div key={status} className="flex-1 flex items-center">
-                        <div className="flex flex-col items-center">
-                          {/* Status Circle */}
-                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                            isCompleted 
-                              ? 'bg-white border-white' 
-                              : isActive 
-                                ? 'bg-white border-white' 
-                                : 'bg-transparent border-white/40'
-                          }`}>
-                            {isCompleted ? (
-                              <CheckCircle size={14} className="text-[#00509e]" />
-                            ) : isActive ? (
-                              <div className="w-2 h-2 bg-[#00509e] rounded-full animate-pulse" />
-                            ) : (
-                              <div className="w-2 h-2 bg-white/40 rounded-full" />
-                            )}
-                          </div>
-                          
-                          {/* Status Label */}
-                          <span className={`text-xs mt-1 font-medium transition-colors ${
-                            isCurrentOrPast ? 'text-white' : 'text-white/60'
-                          }`}>
-                            {status}
-                          </span>
-                        </div>
-                        
-                        {/* Connecting Line */}
-                        {index < 3 && (
-                          <div className={`flex-1 h-0.5 mx-2 transition-colors ${
-                            isCompleted ? 'bg-white' : 'bg-white/30'
-                          }`} />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="h-full">
+      {/* Background Image that extends behind content */}
+      <div className="relative">
+        <div className="h-56">
+          <img 
+            src={getJobImage(job.title)} 
+            alt={job.title}
+            className="w-full h-full object-cover"
+          />
+          {/* Back Button Overlay */}
+          <button 
+            onClick={() => navigate('/home')} 
+            className="absolute left-4 p-2 rounded-full bg-white/90 hover:bg-white transition-colors shadow-md"
+            style={{ top: 'calc(env(safe-area-inset-top) + 3rem)' }}
+          >
+            <ArrowLeft size={20} className="text-gray-700" />
+          </button>
+          {/* More Options Button */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="absolute right-4 h-10 w-10 p-0 bg-white/90 hover:bg-white shadow-md rounded-full"
+                style={{ top: 'calc(env(safe-area-inset-top) + 3rem)' }}
+              >
+                <MoreVertical size={20} className="text-gray-700" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem className="cursor-pointer">
+                <CheckCircle size={16} className="mr-2" />
+                Mark complete
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <CalendarIcon size={16} className="mr-2" />
+                Request inspection
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Share size={16} className="mr-2" />
+                Share job
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      <div className="pt-8 px-4 pb-20">
+      {/* Body Content Section with overlap and job info */}
+      <div className="bg-background rounded-t-3xl px-4 pb-20 pt-6 -mt-8 relative z-10 shadow-xl min-h-screen">
+        {/* Job Info Section */}
+        <div className="mb-6">
+          <div className="flex items-baseline mb-2">
+            <h1 className="text-2xl font-bold text-foreground">{job.title}</h1>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => toggleFavorite(job.id)} 
+              className="h-8 w-8 p-0 hover:bg-transparent ml-2"
+            >
+              <Star 
+                size={20} 
+                className={`transition-colors ${
+                  isFavorite(job.id) 
+                    ? "fill-yellow-500 text-yellow-500" 
+                    : "text-gray-400 hover:text-yellow-500"
+                }`} 
+              />
+            </Button>
+          </div>
+          
+          <div className="flex items-center text-muted-foreground mb-4">
+            <MapPin size={16} className="mr-1" />
+            <span className="text-sm">{job.location}</span>
+          </div>
+          
+          {/* Status Progress Tracker */}
+          <div className="mb-6 max-w-md mx-auto">
+            <div className="flex items-center justify-between">
+              {['Pending', 'Awarded', 'Installation', 'Complete'].map((status, index) => {
+                const isActive = job.status === status;
+                const isCompleted = ['Pending', 'Awarded', 'Installation', 'Complete'].indexOf(job.status) > index;
+                const isCurrentOrPast = isActive || isCompleted;
+                
+                return (
+                  <div key={status} className="flex-1 flex items-center">
+                    <div className="flex flex-col items-center">
+                      {/* Status Circle */}
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        isCompleted 
+                          ? 'bg-primary border-primary' 
+                          : isActive 
+                            ? 'bg-primary border-primary' 
+                            : 'bg-transparent border-gray-300'
+                      }`}>
+                        {isCompleted ? (
+                          <CheckCircle size={14} className="text-white" />
+                        ) : isActive ? (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        ) : (
+                          <div className="w-2 h-2 bg-gray-300 rounded-full" />
+                        )}
+                      </div>
+                      
+                      {/* Status Label */}
+                      <span className={`text-xs mt-1 font-medium transition-colors ${
+                        isCurrentOrPast ? 'text-foreground' : 'text-muted-foreground'
+                      }`}>
+                        {status}
+                      </span>
+                    </div>
+                    
+                    {/* Connecting Line */}
+                    {index < 3 && (
+                      <div className={`flex-1 h-0.5 mx-2 transition-colors ${
+                        isCompleted ? 'bg-primary' : 'bg-gray-300'
+                      }`} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          {/* Installation Instructions Section - Only show for Installation status */}
+          {job.status === 'Installation' && (
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold mb-3">Installation instructions</h2>
+              <div className="space-y-2">
+                {roofAreas.map((area) => (
+                  <div 
+                    key={area.id} 
+                    className="border border-gray-300 rounded-lg overflow-hidden"
+                  >
+                    <button 
+                      className="w-full px-4 py-3 text-left font-medium text-foreground bg-gray-50 hover:bg-gray-100 transition-colors flex items-center justify-between"
+                      onClick={() => navigate(`/installation/${job.id}/${area.id}`)}
+                    >
+                      <span>{area.name}</span>
+                      <ChevronDown size={16} className="text-muted-foreground" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Main Content */}
         {renderContent()}
       </div>
     </div>
