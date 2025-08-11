@@ -126,10 +126,11 @@ export function JobDetails() {
   ];
 
   const documents = [
-    { id: 1, name: 'Sure-Seal EPDM Installation Manual', category: 'Project', type: 'pdf', size: '2.4 MB', link: 'https://www.carlisle.com/docs/sure-seal-installation-guide' },
-    { id: 2, name: 'FAST Adhesive Safety Data Sheet', category: 'Safety', type: 'pdf', size: '1.1 MB', link: 'https://www.carlisle.com/docs/fast-adhesive-sds' },
-    { id: 3, name: 'Carlisle Warranty Certificate', category: 'Project', type: 'pdf', size: '0.8 MB', link: 'https://www.carlisle.com/warranty' },
-    { id: 4, name: 'Sure-Weld TPO Specification Sheet', category: 'Data Sheet', type: 'pdf', size: '1.8 MB', link: 'https://www.carlisle.com/docs/sure-weld-tpo-specs' },
+    { id: 1, name: `Assembly Letter - ${job.title}`, category: 'Project', type: 'pdf', size: '1.2 MB', link: '#' },
+    { id: 2, name: `Submittal Package - ${job.title}`, category: 'Project', type: 'pdf', size: '3.4 MB', link: '#' },
+    { id: 3, name: `Warranty Application - ${job.title}`, category: 'Project', type: 'pdf', size: '1.0 MB', link: '#' },
+    { id: 4, name: `Roof Drawing - ${job.title}`, category: 'Project', type: 'pdf', size: '2.2 MB', link: '#' },
+    { id: 5, name: `Notice of Award - ${job.title}`, category: 'Project', type: 'pdf', size: '0.9 MB', link: '#' },
   ];
 
   const materials = [
@@ -597,7 +598,7 @@ export function JobDetails() {
 
                   <TabsContent value="Project" className="space-y-3">
                     <div className="space-y-3">
-                      {filterDocumentsByCategory(documents, 'Project').slice(0, 5).map((doc) => (
+                      {documents.slice(0, 5).map((doc) => (
                         <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
                           <CardContent className="p-4">
                             <div className="flex items-start space-x-3">
