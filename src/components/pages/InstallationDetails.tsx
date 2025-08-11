@@ -83,16 +83,16 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
   ];
 
   return (
-    <DialogContent className="max-w-[480px] p-0 rounded-xl overflow-hidden">
-      <DialogHeader className="px-6 pt-6 pb-2">
-        <DialogTitle className="text-xl font-bold">Installation Details</DialogTitle>
-        <DialogClose asChild>
-          <Button variant="ghost" size="icon" className="absolute right-4 top-4" onClick={onClose}>
+  <DialogContent className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col">
+      <DialogHeader className="px-6 pt-6 pb-2 flex items-end justify-between">
+        <div className="flex items-end gap-2 w-full">
+          <Button variant="ghost" size="icon" className="mr-2 flex items-center justify-center" onClick={onClose}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-        </DialogClose>
+          <DialogTitle className="text-xl font-bold -mt-10">Installation Details</DialogTitle>
+        </div>
       </DialogHeader>
-      <div className="px-6 pb-6">
+  <div className="px-6 pb-6 flex-1 overflow-y-auto">
         {sections.map((section, idx) => (
           <div key={section.title} className={idx === 0 ? "mb-8" : "mb-8 mt-0.5"}>
             <h2 className="font-semibold text-lg mb-1">{section.title}</h2>

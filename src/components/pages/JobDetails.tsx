@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { Dialog } from '@/components/ui/dialog';
 import { InstallationDetails } from './InstallationDetails';
+import { getJobImage } from '@/lib/getJobImage';
 
 export function JobDetails() {
   const { id } = useParams();
@@ -66,31 +67,7 @@ export function JobDetails() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
-  // Helper function to get job image based on title
-  const getJobImage = (title: string) => {
-    const lowerTitle = title.toLowerCase();
-    
-    if (lowerTitle.includes('data center')) {
-      return '/Job pictures/Data Center 1.jpeg';
-    } else if (lowerTitle.includes('office')) {
-      return '/Job pictures/Office building 1.jpeg';
-    } else if (lowerTitle.includes('warehouse')) {
-      return '/Job pictures/Warehouse 1.jpeg';
-    } else if (lowerTitle.includes('hospital') || lowerTitle.includes('medical')) {
-      return '/Job pictures/Hospital 1.jpeg';
-    } else if (lowerTitle.includes('manufacturing') || lowerTitle.includes('plant')) {
-      return '/Job pictures/Warehouse 2.jpeg';
-    } else if (lowerTitle.includes('retail') || lowerTitle.includes('shopping')) {
-      return '/Job pictures/Shopping center 1.jpeg';
-    } else if (lowerTitle.includes('tech') || lowerTitle.includes('campus')) {
-      return '/Job pictures/Office building 3.jpeg';
-    } else if (lowerTitle.includes('construction')) {
-      return '/Job pictures/Skyscraper.jpeg';
-    } else {
-      // Default fallback for other job types
-      return '/Job pictures/Office building 1.jpeg';
-    }
-  };
+  // ...existing code...
 
   // Check if job status has been updated in localStorage
   const getJobStatus = (jobId: string, defaultStatus: string) => {

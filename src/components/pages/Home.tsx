@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getJobImage } from '@/lib/getJobImage';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,32 +32,7 @@ export function Home() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
-  // Helper function to get job image based on title
-  const getJobImage = (title: string) => {
-    const lowerTitle = title.toLowerCase();
-    if (lowerTitle === 'downtown office complex') {
-      return '/Job pictures/Office building 2.jpeg';
-    } else if (lowerTitle === 'distribution center') {
-      return '/Job pictures/Warehouse 4.jpeg';
-    } else if (lowerTitle.includes('office')) {
-      return '/Job pictures/Office building 1.jpeg';
-    } else if (lowerTitle.includes('warehouse')) {
-      return '/Job pictures/Warehouse 1.jpeg';
-    } else if (lowerTitle.includes('hospital') || lowerTitle.includes('medical')) {
-      return '/Job pictures/Hospital 1.jpeg';
-    } else if (lowerTitle.includes('manufacturing') || lowerTitle.includes('plant')) {
-      return '/Job pictures/Warehouse 2.jpeg';
-    } else if (lowerTitle.includes('retail') || lowerTitle.includes('shopping')) {
-      return '/Job pictures/Shopping center 1.jpeg';
-    } else if (lowerTitle.includes('tech') || lowerTitle.includes('campus')) {
-      return '/Job pictures/Office building 3.jpeg';
-    } else if (lowerTitle.includes('construction')) {
-      return '/Job pictures/Skyscraper.jpeg';
-    } else {
-      // Default fallback for other job types
-      return '/Job pictures/Office building 1.jpeg';
-    }
-  };
+  // ...existing code...
 
   // Helper function to get updated job status
   const getJobStatus = (jobId: string, defaultStatus: string) => {
