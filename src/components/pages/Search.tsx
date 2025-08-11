@@ -155,7 +155,7 @@ export function Search() {
     <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-surface border-b border-border safe-top">
-        <div className="p-4">
+        <div className="p-8">
           <div className="flex items-center space-x-3">
             <div className="flex-1 relative">
               <Input
@@ -212,7 +212,7 @@ export function Search() {
       </div>
 
       {/* Results */}
-      <div className="p-4 pb-20">
+      <div className="px-8 py-4 pb-20">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
             <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>

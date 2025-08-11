@@ -66,7 +66,9 @@ export function JobDetails() {
   const getJobImage = (title: string) => {
     const lowerTitle = title.toLowerCase();
     
-    if (lowerTitle.includes('office')) {
+    if (lowerTitle.includes('data center')) {
+      return '/Job pictures/Data Center 1.jpeg';
+    } else if (lowerTitle.includes('office')) {
       return '/Job pictures/Office building 1.jpeg';
     } else if (lowerTitle.includes('warehouse')) {
       return '/Job pictures/Warehouse 1.jpeg';
@@ -87,60 +89,41 @@ export function JobDetails() {
   };
 
   // Check if job status has been updated in localStorage
-  const getJobStatus = () => {
-    const storedStatus = localStorage.getItem(`job_status_${id}`);
-    if (storedStatus) return storedStatus;
-    
-    // Default status based on job ID
-    return id === '1' ? 'Installation' : id === '3' ? 'Complete' : id === '7' ? 'Pending' : id === '4' ? 'Awarded' : 'Installation';
+  const getJobStatus = (jobId: string, defaultStatus: string) => {
+    const stored = localStorage.getItem(`job_${jobId}_status`);
+    return stored || defaultStatus;
   };
 
-  // Mock job data based on ID
-  const getJobData = () => {
+  // Job data that matches the Home page structure
+  const getAllJobs = () => {
     const jobs = {
-      '1': {
-        title: 'Downtown Office Complex',
-        location: '450 Market Street, Philadelphia, PA',
-        area: '25,000 sq ft',
-        startDate: '2024-07-15',
-        estimatedCompletion: '2024-08-30',
-        progress: 65
-      },
-      '2': {
-        title: 'Retail Shopping Center', 
-        location: '2750 Cumberland Parkway, Mechanicsburg, PA',
-        area: '15,000 sq ft',
-        startDate: '2024-07-20',
-        estimatedCompletion: '2024-09-15',
-        progress: 40
-      },
-      '3': {
-        title: 'Manufacturing Plant',
-        location: '1500 Industrial Boulevard, Carlisle, PA',
-        area: '50,000 sq ft',
-        startDate: '2024-06-01',
-        estimatedCompletion: '2024-08-15',
-        progress: 100
-      },
-      '4': {
-        title: 'Warehouse Facility',
-        location: '890 Norristown Road, Blue Bell, PA',
-        area: '30,000 sq ft',
-        startDate: '2024-08-20',
-        estimatedCompletion: '2024-10-15',
-        progress: 0
-      },
-      '7': {
-        title: 'New Construction Project',
-        location: '123 Commerce Drive, Carlisle, PA',
-        area: '18,000 sq ft',
-        startDate: '2024-08-25',
-        estimatedCompletion: '2024-11-30',
-        progress: 0
-      }
+      pending: [
+        { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
+      ],
+      inProgress: [
+        { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: getJobStatus('2', 'Installation'), progress: 40 },
+        { id: '9', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: getJobStatus('9', 'Installation'), progress: 75 },
+        { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: getJobStatus('1', 'Installation'), progress: 65 },
+        { id: '10', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: getJobStatus('10', 'Installation'), progress: 30 },
+        { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
+        { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: getJobStatus('11', 'Installation'), progress: 85 },
+        { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: getJobStatus('12', 'Installation'), progress: 20 },
+      ],
+      completed: [
+        { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
+        { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: getJobStatus('3', 'Complete'), completedDate: '2024-08-15' },
+        { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
+        { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
+      ]
     };
     
-    return jobs[id] || jobs['1']; // Default to job 1 if not found
+    return [...jobs.pending, ...jobs.inProgress, ...jobs.completed];
+  };
+
+  // Find the specific job by ID
+  const getJobData = () => {
+    const allJobs = getAllJobs();
+    return allJobs.find(job => job.id === id) || allJobs.find(job => job.id === '1'); // Default to job 1 if not found
   };
 
   const jobData = getJobData();
@@ -149,7 +132,9 @@ export function JobDetails() {
   const job = {
     id,
     ...jobData,
-    status: getJobStatus()
+    area: '25,000 sq ft',
+    startDate: '2024-07-15',
+    estimatedCompletion: '2024-08-30'
   };
 
   const roofAreas = [
@@ -429,8 +414,8 @@ export function JobDetails() {
           <div className="space-y-8">
           {/* Orders */}
           <Card>
-            <CardHeader>
-              <CardTitle>Orders</CardTitle>
+            <CardHeader className="pb-4 pt-3">
+              <h2 className="text-xl font-semibold leading-none tracking-tight">Orders</h2>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -484,8 +469,8 @@ export function JobDetails() {
 
           {/* Documents */}
           <Card>
-            <CardHeader>
-              <CardTitle>Documents</CardTitle>
+            <CardHeader className="pb-4 pt-3">
+              <h2 className="text-xl font-semibold leading-none tracking-tight">Documents</h2>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="Project" className="space-y-4">
@@ -575,8 +560,8 @@ export function JobDetails() {
 
           {/* History */}
           <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>History</CardTitle>
+            <CardHeader className="pb-4 pt-3">
+              <h2 className="text-xl font-semibold leading-none tracking-tight">History</h2>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -626,8 +611,8 @@ export function JobDetails() {
 
             {/* Orders */}
             <Card>
-              <CardHeader>
-                <CardTitle>Orders</CardTitle>
+              <CardHeader className="pb-4 pt-3">
+                <h2 className="text-xl font-semibold leading-none tracking-tight">Orders</h2>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -681,8 +666,8 @@ export function JobDetails() {
 
           {/* Documents */}
           <Card>
-            <CardHeader>
-              <CardTitle>Documents</CardTitle>
+            <CardHeader className="pb-4 pt-3">
+              <h2 className="text-xl font-semibold leading-none tracking-tight">Documents</h2>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="Project" className="space-y-4">
@@ -770,8 +755,8 @@ export function JobDetails() {
             </CardContent>
           </Card>            {/* History */}
             <Card>
-              <CardHeader>
-                <CardTitle>History</CardTitle>
+              <CardHeader className="pb-4 pt-3">
+                <h2 className="text-xl font-semibold leading-none tracking-tight">History</h2>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -840,16 +825,12 @@ export function JobDetails() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem className="cursor-pointer">
-                <CheckCircle size={16} className="mr-2" />
-                Mark complete
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
                 <CalendarIcon size={16} className="mr-2" />
                 Request inspection
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <Share size={16} className="mr-2" />
-                Share job
+                Manage job team
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -857,9 +838,9 @@ export function JobDetails() {
       </div>
 
       {/* Body Content Section with overlap and job info */}
-      <div className="bg-background rounded-t-3xl px-4 pb-20 pt-6 -mt-8 relative z-10 shadow-xl min-h-screen">
+      <div className="bg-background rounded-t-3xl px-8 pb-20 -mt-6 relative z-10 shadow-xl min-h-screen">
         {/* Job Info Section */}
-        <div className="mb-6">
+        <div className="mb-6 pt-2">
           <div className="flex items-baseline mb-2">
             <h1 className="text-2xl font-bold text-foreground">{job.title}</h1>
             <Button 

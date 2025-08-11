@@ -26,7 +26,7 @@ export function Profile() {
     <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top">
-        <div className="p-4">
+        <div className="p-8">
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-3">
               <button onClick={() => navigate('/settings')} className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white mt-1">
@@ -41,7 +41,7 @@ export function Profile() {
         </div>
       </div>
 
-      <div className="p-4 space-y-8 pb-20">
+      <div className="px-8 py-4 space-y-8 pb-20">
         <Card>
           <CardContent className="space-y-4 pt-4">
             <div className="flex items-center space-x-4">

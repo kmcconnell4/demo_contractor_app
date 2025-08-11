@@ -97,7 +97,7 @@ export function Create() {
     <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-surface border-b border-border safe-top">
-        <div className="p-4">
+        <div className="p-8">
           <div className="flex items-start space-x-3">
             <button onClick={() => navigate('/home')} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors mt-1">
               <ArrowLeft size={20} />
@@ -122,7 +122,7 @@ export function Create() {
         </div>
       </div>
 
-      <div className="p-4 pb-20">
+      <div className="px-8 py-4 pb-20">
         {/* Step 1: Project Details */}
         {step === 1 && (
           <Card>

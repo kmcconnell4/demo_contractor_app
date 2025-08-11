@@ -66,13 +66,13 @@ export function Settings() {
     <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
-        <div className="p-4">
+        <div className="p-8">
           <h1 className="text-2xl font-bold text-white">Settings</h1>
           <p className="text-white/80">Manage your account and preferences</p>
         </div>
       </div>
 
-      <div className="pt-8 px-4 space-y-8 pb-20">
+      <div className="pt-8 px-8 space-y-8 pb-20">
         {/* Profile Link */}
         <Card className="cursor-pointer transition-material hover:elevation-2" onClick={() => window.location.href = '/profile'}>
           <CardContent className="p-4">
@@ -87,7 +87,7 @@ export function Settings() {
                 <h3 className="font-semibold text-lg">{profile.name}</h3>
                 <p className="text-muted-foreground">View profile</p>
               </div>
-              <ChevronRight size={20} className="text-muted-foreground" />
+              <ChevronRight size={20} className="text-[#012b64]" />
             </div>
           </CardContent>
         </Card>
@@ -98,7 +98,7 @@ export function Settings() {
             <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/notifications'}>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <Bell size={20} className="text-muted-foreground" />
+                  <Bell size={20} className="text-[#012b64]" />
                   <div className="flex-1">
                     <h4 className="font-medium">Notifications</h4>
                     <p className="text-sm text-muted-foreground">Manage your notification preferences</p>
@@ -111,7 +111,7 @@ export function Settings() {
             <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/language'}>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <Globe size={20} className="text-muted-foreground" />
+                  <Globe size={20} className="text-[#012b64]" />
                   <div className="flex-1">
                     <h4 className="font-medium">Language</h4>
                     <p className="text-sm text-muted-foreground">Change your language preferences</p>
@@ -124,7 +124,7 @@ export function Settings() {
             <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/change-password'}>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <Key size={20} className="text-muted-foreground" />
+                  <Key size={20} className="text-[#012b64]" />
                   <div className="flex-1">
                     <h4 className="font-medium">Change password</h4>
                     <p className="text-sm text-muted-foreground">Update your account password</p>
@@ -137,7 +137,7 @@ export function Settings() {
             <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/about'}>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <Info size={20} className="text-muted-foreground" />
+                  <Info size={20} className="text-[#012b64]" />
                   <div className="flex-1">
                     <h4 className="font-medium">About</h4>
                     <p className="text-sm text-muted-foreground">App information and version details</p>
@@ -150,7 +150,7 @@ export function Settings() {
             <Card className="cursor-pointer transition-material hover:elevation-1" onClick={() => window.location.href = '/support'}>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <HelpCircle size={20} className="text-muted-foreground" />
+                  <HelpCircle size={20} className="text-[#012b64]" />
                   <div className="flex-1">
                     <h4 className="font-medium">Support</h4>
                     <p className="text-sm text-muted-foreground">Get help and contact support</p>

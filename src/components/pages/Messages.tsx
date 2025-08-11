@@ -109,7 +109,7 @@ export function Messages() {
     <div className="h-full bg-background flex flex-col">
       {/* Header */}
       <div className="bg-surface border-b border-border safe-top">
-        <div className="p-4">
+        <div className="p-8">
           <h1 className="text-2xl font-bold mb-3">Messages</h1>
           
           {/* Search */}
@@ -129,7 +129,7 @@ export function Messages() {
         {!selectedChat ? (
           /* Chat List */
           <div className="h-full overflow-y-auto">
-            <div className="p-4 space-y-3 pb-20">
+            <div className="px-8 py-4 space-y-3 pb-20">
               {chats
                 .filter(chat => 
                   chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -190,7 +190,7 @@ export function Messages() {
           /* Chat View */
           <div className="h-full flex flex-col">
             {/* Chat Header */}
-            <div className="bg-surface border-b border-border p-4">
+            <div className="bg-surface border-b border-border px-8 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <Button variant="ghost" size="icon" onClick={() => setSelectedChat(null)}>
@@ -218,7 +218,7 @@ export function Messages() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto px-8 py-4 space-y-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -248,7 +248,7 @@ export function Messages() {
             </div>
 
             {/* Message Input */}
-            <div className="bg-surface border-t border-border p-4">
+            <div className="bg-surface border-t border-border px-8 py-4">
               <div className="flex items-center space-x-3">
                 <Input
                   placeholder="Type a message..."

@@ -176,7 +176,7 @@ export function Home() {
     <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
-        <div className="p-4 pb-6">
+        <div className="px-8 py-4 pb-6">
           <div className="mb-4">
             <div className="flex items-center justify-between">
               <Avatar 
@@ -214,7 +214,7 @@ export function Home() {
       </div>
 
       {/* Job Dashboard */}
-      <div className="home-page pt-8 px-4 space-y-8 pb-20">
+      <div className="home-page pt-8 px-8 space-y-8 pb-20">
         {/* Alerts Section */}
         <div>
           {/* Inspection Alert */}
@@ -226,7 +226,7 @@ export function Home() {
               <div className="flex-1">
                 <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Inspection reminder</h3>
                 <p className="text-xs text-[#012b64]/80 leading-relaxed">
-                  You have an inspection scheduled at 4PM today at 450 Market Street
+                  You have an inspection at 4PM today at 450 Market St.
                 </p>
               </div>
             </div>
@@ -295,7 +295,7 @@ export function Home() {
             <h2 className="text-xl font-semibold">Browse for documents</h2>
             <button className="text-sm text-primary font-medium">View all</button>
           </div>
-          <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2 pt-2">
+          <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2 pt-2">
             {/* Safety Data Sheets */}
             <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">

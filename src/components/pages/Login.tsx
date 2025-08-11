@@ -31,7 +31,7 @@ export function Login({ onLogin }: LoginProps) {
   const isFormValid = formData.email.trim() !== '' && formData.password.trim() !== '';
 
   return (
-    <div className="h-full bg-gradient-primary flex items-center justify-center p-4 safe-top safe-bottom">
+    <div className="h-full bg-gradient-primary flex items-center justify-center p-8 safe-top safe-bottom">
       <Card className="w-full max-w-md elevation-3">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
