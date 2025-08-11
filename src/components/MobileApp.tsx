@@ -50,7 +50,6 @@ function AppRoutes() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/job/:id" element={<JobDetails />} />
             <Route path="/job/:id/schedule-inspection" element={<ScheduleInspection />} />
-            <Route path="/installation/:id/:area" element={<InstallationDetails />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/order/:id" element={<OrderDetails />} />
         </Routes>

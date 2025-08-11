@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 import { 
-  ArrowLeft, 
+  ArrowLeft, Box, 
   File, 
   Package, 
   Calendar as CalendarIcon, 
@@ -36,6 +36,8 @@ import {
   Trash2,
   Share
 } from 'lucide-react';
+import { Dialog } from '@/components/ui/dialog';
+import { InstallationDetails } from './InstallationDetails';
 
 export function JobDetails() {
   const { id } = useParams();
@@ -43,6 +45,8 @@ export function JobDetails() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showAllOrders, setShowAllOrders] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [selectedArea, setSelectedArea] = useState<string | null>(null);
   
   // Favorites state management
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -419,35 +423,27 @@ export function JobDetails() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {(showAllOrders ? orders : orders.slice(0, 3)).map((order) => (
-                  <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                              <img 
-                                src={getProductImages(order.products)} 
-                                alt="Product preview"
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = '/placeholder.jpg';
-                                }}
-                              />
+                  {(showAllOrders ? orders : orders.slice(0, 3)).map((order) => (
+                    <Card key={order.id} className="cursor-pointer hover:elevation-2" onClick={() => navigate(`/order/${order.id}`)}>
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <Box size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div>
+                                <h3 className="font-semibold">{order.orderNumber}</h3>
+                                <p className="text-sm text-muted-foreground">
+                                  {order.status === 'delivered' ? 'Delivered' : 'Placed on'} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? 'product' : 'products'}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h3 className="font-semibold">{order.orderNumber}</h3>
-                              <p className="text-sm text-muted-foreground">
-                                {order.status === 'delivered' ? 'Delivered' : 'Placed on'} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? 'product' : 'products'}
-                              </p>
-                            </div>
+                            <ChevronRight size={20} className="text-muted-foreground" />
                           </div>
-                          <ChevronRight size={20} className="text-muted-foreground" />
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
                 ))}
                 {!showAllOrders && orders.length > 3 && (
                   <div className="pt-2">
@@ -609,6 +605,97 @@ export function JobDetails() {
               </Card>
             )}
 
+            {/* Documents */}
+            <Card>
+              <CardHeader className="pb-4 pt-3">
+                <h2 className="text-xl font-semibold leading-none tracking-tight">Documents</h2>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="Project" className="space-y-4">
+                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
+                    <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
+                    <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
+                    <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="Project" className="space-y-3">
+                    <div className="space-y-3">
+                      {filterDocumentsByCategory(documents, 'Project').slice(0, 5).map((doc) => (
+                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <File size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-card-foreground truncate">
+                                  {doc.name}
+                                </h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="Safety" className="space-y-3">
+                    <div className="space-y-3">
+                      {filterDocumentsByCategory(documents, 'Safety').slice(0, 5).map((doc) => (
+                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <File size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-card-foreground truncate">
+                                  {doc.name}
+                                </h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="Data Sheet" className="space-y-3">
+                    <div className="space-y-3">
+                      {filterDocumentsByCategory(documents, 'Data Sheet').slice(0, 5).map((doc) => (
+                        <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                          <CardContent className="p-4">
+                            <div className="flex items-start space-x-3">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <File size={24} style={{ color: "#012b64" }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-card-foreground truncate">
+                                  {doc.name}
+                                </h3>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{doc.size}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+
             {/* Orders */}
             <Card>
               <CardHeader className="pb-4 pt-3">
@@ -622,16 +709,8 @@ export function JobDetails() {
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                                <img 
-                                  src={getProductImages(order.products)} 
-                                  alt="Product preview"
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = '/placeholder.jpg';
-                                  }}
-                                />
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <Box size={24} style={{ color: "#012b64" }} />
                               </div>
                               <div>
                                 <h3 className="font-semibold">{order.orderNumber}</h3>
@@ -663,97 +742,6 @@ export function JobDetails() {
                 </div>
               </CardContent>
             </Card>
-
-          {/* Documents */}
-          <Card>
-            <CardHeader className="pb-4 pt-3">
-              <h2 className="text-xl font-semibold leading-none tracking-tight">Documents</h2>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="Project" className="space-y-4">
-                <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                  <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                  <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
-                  <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="Project" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocumentsByCategory(documents, 'Project').slice(0, 5).map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#012b64" }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground truncate">
-                                {doc.name}
-                              </h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                <span className="text-sm text-muted-foreground">{doc.size}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="Safety" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocumentsByCategory(documents, 'Safety').slice(0, 5).map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#012b64" }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground truncate">
-                                {doc.name}
-                              </h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                <span className="text-sm text-muted-foreground">{doc.size}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="Data Sheet" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocumentsByCategory(documents, 'Data Sheet').slice(0, 5).map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#012b64" }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground truncate">
-                                {doc.name}
-                              </h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                <span className="text-sm text-muted-foreground">{doc.size}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>            {/* History */}
             <Card>
               <CardHeader className="pb-4 pt-3">
                 <h2 className="text-xl font-semibold leading-none tracking-tight">History</h2>
@@ -925,14 +913,19 @@ export function JobDetails() {
                   >
                     <button 
                       className="w-full px-4 py-3 text-left font-medium text-foreground bg-gray-50 hover:bg-gray-100 transition-colors flex items-center justify-between"
-                      onClick={() => navigate(`/installation/${job.id}/${area.id}`)}
+                      onClick={() => { setSelectedArea(area.id); setShowInstallModal(true); }}
                     >
                       <span>{area.name}</span>
-                      <ChevronDown size={16} className="text-muted-foreground" />
+                      <ChevronRight size={16} className="text-muted-foreground" />
                     </button>
                   </div>
                 ))}
               </div>
+              <Dialog open={showInstallModal} onOpenChange={setShowInstallModal}>
+                {selectedArea && (
+                  <InstallationDetails id={job.id} area={selectedArea} onClose={() => setShowInstallModal(false)} />
+                )}
+              </Dialog>
             </div>
           )}
         </div>

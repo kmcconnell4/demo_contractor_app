@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -17,286 +18,111 @@ import {
   ChevronRight
 } from 'lucide-react';
 
-export function InstallationDetails() {
-  const { id, area } = useParams();
-  const navigate = useNavigate();
+interface InstallationDetailsProps {
+  id: string;
+  area: string;
+  onClose: () => void;
+}
 
-  const installationSteps = [
-    {
-      id: 1,
-      name: 'Deck Preparation',
-      description: 'Clean and prepare the roof deck surface',
-      status: 'complete',
-      products: ['Deck Cleaner & Primer', 'Safety Equipment', 'Surface Preparation Tools'],
-      videoUrl: '/api/video/deck-prep',
-      documents: ['Carlisle Deck Preparation Guide.pdf', 'Safety Checklist.pdf'],
-      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Detail&limit=100&q=deck+preparation']
-    },
-    {
-      id: 2,
-      name: 'FAST Adhesive Application',
-      description: 'Apply FAST Adhesive system to ensure proper membrane adhesion',
-      status: 'complete',
-      products: ['FAST Adhesive Primer', 'Application Rollers', 'Spray Equipment'],
-      videoUrl: '/api/video/fast-adhesive-application',
-      documents: ['FAST Adhesive Application Guide.pdf', 'FAST Technical Data Sheet.pdf'],
-      specs: ['https://www.carlislesyntec.com/Document-Viewer/flexible-fast-adhesive-product-data-sheet-pds/rw1957auuUyaOyb-gEUuiA']
-    },
-    {
-      id: 3,
-      name: 'SecurShield Base Installation',
-      description: 'Install SecurShield base layer for membrane foundation',
-      status: 'in-progress',
-      products: ['SecurShield Base Sheet', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Sealing Tape'],
-      videoUrl: '/api/video/securshield-base',
-      documents: ['SecurShield Installation Guide.pdf', 'Fastening Pattern Specifications.pdf'],
-      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield']
-    },
-    {
-      id: 4,
-      name: 'Bottom SecurShield HD Insulation',
-      description: 'Install first layer of SecurShield HD polyiso insulation',
-      status: 'pending',
-      products: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Insulation Fasteners'],
-      videoUrl: '/api/video/securshield-hd-bottom',
-      documents: ['SecurShield HD Installation Manual.pdf', 'R-Value Performance Chart.pdf'],
-      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+HD']
-    },
-    {
-      id: 5,
-      name: 'Top SecurShield HD Insulation',
-      description: 'Install second layer of SecurShield HD with offset joints',
-      status: 'pending',
-      products: ['SecurShield HD Polyiso 2"', 'FAST Adhesive', 'Pressure-Sensitive Joint Tape'],
-      videoUrl: '/api/video/securshield-hd-top',
-      documents: ['SecurShield HD Installation Manual.pdf', 'Joint Sealing Best Practices.pdf'],
-      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+HD']
-    },
-    {
-      id: 6,
-      name: 'SecurShield Cover Board',
-      description: 'Install SecurShield cover board for membrane protection',
-      status: 'pending',
-      products: ['SecurShield Cover Board', 'Heavy-Duty Fasteners', 'Pressure-Sensitive Joint Tape'],
-      videoUrl: '/api/video/securshield-cover-board',
-      documents: ['SecurShield Cover Board Installation.pdf', 'Membrane Protection Guidelines.pdf'],
-      specs: ['https://www.carlislesyntec.com/Search?tabFilter=document-tab&media_type=Product+Data+Sheet&limit=100&q=SecurShield+cover+board']
-    },
-    {
-      id: 7,
-      name: 'Sure-Seal EPDM Installation',
-      description: 'Install Sure-Seal EPDM membrane with proper seaming',
-      status: 'pending',
-      products: ['Sure-Seal EPDM 60 mil', 'Pressure-Sensitive Seaming Tape', 'Sure-Weld Splicing Cement', 'Sure-Seal Lap Sealant'],
-      videoUrl: '/api/video/sure-seal-epdm',
-      documents: ['Sure-Seal Installation Manual.pdf', 'EPDM Seaming Procedures.pdf', 'Carlisle Warranty Information.pdf'],
-      specs: ['https://www.carlislesyntec.com/Search?q=sure-seal&tabFilter=document-tab&system_type=EPDM&media_type=Product+Data+Sheet%7CMembrane']
-    }
-  ];
-
-  // Initialize collapsed state - complete steps are collapsed by default
-  const [collapsedSteps, setCollapsedSteps] = useState<Record<number, boolean>>(() => {
-    const initialState: Record<number, boolean> = {};
-    installationSteps.forEach(step => {
-      // Complete steps start collapsed, others start expanded
-      initialState[step.id] = step.status === 'complete';
-    });
-    return initialState;
-  });
-
-  const toggleStep = (stepId: number) => {
-    setCollapsedSteps(prev => ({
-      ...prev,
-      [stepId]: !prev[stepId]
-    }));
-  };
-
-  const getStepStatusColor = (status: string) => {
-    switch (status) {
-      case 'complete': return 'text-success';
-      case 'in-progress': return 'text-warning';
-      case 'pending': return 'text-muted-foreground';
-      default: return 'text-muted-foreground';
-    }
-  };
-
-  const getStepIcon = (status: string) => {
-    switch (status) {
-      case 'complete': return <CheckCircle size={24} className="text-success" />;
-      case 'in-progress': return <Clock size={24} className="text-warning" />;
-      case 'pending': return <AlertTriangle size={24} className="text-muted-foreground" />;
-      default: return <AlertTriangle size={24} className="text-muted-foreground" />;
-    }
-  };
-
-  const completedSteps = installationSteps.filter(step => step.status === 'complete').length;
-
+export function InstallationDetails({ id, area, onClose }: InstallationDetailsProps) {
   return (
-    <div className="h-full bg-background">
-      {/* Header */}
-      <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
-        <div className="p-4 pb-6">
-          <div className="flex items-start space-x-3">
-            <button 
-              onClick={() => navigate(`/job/${id}`)} 
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white mt-1"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-white">Roof Area {area}</h1>
-              <p className="text-white/80 text-sm">
-                {completedSteps} of {installationSteps.length} steps completed
-              </p>
+  <DialogContent className="w-full max-w-none p-0 overflow-y-auto rounded-t-2xl" style={{ minHeight: 'calc(100dvh - 2rem)', height: 'calc(100dvh - 2rem)', marginTop: '2rem' }}>
+      <DialogHeader className="sticky top-0 z-10 bg-background px-6 pt-6 pb-2 border-b border-border">
+        <DialogTitle className="flex items-center">
+          <ArrowLeft size={20} className="mr-2 cursor-pointer" onClick={onClose} />
+          Roof area {area}
+        </DialogTitle>
+      </DialogHeader>
+      <div className="px-6 pb-6">
+        {[
+          // ...existing code...
+          {
+            title: "Deck",
+            products: [
+              { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+              { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
+              { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
+            ],
+            instructions: "Inspect the deck for damage and debris. Ensure the surface is dry and clean. Mark any areas requiring repair."
+          },
+          {
+            title: "Primer",
+            products: [
+              { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" },
+              { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" },
+              { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" }
+            ],
+            instructions: "Apply primer evenly to the prepared deck. Allow primer to dry per manufacturer’s instructions. Avoid foot traffic until dry."
+          },
+          {
+            title: "Base sheet",
+            products: [
+              { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
+              { name: "VapAir Seal Air and Vapor Barrier Temporary Roof", img: "/Product images/VapAir Seal Air and Vapor Barrier Temporary Roof.png" },
+              { name: "Sure-White Pressure-Sensitive Pre-Molded Pipe Seal", img: "/Product images/Sure-White Pressure-Sensitive Pre-Molded Pipe Seal.png" }
+            ],
+            instructions: "Roll out base sheet and align to layout. Secure sheet per fastening schedule. Overlap seams as specified."
+          },
+          {
+            title: "Bottom insulation",
+            products: [
+              { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+              { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
+              { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
+            ],
+            instructions: "Place bottom insulation boards tightly together. Stagger joints for stability. Mechanically fasten as required."
+          },
+          {
+            title: "Top insulation",
+            products: [
+              { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+              { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
+              { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
+            ],
+            instructions: "Install top insulation over bottom layer. Ensure full coverage and alignment. Fasten per project specifications."
+          },
+          {
+            title: "Cover board",
+            products: [
+              { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+              { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
+              { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
+            ],
+            instructions: "Lay cover board over insulation. Cut to fit around penetrations. Attach securely to prevent movement."
+          }
+        ].map((section, idx) => (
+          <div key={section.title} className={idx === 0 ? "mb-8" : "mb-8 mt-0.5"}>
+            <h2 className="font-semibold text-lg mb-1">{section.title}</h2>
+            <p className="text-muted-foreground text-sm mb-3">{section.instructions}</p>
+            <div className="mb-2">
+              <div className="font-medium text-sm mb-1">Products</div>
+              <div className="flex gap-3 mb-2 overflow-x-auto pb-2" style={{ WebkitOverflowScrolling: 'touch' }}>
+                {section.products.map((product, i) => (
+                  <div key={i} className="min-w-[140px] w-36 h-44 bg-white rounded-xl shadow border flex flex-col overflow-hidden p-0">
+                    <img src={product.img} alt={product.name} className="w-full h-28 object-cover rounded-t-xl" style={{ objectFit: 'cover', width: '100%', height: '64%' }} />
+                    <div className="text-xs text-center font-medium line-clamp-2 h-16 flex items-center justify-center px-2">{product.name}</div>
+                  </div>
+                ))}
+              </div>
             </div>
+            <div className="mb-2">
+              <div className="mb-10" />
+            </div>
+            {section.title !== "Membrane" && (
+              <div className="mt-3">
+                <div className="w-[100vw] max-w-none h-56 bg-black flex flex-col items-center justify-center border border-[#222] relative overflow-hidden -mx-6">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="z-10"><polygon points="9 7 19 12 9 17 9 7"></polygon></svg>
+                  <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-black/80 to-transparent flex items-center px-3">
+                    <div className="w-4 h-1 rounded bg-white/70 mr-2" />
+                    <div className="flex-1 h-1 rounded bg-white/30" />
+                    <div className="w-4 h-4 rounded-full bg-white/80 ml-2" />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        ))}
       </div>
-
-      <div className="pt-8 px-4 pb-20">
-        <div className="space-y-4">
-          {installationSteps.map((step) => (
-            <Collapsible 
-              key={step.id} 
-              open={!collapsedSteps[step.id]}
-              onOpenChange={() => toggleStep(step.id)}
-            >
-              <Card 
-                className={`transition-material ${
-                  step.status === 'in-progress' 
-                    ? 'border-warning bg-warning/5' 
-                    : step.status === 'complete' 
-                      ? 'border-success bg-success/5' 
-                      : ''
-                }`}
-              >
-                <CollapsibleTrigger asChild>
-                  <CardHeader className="pb-3 cursor-pointer hover:bg-muted/20 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg flex items-center space-x-3">
-                        {getStepIcon(step.status)}
-                        <span>Step {step.id}: {step.name}</span>
-                      </CardTitle>
-                      <div className="flex items-center space-x-2">
-                        <Badge 
-                          className={`${
-                            step.status === 'complete' 
-                              ? 'bg-success text-success-foreground'
-                              : step.status === 'in-progress'
-                                ? 'bg-warning text-warning-foreground'
-                                : 'bg-muted text-muted-foreground'
-                          } pointer-events-none`}
-                        >
-                          {step.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                        </Badge>
-                        {collapsedSteps[step.id] ? (
-                          <ChevronRight size={20} className="text-muted-foreground" />
-                        ) : (
-                          <ChevronDown size={20} className="text-muted-foreground" />
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground">{step.description}</p>
-                  </CardHeader>
-                </CollapsibleTrigger>
-
-                <CollapsibleContent>
-                  <CardContent>
-                <Tabs defaultValue="products" className="space-y-4">
-                  <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                    <TabsTrigger value="products" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Products</TabsTrigger>
-                    <TabsTrigger value="video" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Video</TabsTrigger>
-                    <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Documents</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="products" className="space-y-3">
-                    <div className="grid grid-cols-1 gap-3">
-                      {step.products.map((product, index) => (
-                        <Card key={index} className="cursor-pointer hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex space-x-4">
-                              <img 
-                                src="/placeholder.jpg" 
-                                alt={product} 
-                                className="w-12 h-12 object-cover rounded-lg bg-muted"
-                              />
-                              <div className="flex-1">
-                                <h3 className="font-semibold text-sm">{product}</h3>
-                                <p className="text-xs text-muted-foreground">Carlisle product required for this installation step</p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                    {step.specs && (
-                      <p 
-                        className="text-xs text-primary mt-2 cursor-pointer hover:underline"
-                        onClick={() => window.open(step.specs[0], '_blank')}
-                      >
-                        View complete product specifications
-                      </p>
-                    )}
-                  </TabsContent>
-
-                  <TabsContent value="video" className="space-y-3">
-                    <div className="bg-muted/30 rounded-lg p-4 text-center">
-                      <Play size={48} className="mx-auto text-primary mb-2" />
-                      <h4 className="font-semibold mb-1">Installation Video</h4>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Step-by-step video tutorial for {step.name.toLowerCase()}
-                      </p>
-                      <Button>
-                        <Play size={16} className="mr-2" />
-                        Watch Tutorial
-                      </Button>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="docs" className="space-y-3">
-                    <div className="space-y-3">
-                      {step.documents.map((doc, index) => (
-                        <Card key={index} className="cursor-pointer transition-material hover:elevation-2">
-                          <CardContent className="p-4">
-                            <div className="flex items-start space-x-3">
-                              <File size={20} className="text-accent" />
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-sm">{doc}</h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <Badge variant="outline" className="text-xs">Technical</Badge>
-                                  <span className="text-xs text-muted-foreground">PDF</span>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </TabsContent>
-                </Tabs>
-
-                {step.status === 'in-progress' && (
-                  <div className="mt-4 pt-4 border-t border-border">
-                    <Button className="w-full">
-                      Mark Step as Complete
-                    </Button>
-                  </div>
-                )}
-
-                {step.status === 'pending' && step.id === completedSteps + 1 && (
-                  <div className="mt-4 pt-4 border-t border-border">
-                    <Button className="w-full" variant="outline">
-                      Start This Step
-                    </Button>
-                  </div>
-                )}
-                  </CardContent>
-                </CollapsibleContent>
-              </Card>
-            </Collapsible>
-          ))}
-        </div>
-      </div>
-    </div>
+    </DialogContent>
   );
 }
