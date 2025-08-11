@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
@@ -24,66 +25,66 @@ interface InstallationDetailsProps {
   onClose: () => void;
 }
 
-export function InstallationDetails({ id, area, onClose }: InstallationDetailsProps) {
-  const sections = [
-    {
-      title: "Deck",
-      products: [
-        { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
-        { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
-        { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
-      ],
-      instructions: "Inspect the deck for damage and debris. Ensure the surface is dry and clean. Mark any areas requiring repair."
-    },
-    {
-      title: "Primer",
-      products: [
-        { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" },
-        { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" },
-        { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" }
-      ],
-      instructions: "Apply primer evenly to the prepared deck. Allow primer to dry per manufacturer’s instructions. Avoid foot traffic until dry."
-    },
-    {
-      title: "Base sheet",
-      products: [
-        { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
-        { name: "VapAir Seal Air and Vapor Barrier Temporary Roof", img: "/Product images/VapAir Seal Air and Vapor Barrier Temporary Roof.png" },
-        { name: "Sure-White Pressure-Sensitive Pre-Molded Pipe Seal", img: "/Product images/Sure-White Pressure-Sensitive Pre-Molded Pipe Seal.png" }
-      ],
-      instructions: "Roll out base sheet and align to layout. Secure sheet per fastening schedule. Overlap seams as specified."
-    },
-    {
-      title: "Bottom insulation",
-      products: [
-        { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
-        { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
-        { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
-      ],
-      instructions: "Place bottom insulation boards tightly together. Stagger joints for stability. Mechanically fasten as required."
-    },
-    {
-      title: "Top insulation",
-      products: [
-        { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
-        { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
-        { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
-      ],
-      instructions: "Install top insulation over bottom layer. Ensure full coverage and alignment. Fasten per project specifications."
-    },
-    {
-      title: "Cover board",
-      products: [
-        { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
-        { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
-        { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
-      ],
-      instructions: "Lay cover board over insulation. Cut to fit around penetrations. Attach securely to prevent movement."
-    }
-  ];
+const sections = [
+  {
+    title: "Deck",
+    products: [
+      { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+      { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
+      { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
+    ],
+    instructions: "Inspect the deck for damage and debris. Ensure the surface is dry and clean. Mark any areas requiring repair."
+  },
+  {
+    title: "Primer",
+    products: [
+      { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" },
+      { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" },
+      { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" }
+    ],
+    instructions: "Apply primer evenly to the prepared deck. Allow primer to dry per manufacturer’s instructions. Avoid foot traffic until dry."
+  },
+  {
+    title: "Base sheet",
+    products: [
+      { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
+      { name: "VapAir Seal Air and Vapor Barrier Temporary Roof", img: "/Product images/VapAir Seal Air and Vapor Barrier Temporary Roof.png" },
+      { name: "Sure-White Pressure-Sensitive Pre-Molded Pipe Seal", img: "/Product images/Sure-White Pressure-Sensitive Pre-Molded Pipe Seal.png" }
+    ],
+    instructions: "Roll out base sheet and align to layout. Secure sheet per fastening schedule. Overlap seams as specified."
+  },
+  {
+    title: "Bottom insulation",
+    products: [
+      { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+      { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
+      { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
+    ],
+    instructions: "Place bottom insulation boards tightly together. Stagger joints for stability. Mechanically fasten as required."
+  },
+  {
+    title: "Top insulation",
+    products: [
+      { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+      { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
+      { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
+    ],
+    instructions: "Install top insulation over bottom layer. Ensure full coverage and alignment. Fasten per project specifications."
+  },
+  {
+    title: "Cover board",
+    products: [
+      { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
+      { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
+      { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
+    ],
+    instructions: "Lay cover board over insulation. Cut to fit around penetrations. Attach securely to prevent movement."
+  }
+];
 
+export function InstallationDetails({ id, area, onClose }: InstallationDetailsProps) {
   return (
-  <DialogContent className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col">
+    <DialogContent className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col">
       <DialogHeader className="px-6 pt-6 pb-2 flex items-end justify-between">
         <div className="flex items-end gap-2 w-full">
           <Button variant="ghost" size="icon" className="mr-2 flex items-center justify-center" onClick={onClose}>
@@ -92,7 +93,7 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
           <DialogTitle className="text-xl font-bold -mt-10">Installation Details</DialogTitle>
         </div>
       </DialogHeader>
-  <div className="px-6 pb-6 flex-1 overflow-y-auto">
+      <div className="px-6 pb-6 flex-1 overflow-y-auto">
         {sections.map((section, idx) => (
           <div key={section.title} className={idx === 0 ? "mb-8" : "mb-8 mt-0.5"}>
             <h2 className="font-semibold text-lg mb-1">{section.title}</h2>
