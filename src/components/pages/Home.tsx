@@ -9,6 +9,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen, Bell } from 'lucide-react';
 
 export function Home() {
+  // Toggle favorite status for a job
+  const toggleFavorite = (jobId: string, event?: React.MouseEvent) => {
+    if (event) event.stopPropagation();
+    setFavorites(prev => {
+      const newFavorites = prev.includes(jobId)
+        ? prev.filter(id => id !== jobId)
+        : [...prev, jobId];
+      localStorage.setItem('favorite_jobs', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -18,24 +29,16 @@ export function Home() {
     return stored ? JSON.parse(stored) : [];
   });
   
-  const toggleFavorite = (jobId: string, event: React.MouseEvent) => {
-    event.stopPropagation();
-    setFavorites(prev => {
-      const newFavorites = prev.includes(jobId)
-        ? prev.filter(id => id !== jobId)
-        : [...prev, jobId];
-      localStorage.setItem('favorite_jobs', JSON.stringify(newFavorites));
-      return newFavorites;
-    });
-  };
-  
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
   // Helper function to get job image based on title
   const getJobImage = (title: string) => {
     const lowerTitle = title.toLowerCase();
-    
-    if (lowerTitle.includes('office')) {
+    if (lowerTitle === 'downtown office complex') {
+      return '/Job pictures/Office building 2.jpeg';
+    } else if (lowerTitle === 'distribution center') {
+      return '/Job pictures/Warehouse 4.jpeg';
+    } else if (lowerTitle.includes('office')) {
       return '/Job pictures/Office building 1.jpeg';
     } else if (lowerTitle.includes('warehouse')) {
       return '/Job pictures/Warehouse 1.jpeg';
