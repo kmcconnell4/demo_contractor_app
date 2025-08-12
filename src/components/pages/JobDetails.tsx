@@ -781,11 +781,9 @@ export function JobDetails() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem className="cursor-pointer">
-                <CalendarIcon size={16} className="mr-2" />
                 Request inspection
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
-                <Share size={16} className="mr-2" />
                 Manage job team
               </DropdownMenuItem>
             </DropdownMenuContent>

@@ -77,7 +77,16 @@ export function Search() {
   const allResults = [...mockResults.documents, ...mockResults.products, ...mockResults.jobs];
 
   const getFilteredResults = () => {
-    let results = activeTab === 'all' ? allResults : mockResults[activeTab as keyof typeof mockResults] || [];
+    let results = allResults;
+    // Tab filtering
+    if (activeTab === 'documents') {
+      results = results.filter(item => item.type === 'document');
+    } else if (activeTab === 'products') {
+      results = results.filter(item => item.type === 'product');
+    } else if (activeTab === 'jobs') {
+      results = results.filter(item => item.type === 'job');
+    }
+    // Search query filtering
     if (query) {
       results = results.filter(item => 
         item.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -196,6 +205,7 @@ export function Search() {
 
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3 mt-3">
+
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="min-w-[160px] w-48 pl-3">
                 <span className="font-medium mr-1">Sort By:</span>
@@ -207,60 +217,6 @@ export function Search() {
               </SelectContent>
             </Select>
 
-            {/* Jobs tab: Status filter */}
-            {activeTab === 'jobs' && (
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="installation">Installation</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="complete">Complete</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-
-            {/* Documents/Products tab: Job, System, Type filters */}
-            {(activeTab === 'documents' || activeTab === 'products') && (
-              <>
-                <Select value={filterJob} onValueChange={setFilterJob}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Job" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Jobs</SelectItem>
-                    <SelectItem value="Downtown Office">Downtown Office</SelectItem>
-                    <SelectItem value="Retail Shopping Center">Retail Shopping Center</SelectItem>
-                    <SelectItem value="Warehouse Facility">Warehouse Facility</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={filterSystem} onValueChange={setFilterSystem}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="System" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Systems</SelectItem>
-                    <SelectItem value="Technical">Technical</SelectItem>
-                    <SelectItem value="Safety">Safety</SelectItem>
-                    <SelectItem value="Warranty">Warranty</SelectItem>
-                    <SelectItem value="Membrane">Membrane</SelectItem>
-                    <SelectItem value="Insulation">Insulation</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={filterType} onValueChange={setFilterType}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="document">Document</SelectItem>
-                    <SelectItem value="product">Product</SelectItem>
-                  </SelectContent>
-                </Select>
-              </>
-            )}
 
             <Button variant="outline" size="sm" onClick={() => setIsFilterModalOpen(true)} className="flex items-center gap-2 px-3">
               <Filter size={20} />
@@ -283,16 +239,78 @@ export function Search() {
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <h2 className="text-lg font-semibold mb-4">Filters</h2>
-            {/* Tab-specific filters */}
+            {/* All tab filters */}
+            {activeTab === 'all' && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Job</label>
+                  <Select value={filterJob} onValueChange={setFilterJob}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Job" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Jobs</SelectItem>
+                      <SelectItem value="Downtown Office">Downtown Office</SelectItem>
+                      <SelectItem value="Retail Shopping Center">Retail Shopping Center</SelectItem>
+                      <SelectItem value="Warehouse Facility">Warehouse Facility</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Job status</label>
+                  <Select value={filterStatus} onValueChange={setFilterStatus}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Job status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All job statuses</SelectItem>
+                      <SelectItem value="installation">Installation</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="complete">Complete</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">System</label>
+                  <Select value={filterSystem} onValueChange={setFilterSystem}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="System" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Systems</SelectItem>
+                      <SelectItem value="Technical">Technical</SelectItem>
+                      <SelectItem value="Safety">Safety</SelectItem>
+                      <SelectItem value="Warranty">Warranty</SelectItem>
+                      <SelectItem value="Membrane">Membrane</SelectItem>
+                      <SelectItem value="Insulation">Insulation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Type</label>
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="document">Document</SelectItem>
+                      <SelectItem value="product">Product</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+            {/* Jobs tab filters */}
             {activeTab === 'jobs' && (
               <div className="space-y-4">
-                <label className="block text-sm font-medium mb-1">Status</label>
+                <label className="block text-sm font-medium mb-1">Job status</label>
                 <Select value={filterStatus} onValueChange={setFilterStatus}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Status" />
+                    <SelectValue placeholder="Job status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="all">All job statuses</SelectItem>
                     <SelectItem value="installation">Installation</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="complete">Complete</SelectItem>
@@ -300,6 +318,7 @@ export function Search() {
                 </Select>
               </div>
             )}
+            {/* Documents/Products tab filters */}
             {(activeTab === 'documents' || activeTab === 'products') && (
               <div className="space-y-4">
                 <div>
