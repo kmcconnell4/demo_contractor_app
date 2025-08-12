@@ -39,6 +39,20 @@ import {
 import { Dialog } from '@/components/ui/dialog';
 import { InstallationDetails } from './InstallationDetails';
 import { getJobImage } from '@/lib/getJobImage';
+import installationDetailsData from '../../lib/installationDetailsData';
+
+function getJobProductDocs(jobId: string) {
+  const jobDetails = installationDetailsData.find(j => j.jobId === jobId);
+  if (!jobDetails) return [];
+  // Example mapping for demo purposes
+  return jobDetails.sections.flatMap(section =>
+    section.products.map(product => ({
+      product: product.name,
+      safetyDataSheet: `/docs/sds/${product.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-sds.pdf`,
+      productDataSheet: `/docs/pds/${product.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}-pds.pdf`
+    }))
+  );
+}
 
 export function JobDetails() {
   const { id } = useParams();
@@ -66,8 +80,6 @@ export function JobDetails() {
   };
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
-
-  // ...existing code...
 
   // Check if job status has been updated in localStorage
   const getJobStatus = (jobId: string, defaultStatus: string) => {
@@ -309,6 +321,8 @@ export function JobDetails() {
     }
   ];
 
+  const jobProductDocs = getJobProductDocs(id ?? '1');
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Installation': return 'bg-warning text-warning-foreground';
@@ -450,13 +464,13 @@ export function JobDetails() {
               <Tabs defaultValue="Project" className="space-y-4">
                 <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
                   <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                  <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
-                  <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                  <TabsTrigger value="Safety Data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
+                  <TabsTrigger value="Product Info" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="Project" className="space-y-3">
                   <div className="space-y-3">
-                    {filterDocumentsByCategory(documents, 'Project').slice(0, 5).map((doc) => (
+                    {filterDocumentsByCategory(installationDocuments, 'Project').map((doc) => (
                       <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
                         <CardContent className="p-4">
                           <div className="flex items-start space-x-3">
@@ -479,14 +493,14 @@ export function JobDetails() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="Safety" className="space-y-3">
+                <TabsContent value="Safety Data" className="space-y-3">
                   <div className="space-y-3">
-                    {filterDocumentsByCategory(documents, 'Safety').slice(0, 5).map((doc) => (
+                    {filterDocumentsByCategory(installationDocuments, 'Safety').map((doc) => (
                       <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
                         <CardContent className="p-4">
                           <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#012b64" }} />
+                            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#0a7d2f" }} />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="font-semibold text-card-foreground truncate">
@@ -503,31 +517,7 @@ export function JobDetails() {
                     ))}
                   </div>
                 </TabsContent>
-
-                <TabsContent value="Data Sheet" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocumentsByCategory(documents, 'Data Sheet').slice(0, 5).map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#012b64" }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground truncate">
-                                {doc.name}
-                              </h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                <span className="text-sm text-muted-foreground">{doc.size}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
+                // ...existing code...
               </Tabs>
             </CardContent>
           </Card>
@@ -598,7 +588,7 @@ export function JobDetails() {
 
                   <TabsContent value="Project" className="space-y-3">
                     <div className="space-y-3">
-                      {documents.slice(0, 5).map((doc) => (
+                      {filterDocumentsByCategory(installationDocuments, 'Project').map((doc) => (
                         <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
                           <CardContent className="p-4">
                             <div className="flex items-start space-x-3">
@@ -623,7 +613,7 @@ export function JobDetails() {
 
                   <TabsContent value="Safety" className="space-y-3">
                     <div className="space-y-3">
-                      {filterDocumentsByCategory(documents, 'Safety').slice(0, 5).map((doc) => (
+                      {filterDocumentsByCategory(installationDocuments, 'Safety').map((doc) => (
                         <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
                           <CardContent className="p-4">
                             <div className="flex items-start space-x-3">
@@ -648,7 +638,7 @@ export function JobDetails() {
 
                   <TabsContent value="Data Sheet" className="space-y-3">
                     <div className="space-y-3">
-                      {filterDocumentsByCategory(documents, 'Data Sheet').slice(0, 5).map((doc) => (
+                      {filterDocumentsByCategory(installationDocuments, 'Data Sheet').map((doc) => (
                         <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
                           <CardContent className="p-4">
                             <div className="flex items-start space-x-3">
@@ -910,6 +900,18 @@ export function JobDetails() {
         
         {/* Main Content */}
         {renderContent()}
+        
+        {/* Product Documents Section - Example rendering code */}
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg mb-2">Product Documents</h3>
+          {jobProductDocs.map((doc, i) => (
+            <div key={i} className="mb-4">
+              <div className="font-medium text-sm">{doc.product}</div>
+              <a href={doc.safetyDataSheet} className="text-blue-600 underline text-xs mr-4" target="_blank" rel="noopener noreferrer">Safety Data Sheet</a>
+              <a href={doc.productDataSheet} className="text-blue-600 underline text-xs" target="_blank" rel="noopener noreferrer">Product Data Sheet</a>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
