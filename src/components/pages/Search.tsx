@@ -1,3 +1,5 @@
+  // Modal state for filters
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -15,6 +17,10 @@ export function Search() {
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'all');
   const [sortBy, setSortBy] = useState('relevance');
   const [filterStatus, setFilterStatus] = useState(searchParams.get('status') || 'all');
+  // New filter states
+  const [filterJob, setFilterJob] = useState('all');
+  const [filterSystem, setFilterSystem] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   
   // Favorites state management
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -72,18 +78,28 @@ export function Search() {
 
   const getFilteredResults = () => {
     let results = activeTab === 'all' ? allResults : mockResults[activeTab as keyof typeof mockResults] || [];
-    
     if (query) {
       results = results.filter(item => 
         item.title.toLowerCase().includes(query.toLowerCase()) ||
         ('category' in item && item.category.toLowerCase().includes(query.toLowerCase()))
       );
     }
-
+    // Jobs tab: filter by status
     if (filterStatus !== 'all' && activeTab === 'jobs') {
       results = results.filter(item => 'status' in item && item.status.toLowerCase() === filterStatus);
     }
-
+    // Documents/Products tab: filter by Job, System, Type
+    if ((activeTab === 'documents' || activeTab === 'products')) {
+      if (filterJob !== 'all') {
+        results = results.filter(item => item.title.toLowerCase().includes(filterJob.toLowerCase()));
+      }
+      if (filterSystem !== 'all') {
+        results = results.filter(item => ('category' in item) && item.category.toLowerCase() === filterSystem);
+      }
+      if (filterType !== 'all') {
+        results = results.filter(item => ('type' in item) && item.type.toLowerCase() === filterType);
+      }
+    }
     return results;
   };
 
@@ -179,17 +195,19 @@ export function Search() {
           </div>
 
           {/* Filters */}
-          <div className="flex items-center space-x-3 mt-3">
+          <div className="flex flex-wrap items-center gap-3 mt-3">
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-32">
+              <SelectTrigger className="min-w-[160px] w-48 pl-3">
+                <span className="font-medium mr-1">Sort By:</span>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="min-w-[160px] w-48">
                 <SelectItem value="relevance">Relevance</SelectItem>
                 <SelectItem value="name">Name</SelectItem>
               </SelectContent>
             </Select>
 
+            {/* Jobs tab: Status filter */}
             {activeTab === 'jobs' && (
               <Select value={filterStatus} onValueChange={setFilterStatus}>
                 <SelectTrigger className="w-32">
@@ -204,14 +222,139 @@ export function Search() {
               </Select>
             )}
 
-            <Button variant="outline" size="icon">
+            {/* Documents/Products tab: Job, System, Type filters */}
+            {(activeTab === 'documents' || activeTab === 'products') && (
+              <>
+                <Select value={filterJob} onValueChange={setFilterJob}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Job" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Jobs</SelectItem>
+                    <SelectItem value="Downtown Office">Downtown Office</SelectItem>
+                    <SelectItem value="Retail Shopping Center">Retail Shopping Center</SelectItem>
+                    <SelectItem value="Warehouse Facility">Warehouse Facility</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={filterSystem} onValueChange={setFilterSystem}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="System" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Systems</SelectItem>
+                    <SelectItem value="Technical">Technical</SelectItem>
+                    <SelectItem value="Safety">Safety</SelectItem>
+                    <SelectItem value="Warranty">Warranty</SelectItem>
+                    <SelectItem value="Membrane">Membrane</SelectItem>
+                    <SelectItem value="Insulation">Insulation</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={filterType} onValueChange={setFilterType}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="document">Document</SelectItem>
+                    <SelectItem value="product">Product</SelectItem>
+                  </SelectContent>
+                </Select>
+              </>
+            )}
+
+            <Button variant="outline" size="sm" onClick={() => setIsFilterModalOpen(true)} className="flex items-center gap-2 px-3">
               <Filter size={20} />
+              <span className="font-medium">Filter</span>
             </Button>
           </div>
         </div>
       </div>
 
       {/* Results */}
+      {/* Filter Modal */}
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white dark:bg-background rounded-lg shadow-lg w-full max-w-sm mx-4 p-6 relative">
+            <button
+              className="absolute top-3 right-3 text-muted-foreground hover:text-primary"
+              onClick={() => setIsFilterModalOpen(false)}
+              aria-label="Close"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <h2 className="text-lg font-semibold mb-4">Filters</h2>
+            {/* Tab-specific filters */}
+            {activeTab === 'jobs' && (
+              <div className="space-y-4">
+                <label className="block text-sm font-medium mb-1">Status</label>
+                <Select value={filterStatus} onValueChange={setFilterStatus}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="installation">Installation</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="complete">Complete</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {(activeTab === 'documents' || activeTab === 'products') && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Job</label>
+                  <Select value={filterJob} onValueChange={setFilterJob}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Job" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Jobs</SelectItem>
+                      <SelectItem value="Downtown Office">Downtown Office</SelectItem>
+                      <SelectItem value="Retail Shopping Center">Retail Shopping Center</SelectItem>
+                      <SelectItem value="Warehouse Facility">Warehouse Facility</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">System</label>
+                  <Select value={filterSystem} onValueChange={setFilterSystem}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="System" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Systems</SelectItem>
+                      <SelectItem value="Technical">Technical</SelectItem>
+                      <SelectItem value="Safety">Safety</SelectItem>
+                      <SelectItem value="Warranty">Warranty</SelectItem>
+                      <SelectItem value="Membrane">Membrane</SelectItem>
+                      <SelectItem value="Insulation">Insulation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Type</label>
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="document">Document</SelectItem>
+                      <SelectItem value="product">Product</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+            <div className="mt-6 flex justify-end">
+              <Button variant="default" size="sm" onClick={() => setIsFilterModalOpen(false)}>
+                Apply Filters
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="px-8 py-4 pb-20">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
