@@ -901,17 +901,6 @@ export function JobDetails() {
         {/* Main Content */}
         {renderContent()}
         
-        {/* Product Documents Section - Example rendering code */}
-        <div className="mt-6">
-          <h3 className="font-semibold text-lg mb-2">Product Documents</h3>
-          {jobProductDocs.map((doc, i) => (
-            <div key={i} className="mb-4">
-              <div className="font-medium text-sm">{doc.product}</div>
-              <a href={doc.safetyDataSheet} className="text-blue-600 underline text-xs mr-4" target="_blank" rel="noopener noreferrer">Safety Data Sheet</a>
-              <a href={doc.productDataSheet} className="text-blue-600 underline text-xs" target="_blank" rel="noopener noreferrer">Product Data Sheet</a>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

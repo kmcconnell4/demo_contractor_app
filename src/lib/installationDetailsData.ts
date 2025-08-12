@@ -36,7 +36,7 @@ const installationDetailsData: JobInstallationDetails[] = [
         faqLinks: [
           { label: "Primer FAQ", url: "/docs/primer-faq.pdf" }
         ],
-        videoUrl: "https://example.com/primer-video.mp4"
+  videoUrl: "/video-tutorials/CAV-GRIP_III_video_tutorial.mp4"
       },
       {
         title: "Base sheet",
