@@ -1,5 +1,3 @@
-  // Modal state for filters
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -11,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search as SearchIcon, Filter, Mic, MicOff, File, Package, Briefcase, Heart, Star } from 'lucide-react';
 
 export function Search() {
+  // Modal state for filters
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const [isVoiceActive, setIsVoiceActive] = useState(searchParams.get('voice') === 'true');
