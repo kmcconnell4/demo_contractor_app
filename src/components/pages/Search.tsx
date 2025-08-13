@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,7 +14,7 @@ export function Search() {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const [isVoiceActive, setIsVoiceActive] = useState(searchParams.get('voice') === 'true');
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'all');
+  const [activeTab, setActiveTab] = useState('all');
   const [sortBy, setSortBy] = useState('relevance');
   const [filterStatus, setFilterStatus] = useState(searchParams.get('status') || 'all');
   // New filter states
@@ -41,49 +41,66 @@ export function Search() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
-  // Mock search results
-  const mockResults = {
-    documents: [
-      { id: 1, type: 'document', title: 'Installation Manual - EPDM Membrane', category: 'Technical', size: '2.4 MB' },
-      { id: 2, type: 'document', title: 'Safety Data Sheet - Primer XL', category: 'Safety', size: '1.1 MB' },
-  { id: 3, type: 'document', title: 'Warranty Application - Downtown Office', category: 'Warranty', size: '0.8 MB' },
-      // Examples from Job Details page
-      { id: 4, type: 'document', title: 'Assembly Letter - Downtown Office Complex', category: 'Project', size: '1.2 MB' },
-      { id: 5, type: 'document', title: 'Submittal Package - EPDM Roofing System', category: 'Project', size: '3.4 MB' },
-      { id: 6, type: 'document', title: 'Sure-Seal EPDM Membrane Data Sheet', category: 'Data Sheet', size: '2.1 MB' },
-      { id: 7, type: 'document', title: 'SecurShield HD Polyiso Insulation Data Sheet', category: 'Data Sheet', size: '1.8 MB' },
-      { id: 8, type: 'document', title: 'FAST Adhesive Product Data Sheet', category: 'Data Sheet', size: '1.5 MB' },
-      { id: 9, type: 'document', title: 'FAST Adhesive Safety Data Sheet', category: 'Safety', size: '0.8 MB' },
-      { id: 10, type: 'document', title: 'Sure-Seal Lap Sealant SDS', category: 'Safety', size: '0.6 MB' },
-      { id: 11, type: 'document', title: 'Sure-Weld Splicing Cement SDS', category: 'Safety', size: '0.7 MB' },
+  // Import jobs from Home page logic
+  const jobs = {
+    pending: [
+      { id: '7', type: 'job', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: 'Pending', dueDate: '2024-08-25' },
     ],
-    products: [
-      { id: 4, type: 'product', title: 'EPDM Membrane 60 mil', category: 'Membrane', code: 'EPD-60-BLK' },
-      { id: 5, type: 'product', title: 'Polyiso Insulation 2"', category: 'Insulation', code: 'ISO-2-FG' },
-      { id: 6, type: 'product', title: 'TPO Membrane 45 mil', category: 'Membrane', code: 'TPO-45-WHT' },
+    inProgress: [
+      { id: '2', type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Installation', progress: 40 },
+      { id: '9', type: 'job', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: 'Installation', progress: 75 },
+      { id: '1', type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation', progress: 65 },
+      { id: '10', type: 'job', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: 'Installation', progress: 30 },
+      { id: '4', type: 'job', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: 'Awarded', startDate: '2024-08-20' },
+      { id: '11', type: 'job', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: 'Installation', progress: 85 },
+      { id: '12', type: 'job', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: 'Installation', progress: 20 },
     ],
-    jobs: [
-      // Pending jobs
-      { id: 7, type: 'job', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: 'Pending' },
-      
-      // In Progress jobs
-      { id: 2, type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Installation' },
-      { id: 9, type: 'job', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: 'Installation' },
-      { id: 1, type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation' },
-      { id: 10, type: 'job', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: 'Installation' },
-      { id: 4, type: 'job', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: 'Awarded' },
-      { id: 11, type: 'job', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: 'Installation' },
-      { id: 12, type: 'job', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: 'Installation' },
-      
-      // Completed jobs
-      { id: 8, type: 'job', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: 'Complete' },
-      { id: 3, type: 'job', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: 'Complete' },
-      { id: 6, type: 'job', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: 'Complete' },
-      { id: 5, type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete' },
+    inspection: [
+      { id: '13', type: 'job', title: 'University Science Building', location: '800 College Ave, Lancaster, PA', status: 'Inspection', inspectionDate: '2024-08-30' },
+      { id: '14', type: 'job', title: 'Regional Medical Center', location: '200 Health Blvd, Reading, PA', status: 'Inspection', inspectionDate: '2024-09-02' },
+      { id: '15', type: 'job', title: 'Tech Park Expansion', location: '1000 Innovation Dr, Harrisburg, PA', status: 'Inspection', inspectionDate: '2024-09-05' },
+    ],
+    completed: [
+      { id: '8', type: 'job', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: 'Complete', completedDate: '2024-08-10' },
+      { id: '3', type: 'job', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: 'Complete', completedDate: '2024-08-15' },
+      { id: '6', type: 'job', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: 'Complete', completedDate: '2024-07-15' },
+      { id: '5', type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete', completedDate: '2024-07-28' },
     ]
   };
 
-  const allResults = [...mockResults.documents, ...mockResults.products, ...mockResults.jobs];
+  // Combine all jobs into a single array
+  const allJobs = [
+    ...jobs.pending,
+    ...jobs.inProgress,
+    ...jobs.inspection,
+    ...jobs.completed,
+  ];
+
+  // Add mock documents and products from job details
+  const documents = [
+    { id: 1, type: 'document', title: 'Installation Manual - EPDM Membrane', category: 'Technical', size: '2.4 MB' },
+    { id: 2, type: 'document', title: 'Safety Data Sheet - Primer XL', category: 'Safety', size: '1.1 MB' },
+    { id: 3, type: 'document', title: 'Warranty Application - Downtown Office', category: 'Warranty', size: '0.8 MB' },
+    { id: 4, type: 'document', title: 'Assembly Letter - Downtown Office Complex', category: 'Project', size: '1.2 MB' },
+    { id: 5, type: 'document', title: 'Submittal Package - EPDM Roofing System', category: 'Project', size: '3.4 MB' },
+    { id: 6, type: 'document', title: 'Sure-Seal EPDM Membrane Data Sheet', category: 'Data Sheet', size: '2.1 MB' },
+    { id: 7, type: 'document', title: 'SecurShield HD Polyiso Insulation Data Sheet', category: 'Data Sheet', size: '1.8 MB' },
+    { id: 8, type: 'document', title: 'FAST Adhesive Product Data Sheet', category: 'Data Sheet', size: '1.5 MB' },
+    { id: 9, type: 'document', title: 'FAST Adhesive Safety Data Sheet', category: 'Safety', size: '0.8 MB' },
+    { id: 10, type: 'document', title: 'Sure-Seal Lap Sealant SDS', category: 'Safety', size: '0.6 MB' },
+    { id: 11, type: 'document', title: 'Sure-Weld Splicing Cement SDS', category: 'Safety', size: '0.7 MB' },
+  ];
+  const products = [
+    { id: 4, type: 'product', title: 'EPDM Membrane 60 mil', category: 'Membrane', code: 'EPD-60-BLK' },
+    { id: 5, type: 'product', title: 'Polyiso Insulation 2"', category: 'Insulation', code: 'ISO-2-FG' },
+    { id: 6, type: 'product', title: 'TPO Membrane 45 mil', category: 'Membrane', code: 'TPO-45-WHT' },
+  ];
+
+  const allResults = [
+    ...documents,
+    ...products,
+    ...allJobs,
+  ];
 
   const getFilteredResults = () => {
     let results = allResults;
@@ -97,26 +114,15 @@ export function Search() {
     }
     // Search query filtering
     if (query) {
-      results = results.filter(item => 
+      results = results.filter(item =>
         item.title.toLowerCase().includes(query.toLowerCase()) ||
+        ('location' in item && item.location.toLowerCase().includes(query.toLowerCase())) ||
         ('category' in item && item.category.toLowerCase().includes(query.toLowerCase()))
       );
     }
     // Jobs tab: filter by status
     if (filterStatus !== 'all' && activeTab === 'jobs') {
-      results = results.filter(item => 'status' in item && item.status.toLowerCase() === filterStatus);
-    }
-    // Documents/Products tab: filter by Job, System, Type
-    if ((activeTab === 'documents' || activeTab === 'products')) {
-      if (filterJob !== 'all') {
-        results = results.filter(item => item.title.toLowerCase().includes(filterJob.toLowerCase()));
-      }
-      if (filterSystem !== 'all') {
-        results = results.filter(item => ('category' in item) && item.category.toLowerCase() === filterSystem);
-      }
-      if (filterType !== 'all') {
-        results = results.filter(item => ('type' in item) && item.type.toLowerCase() === filterType);
-      }
+      results = results.filter(item => 'status' in item && item.status.toLowerCase() === filterStatus.toLowerCase());
     }
     return results;
   };
@@ -172,18 +178,14 @@ export function Search() {
   }, [isVoiceActive]);
 
   useEffect(() => {
-    // Handle URL parameter changes
+    // Handle URL parameter changes for status only
     const status = searchParams.get('status');
-    const tab = searchParams.get('tab');
-    
     if (status) {
       setFilterStatus(status);
     }
-    
-    if (tab) {
-      setActiveTab(tab);
-    }
   }, [searchParams]);
+
+  const navigate = useNavigate();
 
   return (
     <div className="h-full bg-background">
@@ -386,10 +388,10 @@ export function Search() {
       <div className="px-8 py-4 pb-20">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-            <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
-            <TabsTrigger value="documents" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Documents</TabsTrigger>
-            <TabsTrigger value="products" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Products</TabsTrigger>
-            <TabsTrigger value="jobs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Jobs</TabsTrigger>
+            <TabsTrigger value="all" onClick={() => setActiveTab('all')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
+            <TabsTrigger value="documents" onClick={() => setActiveTab('documents')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Documents</TabsTrigger>
+            <TabsTrigger value="products" onClick={() => setActiveTab('products')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Products</TabsTrigger>
+            <TabsTrigger value="jobs" onClick={() => setActiveTab('jobs')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Jobs</TabsTrigger>
           </TabsList>
 
           <div className="mt-4">
@@ -408,13 +410,13 @@ export function Search() {
 
             <div className="space-y-3">
               {getFilteredResults().map((item) => (
-                <Card 
-                  key={item.id} 
+                <Card
+                  key={item.id}
                   className="cursor-pointer transition-material hover:elevation-2"
                   onClick={() => {
-                    if (item.type === 'product') {
-                      window.location.href = `/product/${item.id}`;
-                    }
+                    if (item.type === 'job') navigate(`/job/${item.id}`);
+                    if (item.type === 'product') navigate(`/product/${item.id}`);
+                    // For documents, you may want to open a modal or link
                   }}
                 >
                   <CardContent className="p-4">
@@ -435,15 +437,14 @@ export function Search() {
                               <Star
                                 size={14}
                                 className={`transition-colors ${
-                                  isFavorite(item.id.toString()) 
-                                    ? "fill-yellow-500 text-yellow-500" 
+                                  isFavorite(item.id.toString())
+                                    ? "fill-yellow-500 text-yellow-500"
                                     : "text-muted-foreground hover:text-yellow-500"
                                 }`}
                               />
                             </Button>
                           )}
                         </div>
-                        
                         <div className="flex items-start justify-between mt-1">
                           <div className="flex flex-wrap items-center gap-2">
                             {'status' in item && (
@@ -470,6 +471,15 @@ export function Search() {
                               <span className="text-sm text-muted-foreground">
                                 {item.size}
                               </span>
+                            )}
+                            {'dueDate' in item && (
+                              <span className="text-xs text-muted-foreground">Due: {new Date(item.dueDate).toLocaleDateString()}</span>
+                            )}
+                            {'completedDate' in item && (
+                              <span className="text-xs text-muted-foreground">Completed: {new Date(item.completedDate).toLocaleDateString()}</span>
+                            )}
+                            {'inspectionDate' in item && (
+                              <span className="text-xs text-muted-foreground">Inspection: {new Date(item.inspectionDate).toLocaleDateString()}</span>
                             )}
                           </div>
                         </div>

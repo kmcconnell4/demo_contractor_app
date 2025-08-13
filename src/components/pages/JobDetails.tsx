@@ -533,7 +533,30 @@ export function JobDetails() {
                     ))}
                   </div>
                 </TabsContent>
-                // ...existing code...
+                <TabsContent value="Product Info" className="space-y-3">
+                  <div className="space-y-3">
+                    {filterDocumentsByCategory(installationDocuments, 'Data Sheet').map((doc) => (
+                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <File size={24} style={{ color: "#012b64" }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-card-foreground truncate">
+                                {doc.name}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
+                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
