@@ -46,8 +46,7 @@ const installationDetailsData: JobInstallationDetails[] = [
         ],
         documentLinks: [
           { label: "Base Sheet Instructions", url: "/docs/base-sheet-instructions.pdf" }
-        ],
-        videoUrl: "https://example.com/base-sheet-video.mp4"
+        ]
       },
       {
         title: "Bottom insulation",
@@ -58,8 +57,7 @@ const installationDetailsData: JobInstallationDetails[] = [
         attachmentMethodLink: { label: "Attachment Method", url: "/docs/insulation-attachment.pdf" },
         documentLinks: [
           { label: "Bottom Insulation Instructions", url: "/docs/bottom-insulation-instructions.pdf" }
-        ],
-        videoUrl: "https://example.com/bottom-insulation-video.mp4"
+        ]
       },
       {
         title: "Top insulation",

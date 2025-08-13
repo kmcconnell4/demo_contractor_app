@@ -46,7 +46,16 @@ export function Search() {
     documents: [
       { id: 1, type: 'document', title: 'Installation Manual - EPDM Membrane', category: 'Technical', size: '2.4 MB' },
       { id: 2, type: 'document', title: 'Safety Data Sheet - Primer XL', category: 'Safety', size: '1.1 MB' },
-      { id: 3, type: 'document', title: 'Warranty Certificate - Downtown Office', category: 'Warranty', size: '0.8 MB' },
+  { id: 3, type: 'document', title: 'Warranty Application - Downtown Office', category: 'Warranty', size: '0.8 MB' },
+      // Examples from Job Details page
+      { id: 4, type: 'document', title: 'Assembly Letter - Downtown Office Complex', category: 'Project', size: '1.2 MB' },
+      { id: 5, type: 'document', title: 'Submittal Package - EPDM Roofing System', category: 'Project', size: '3.4 MB' },
+      { id: 6, type: 'document', title: 'Sure-Seal EPDM Membrane Data Sheet', category: 'Data Sheet', size: '2.1 MB' },
+      { id: 7, type: 'document', title: 'SecurShield HD Polyiso Insulation Data Sheet', category: 'Data Sheet', size: '1.8 MB' },
+      { id: 8, type: 'document', title: 'FAST Adhesive Product Data Sheet', category: 'Data Sheet', size: '1.5 MB' },
+      { id: 9, type: 'document', title: 'FAST Adhesive Safety Data Sheet', category: 'Safety', size: '0.8 MB' },
+      { id: 10, type: 'document', title: 'Sure-Seal Lap Sealant SDS', category: 'Safety', size: '0.6 MB' },
+      { id: 11, type: 'document', title: 'Sure-Weld Splicing Cement SDS', category: 'Safety', size: '0.7 MB' },
     ],
     products: [
       { id: 4, type: 'product', title: 'EPDM Membrane 60 mil', category: 'Membrane', code: 'EPD-60-BLK' },

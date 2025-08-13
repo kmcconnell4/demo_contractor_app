@@ -82,7 +82,12 @@ export default {
 			transitionDuration: {
 				'fast': '150ms',
 				'normal': '250ms',
-				'slow': '350ms'
+				'slow': '350ms',
+				'1000': '1000ms',
+				'1500': '1500ms',
+				'2000': '2000ms',
+				'3000': '3000ms',
+				'4000': '4000ms'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

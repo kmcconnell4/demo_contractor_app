@@ -1,4 +1,20 @@
 import { useState } from 'react';
+
+// Helper to format history timestamp as 'Month Day, Year at XX:XXAM/PM'
+function formatHistoryTimestamp(ts: string) {
+  // Example: '2024-07-28 2:15 PM' => 'July 28, 2024 at 2:15PM'
+  const dateTimeMatch = ts.match(/(\d{4})-(\d{2})-(\d{2}) (\d{1,2}):(\d{2}) ([AP]M)/);
+  if (!dateTimeMatch) return ts;
+  const year = dateTimeMatch[1];
+  const month = dateTimeMatch[2];
+  const day = dateTimeMatch[3];
+  const hour = dateTimeMatch[4];
+  const minute = dateTimeMatch[5];
+  const ampm = dateTimeMatch[6];
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const monthName = months[parseInt(month, 10) - 1];
+  return `${monthName} ${parseInt(day, 10)}, ${year} at ${hour}:${minute}${ampm}`;
+}
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -530,14 +546,15 @@ export function JobDetails() {
             <CardContent>
               <div className="space-y-4">
                 {(showAllHistory ? jobHistory : jobHistory.slice(0, 3)).map((entry) => (
-                  <div key={entry.id} className="pb-4 border-b border-border last:border-b-0 last:pb-0">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <p className="font-semibold text-sm">{entry.action}</p>
-                      <span className="text-xs text-muted-foreground">•</span>
-                      <p className="text-xs text-muted-foreground">{entry.timestamp}</p>
+                  <div key={entry.id} className="pb-6">
+                    <div className="flex items-center mb-2">
+                      <span className="font-semibold text-base mr-2">{entry.user}</span>
+                      <span className="text-[14px] text-muted-foreground font-normal">{formatHistoryTimestamp(entry.timestamp)}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-1">{entry.description}</p>
-                    <p className="text-xs text-muted-foreground">by {entry.user}</p>
+                    <div className="mb-4">
+                      <span className="text-base text-muted-foreground font-normal">{entry.description || entry.action}</span>
+                    </div>
+                    <hr className="border-t border-border" />
                   </div>
                 ))}
                 {!showAllHistory && jobHistory.length > 3 && (

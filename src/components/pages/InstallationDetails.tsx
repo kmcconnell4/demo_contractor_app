@@ -51,7 +51,17 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
       </DialogHeader>
       <div className="px-6 pb-6 flex-1 overflow-y-auto">
         {sections.map((section, idx) => (
-          <div key={section.title} className={idx === 0 ? "mb-20" : "mb-20 mt-0.5"}>
+          <div
+            key={section.title}
+            className={
+              // Reduce spacing specifically between Primer and Base sheet
+              section.title === "Base sheet" && idx > 0 && sections[idx - 1].title === "Primer"
+                ? "mb-0 mt-0"
+                : section.videoUrl
+                  ? (idx === 0 ? "mb-20" : "mb-20 mt-0.5")
+                  : (idx === 0 ? "mb-10" : "mb-10 mt-0.5")
+            }
+          >
             {section.videoUrl && (
               <div className="mb-3">
                 <div className="w-[100vw] max-w-none h-56 bg-black flex flex-col items-center justify-center border border-[#222] relative overflow-hidden -mx-6">

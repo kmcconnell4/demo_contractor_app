@@ -5,11 +5,11 @@ export function LoadingScreen() {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setFade(true), 3000);
-    const hideTimer = setTimeout(() => setShow(false), 4500);
+    const fadeTimer = setTimeout(() => setFade(true), 4000); // Show for 4s
+    const unmountTimer = setTimeout(() => setShow(false), 6000); // Unmount after fade out
     return () => {
-      clearTimeout(timer);
-      clearTimeout(hideTimer);
+      clearTimeout(fadeTimer);
+      clearTimeout(unmountTimer);
     };
   }, []);
 
@@ -17,7 +17,7 @@ export function LoadingScreen() {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-[#00509e] to-[#012b64] transition-opacity duration-1500 ${fade ? 'opacity-0' : 'opacity-100'}`}
+  className={`fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-[#00509e] to-[#012b64] transition-opacity duration-4000 ${fade ? 'opacity-0' : 'opacity-100'}`}
     >
       <img
         src="/CCM logo inverted.svg"

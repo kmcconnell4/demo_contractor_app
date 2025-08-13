@@ -11,11 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen, Bell } from 'lucide-react';
 
 export function Home() {
-  const [showLoading, setShowLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setShowLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
   // Toggle favorite status for a job
   const toggleFavorite = (jobId: string, event?: React.MouseEvent) => {
     if (event) event.stopPropagation();
@@ -73,6 +68,11 @@ export function Home() {
       { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
       { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: getJobStatus('11', 'Installation'), progress: 85 },
       { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: getJobStatus('12', 'Installation'), progress: 20 },
+    ],
+    inspection: [
+      { id: '13', title: 'University Science Building', location: '800 College Ave, Lancaster, PA', status: getJobStatus('13', 'Inspection'), inspectionDate: '2024-08-30' },
+      { id: '14', title: 'Regional Medical Center', location: '200 Health Blvd, Reading, PA', status: getJobStatus('14', 'Inspection'), inspectionDate: '2024-09-02' },
+      { id: '15', title: 'Tech Park Expansion', location: '1000 Innovation Dr, Harrisburg, PA', status: getJobStatus('15', 'Inspection'), inspectionDate: '2024-09-05' },
     ],
     completed: [
       { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
@@ -158,9 +158,7 @@ export function Home() {
   );
 
   return (
-    <>
-      {showLoading && <LoadingScreen />}
-      <div className="h-full bg-background">
+    <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="px-8 py-4 pb-6">
@@ -439,7 +437,6 @@ export function Home() {
           </div>
         )}
       </div>
-      </div>
-    </>
+    </div>
   );
 }
