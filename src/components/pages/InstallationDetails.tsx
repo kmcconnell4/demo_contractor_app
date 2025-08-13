@@ -77,7 +77,11 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
                 <div className="font-medium text-sm mb-1">Products</div>
                 <div className="flex gap-3 mb-2 overflow-x-auto pb-2" style={{ WebkitOverflowScrolling: 'touch' }}>
                   {section.products.map((product, i) => (
-                    <div key={i} className="min-w-[140px] w-36 h-44 bg-white rounded-xl shadow border flex flex-col overflow-hidden p-0">
+                    <div 
+                      key={i} 
+                      className="min-w-[140px] w-36 h-44 bg-white rounded-xl shadow border flex flex-col overflow-hidden p-0 cursor-pointer"
+                      onClick={() => window.location.href = `/product/${encodeURIComponent(product.name)}`}
+                    >
                       <img
                         src={getProductImage(product.name)}
                         alt={product.name}

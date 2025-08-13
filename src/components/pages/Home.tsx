@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen, Bell } from 'lucide-react';
 
 export function Home() {
+  const [showLoading, setShowLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
   // Toggle favorite status for a job
   const toggleFavorite = (jobId: string, event?: React.MouseEvent) => {
     if (event) event.stopPropagation();
@@ -152,7 +158,9 @@ export function Home() {
   );
 
   return (
-    <div className="h-full bg-background">
+    <>
+      {showLoading && <LoadingScreen />}
+      <div className="h-full bg-background">
       {/* Header */}
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="px-8 py-4 pb-6">
@@ -431,6 +439,7 @@ export function Home() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

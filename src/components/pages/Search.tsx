@@ -399,7 +399,15 @@ export function Search() {
 
             <div className="space-y-3">
               {getFilteredResults().map((item) => (
-                <Card key={item.id} className="cursor-pointer transition-material hover:elevation-2">
+                <Card 
+                  key={item.id} 
+                  className="cursor-pointer transition-material hover:elevation-2"
+                  onClick={() => {
+                    if (item.type === 'product') {
+                      window.location.href = `/product/${item.id}`;
+                    }
+                  }}
+                >
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-3">
                       {getItemIcon(item.type)}

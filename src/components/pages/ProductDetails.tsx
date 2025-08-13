@@ -21,10 +21,10 @@ export function ProductDetails() {
 
   // Mock product data
   const product = {
-    id,
-    name: 'EPDM Membrane 60 mil',
-    description: 'High-performance EPDM roofing membrane designed for superior weather resistance and longevity.',
-    image: '/api/placeholder/400/300',
+  id,
+  name: 'EPDM Membrane 60 mil',
+  description: 'High-performance EPDM roofing membrane designed for superior weather resistance and longevity.',
+  image: '/Product images/EPDM Membrane.png',
     category: 'Membrane',
     manufacturer: 'RoofPro Materials',
     productCode: 'EPD-60-BLK',
@@ -82,73 +82,73 @@ export function ProductDetails() {
 
   return (
     <div className="h-full bg-background">
-      {/* Header */}
-      <div className="bg-surface border-b border-border safe-top">
-        <div className="p-4">
-          <div className="flex items-start space-x-3">
-            <button onClick={() => navigate(-1)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors mt-1">
-              <ArrowLeft size={20} />
-            </button>
-            <div>
-              <h1 className="text-2xl font-bold">Product Details</h1>
-              <p className="text-sm text-muted-foreground">{product.category}</p>
+      {/* Top section: product image, back button, title, status, meta info overlayed on image */}
+      <div className="relative">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-64 object-cover rounded-b-3xl"
+        />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-4 left-4 z-10 bg-white/80 hover:bg-white"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft size={20} className="text-primary" />
+        </Button>
+        <div className="absolute bottom-0 left-0 w-full px-8 pb-4 flex items-end justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white drop-shadow-lg mb-1">{product.name}</h1>
+            <div className="flex items-center gap-4 text-white/90 drop-shadow">
+              <span className="text-sm">Code: {product.productCode}</span>
+              <span className="text-sm">Category: {product.category}</span>
+              <span className="text-sm">Size: {product.specifications.thickness} x {product.specifications.width} x {product.specifications.length}</span>
             </div>
           </div>
+          <Badge variant="outline" className="text-xs bg-white/80 text-primary backdrop-blur-sm">
+            {product.productCode}
+          </Badge>
         </div>
       </div>
 
       <div className="p-4 space-y-8 pb-20">
-        {/* Product Header */}
+        {/* Product Info */}
         <Card>
           <CardContent className="p-4">
-            <div className="space-y-4">
-              {/* Product Image */}
-              <div className="w-full h-48 bg-muted rounded-lg flex items-center justify-center">
-                <img 
-                  src={product.image} 
-                  alt={product.name}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
-
-              {/* Product Info */}
-              <div className="space-y-3">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h2 className="text-xl font-semibold">{product.name}</h2>
-                    <p className="text-muted-foreground">{product.manufacturer}</p>
-                  </div>
-                  <Badge className="bg-primary text-primary-foreground">
-                    {product.productCode}
-                  </Badge>
+            <div className="space-y-3">
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold">{product.name}</h2>
+                  <p className="text-muted-foreground">{product.manufacturer}</p>
                 </div>
-
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        size={16} 
-                        className={i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'} 
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm text-muted-foreground">({product.rating})</span>
-                </div>
-
-                <p className="text-muted-foreground">{product.description}</p>
+                <Badge className="bg-primary text-primary-foreground">
+                  {product.productCode}
+                </Badge>
               </div>
-
-              {/* Features */}
-              <div className="space-y-2">
-                <h2 className="text-xl font-semibold">Key Features</h2>
-                <div className="flex flex-wrap gap-2">
-                  {product.features.map((feature, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {feature}
-                    </Badge>
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      size={16} 
+                      className={i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'} 
+                    />
                   ))}
                 </div>
+                <span className="text-sm text-muted-foreground">({product.rating})</span>
+              </div>
+              <p className="text-muted-foreground">{product.description}</p>
+            </div>
+            {/* Features */}
+            <div className="space-y-2 mt-4">
+              <h2 className="text-xl font-semibold">Key Features</h2>
+              <div className="flex flex-wrap gap-2">
+                {product.features.map((feature, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
+                    {feature}
+                  </Badge>
+                ))}
               </div>
             </div>
           </CardContent>
@@ -243,17 +243,6 @@ export function ProductDetails() {
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button variant="outline">
-            <Download size={20} className="mr-2" />
-            Download Specs
-          </Button>
-          <Button>
-            <Droplets size={20} className="mr-2" />
-            Request Sample
-          </Button>
-        </div>
       </div>
     </div>
   );
