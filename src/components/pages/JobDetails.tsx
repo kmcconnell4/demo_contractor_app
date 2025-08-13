@@ -571,11 +571,12 @@ export function JobDetails() {
                 {(showAllHistory ? jobHistory : jobHistory.slice(0, 3)).map((entry) => (
                   <div key={entry.id} className="pb-6">
                     <div className="flex items-center mb-2">
-                      <span className="font-semibold text-base mr-2">{entry.user}</span>
+                      <span className="font-semibold text-base mr-2">{entry.action}</span>
                       <span className="text-[14px] text-muted-foreground font-normal">{formatHistoryTimestamp(entry.timestamp)}</span>
                     </div>
                     <div className="mb-4">
-                      <span className="text-base text-muted-foreground font-normal">{entry.description || entry.action}</span>
+                      <span className="text-base text-muted-foreground font-normal">{entry.description}</span>
+                      <span className="block text-xs text-muted-foreground mt-1">by {entry.user}</span>
                     </div>
                     <hr className="border-t border-border" />
                   </div>

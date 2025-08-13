@@ -96,10 +96,11 @@ export function Search() {
     { id: 6, type: 'product', title: 'TPO Membrane 45 mil', category: 'Membrane', code: 'TPO-45-WHT' },
   ];
 
+  // Ensure allResults items have unique string keys
   const allResults = [
-    ...documents,
-    ...products,
-    ...allJobs,
+    ...documents.map((doc, idx) => ({ ...doc, id: `doc-${doc.id}-${idx}` })),
+    ...products.map((prod, idx) => ({ ...prod, id: `prod-${prod.id}-${idx}` })),
+    ...allJobs.map((job, idx) => ({ ...job, id: `job-${job.id}-${idx}` })),
   ];
 
   const getFilteredResults = () => {
@@ -388,10 +389,10 @@ export function Search() {
       <div className="px-8 py-4 pb-20">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-            <TabsTrigger value="all" onClick={() => setActiveTab('all')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
-            <TabsTrigger value="documents" onClick={() => setActiveTab('documents')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Documents</TabsTrigger>
-            <TabsTrigger value="products" onClick={() => setActiveTab('products')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Products</TabsTrigger>
-            <TabsTrigger value="jobs" onClick={() => setActiveTab('jobs')} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Jobs</TabsTrigger>
+            <TabsTrigger value="all" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">All</TabsTrigger>
+            <TabsTrigger value="documents" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Documents</TabsTrigger>
+            <TabsTrigger value="products" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Products</TabsTrigger>
+            <TabsTrigger value="jobs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Jobs</TabsTrigger>
           </TabsList>
 
           <div className="mt-4">
@@ -473,7 +474,9 @@ export function Search() {
                               </span>
                             )}
                             {'dueDate' in item && (
-                              <span className="text-xs text-muted-foreground">Due: {new Date(item.dueDate).toLocaleDateString()}</span>
+                              (item.status !== 'Pending' && (
+                                <span className="text-xs text-muted-foreground">Due: {new Date(item.dueDate).toLocaleDateString()}</span>
+                              ))
                             )}
                             {'completedDate' in item && (
                               <span className="text-xs text-muted-foreground">Completed: {new Date(item.completedDate).toLocaleDateString()}</span>

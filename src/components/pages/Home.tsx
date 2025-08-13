@@ -33,8 +33,6 @@ export function Home() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
-  // ...existing code...
-
   // Helper function to get updated job status
   const getJobStatus = (jobId: string, defaultStatus: string) => {
     const storedStatus = localStorage.getItem(`job_status_${jobId}`);
@@ -58,7 +56,7 @@ export function Home() {
   // Mock data for jobs
   const jobs = {
     pending: [
-      { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
+      { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: getJobStatus('7', 'Pending') },
     ],
     inProgress: [
       { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: getJobStatus('2', 'Installation'), progress: 40 },

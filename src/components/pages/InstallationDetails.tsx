@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import installationDetailsData from '../../lib/installationDetailsData';
 
 // Map product names to image filenames in public/Product images
@@ -40,10 +40,12 @@ const getSectionsForJob = (jobId: string) => {
 export function InstallationDetails({ id, area, onClose }: InstallationDetailsProps) {
   const sections = getSectionsForJob(id);
   return (
-    <DialogContent className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col">
+    <DialogContent
+      className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col"
+    >
       <DialogHeader className="px-6 pt-6 pb-2 flex items-end justify-between">
-        <div className="flex w-full gap-2" style={{ alignItems: 'flex-end' }}>
-          <button type="button" className="mb-[-4px] mr-2 flex items-center justify-center rounded-full p-2 hover:bg-muted" onClick={onClose} aria-label="Back">
+        <div className="flex items-end gap-2 justify-start w-full">
+          <button type="button" className="flex items-center justify-center rounded-full p-2 hover:bg-muted mb-[-4px]" onClick={onClose} aria-label="Back">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <h1 className="text-2xl font-bold leading-none tracking-tight">Installation Details</h1>
@@ -62,7 +64,17 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
                   : (idx === 0 ? "mb-10" : "mb-10 mt-0.5")
             }
           >
-            {section.videoUrl && (
+            {section.title === 'Primer' && (
+              <div className="mb-3">
+                <div className="w-[100vw] max-w-none h-56 bg-black flex flex-col items-center justify-center border border-[#222] relative overflow-hidden -mx-6">
+                  <video controls className="w-full h-full object-cover">
+                    <source src={section.videoUrl?.startsWith('/') ? section.videoUrl : `/Video Tutorials/CAV-GRIP_III_video_tutorial.mp4`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            )}
+            {section.videoUrl && section.title !== 'Primer' && (
               <div className="mb-3">
                 <div className="w-[100vw] max-w-none h-56 bg-black flex flex-col items-center justify-center border border-[#222] relative overflow-hidden -mx-6">
                   <video controls className="w-full h-full object-cover">
@@ -107,7 +119,6 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
             )}
           </div>
         ))}
-          // ...existing code...
       </div>
     </DialogContent>
   );
