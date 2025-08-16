@@ -94,6 +94,51 @@ export function Search() {
     if (filterStatus !== 'all' && activeTab === 'jobs') {
       results = results.filter(item => 'status' in item && item.status.toLowerCase() === filterStatus.toLowerCase());
     }
+    // Sort by Last modified
+    if (sortBy === 'lastModified') {
+      results = [...results].sort((a, b) => {
+        // Use completedDate, dueDate, startDate, or mock lastModified
+        const getDate = (item: any) => {
+          return (
+            item.completedDate ||
+            item.dueDate ||
+            item.startDate ||
+            item.lastModified ||
+            item.inspectionDate ||
+            null
+          );
+        };
+        const dateA = getDate(a);
+        const dateB = getDate(b);
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        // Parse as Date
+        const timeA = new Date(dateA).getTime();
+        const timeB = new Date(dateB).getTime();
+        return timeB - timeA;
+      });
+    }
+    // Sort alphabetically by title for A - Z
+    if (sortBy === 'name') {
+      results = [...results].sort((a, b) => {
+        const titleA = (a.title || '').toLowerCase();
+        const titleB = (b.title || '').toLowerCase();
+        if (titleA < titleB) return -1;
+        if (titleA > titleB) return 1;
+        return 0;
+      });
+    }
+    // Sort reverse alphabetically by title for Z - A
+    if (sortBy === 'reverseAlpha') {
+      results = [...results].sort((a, b) => {
+        const titleA = (a.title || '').toLowerCase();
+        const titleB = (b.title || '').toLowerCase();
+        if (titleA < titleB) return 1;
+        if (titleA > titleB) return -1;
+        return 0;
+      });
+    }
     return results;
   };
 
@@ -194,7 +239,9 @@ export function Search() {
               </SelectTrigger>
               <SelectContent className="min-w-[160px] w-48">
                 <SelectItem value="relevance">Relevance</SelectItem>
-                <SelectItem value="name">Name</SelectItem>
+                <SelectItem value="name">A - Z</SelectItem>
+                <SelectItem value="reverseAlpha">Z - A</SelectItem>
+                <SelectItem value="lastModified">Last modified</SelectItem>
               </SelectContent>
             </Select>
 
