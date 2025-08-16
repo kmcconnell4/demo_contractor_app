@@ -1,68 +1,19 @@
-// src/lib/jobsData.ts
-// Example job data for dynamic installation details
 
-export interface InstallationSection {
-  title: string;
-  products: { name: string; img: string }[];
-  instructions: string;
-}
-
-export interface JobData {
-  id: string;
-  name: string;
-  installationSections: InstallationSection[];
-}
-
-const jobsData: JobData[] = [
-  {
-    id: "job-1",
-    name: "Data Center 1",
-    installationSections: [
-      {
-        title: "Deck",
-        products: [
-          { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
-          { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
-          { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" }
-        ],
-        instructions: "Inspect the deck for damage and debris. Ensure the surface is dry and clean. Mark any areas requiring repair."
-      },
-      {
-        title: "Primer",
-        products: [
-          { name: "CAV-GRIP III Adhesive Primer", img: "/Product images/CAV-GRIP III Adhesive Primer.png" },
-          { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" },
-          { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" }
-        ],
-        instructions: "Apply primer evenly to the prepared deck. Allow primer to dry per manufacturer’s instructions. Avoid foot traffic until dry."
-      }
-    ]
-  },
-  {
-    id: "job-2",
-    name: "Hospital 1",
-    installationSections: [
-      {
-        title: "Base sheet",
-        products: [
-          { name: "Sure Weld TPO Reinforced Membrane", img: "/Product images/Sure Weld TPO Reinforced Membrane.png" },
-          { name: "VapAir Seal Air and Vapor Barrier Temporary Roof", img: "/Product images/VapAir Seal Air and Vapor Barrier Temporary Roof.png" },
-          { name: "Sure-White Pressure-Sensitive Pre-Molded Pipe Seal", img: "/Product images/Sure-White Pressure-Sensitive Pre-Molded Pipe Seal.png" }
-        ],
-        instructions: "Roll out base sheet and align to layout. Secure sheet per fastening schedule. Overlap seams as specified."
-      },
-      {
-        title: "Bottom insulation",
-        products: [
-          { name: "SecurShield Polyiso Tapered Insulation", img: "/Product images/SecurShield Polyiso Tapered Insulation.png" },
-          { name: "Sure Weld TPO Walkway Rolls", img: "/Product images/Sure-Weld TPO Walkway Rolls.png" },
-          { name: "Sure-Flex PVC Pressure-Sensitive Cover Strip", img: "/Product images/Sure-Flex PVC Pressure-Sensitive Cover Strip.png" }
-        ],
-        instructions: "Place bottom insulation boards tightly together. Stagger joints for stability. Mechanically fasten as required."
-      }
-    ]
-  }
-  // Add more jobs as needed
+// Centralized job list for dashboard/search/details
+export const jobsData = [
+  { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation', progress: 65 },
+  { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Installation', progress: 40 },
+  { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: 'Complete', completedDate: '2024-08-15' },
+  { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: 'Awarded', startDate: '2024-08-20' },
+  { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete', completedDate: '2024-07-28' },
+  { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: 'Complete', completedDate: '2024-07-15' },
+  { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: 'Pending', dueDate: '2024-08-25' },
+  { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: 'Complete', completedDate: '2024-08-10' },
+  { id: '9', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: 'Installation', progress: 75 },
+  { id: '10', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: 'Installation', progress: 30 },
+  { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: 'Installation', progress: 85 },
+  { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: 'Installation', progress: 20 },
+  // Inspection jobs
+  { id: '13', title: 'Inspection Job 1', location: '100 Inspection Ave, Harrisburg, PA', status: 'Inspection', progress: 90 },
+  { id: '14', title: 'Inspection Job 2', location: '200 Inspection Blvd, Lancaster, PA', status: 'Inspection', progress: 80 },
 ];
-
-export default jobsData;

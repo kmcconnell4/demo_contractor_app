@@ -1,3 +1,4 @@
+import { jobsData } from '@/lib/jobsData';
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -41,40 +42,8 @@ export function Search() {
   
   const isFavorite = (jobId: string) => favorites.includes(jobId);
 
-  // Import jobs from Home page logic
-  const jobs = {
-    pending: [
-      { id: '7', type: 'job', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: 'Pending', dueDate: '2024-08-25' },
-    ],
-    inProgress: [
-      { id: '2', type: 'job', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: 'Installation', progress: 40 },
-      { id: '9', type: 'job', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: 'Installation', progress: 75 },
-      { id: '1', type: 'job', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: 'Installation', progress: 65 },
-      { id: '10', type: 'job', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: 'Installation', progress: 30 },
-      { id: '4', type: 'job', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: 'Awarded', startDate: '2024-08-20' },
-      { id: '11', type: 'job', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: 'Installation', progress: 85 },
-      { id: '12', type: 'job', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: 'Installation', progress: 20 },
-    ],
-    inspection: [
-      { id: '13', type: 'job', title: 'University Science Building', location: '800 College Ave, Lancaster, PA', status: 'Inspection', inspectionDate: '2024-08-30' },
-      { id: '14', type: 'job', title: 'Regional Medical Center', location: '200 Health Blvd, Reading, PA', status: 'Inspection', inspectionDate: '2024-09-02' },
-      { id: '15', type: 'job', title: 'Tech Park Expansion', location: '1000 Innovation Dr, Harrisburg, PA', status: 'Inspection', inspectionDate: '2024-09-05' },
-    ],
-    completed: [
-      { id: '8', type: 'job', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: 'Complete', completedDate: '2024-08-10' },
-      { id: '3', type: 'job', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: 'Complete', completedDate: '2024-08-15' },
-      { id: '6', type: 'job', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: 'Complete', completedDate: '2024-07-15' },
-      { id: '5', type: 'job', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: 'Complete', completedDate: '2024-07-28' },
-    ]
-  };
-
-  // Combine all jobs into a single array
-  const allJobs = [
-    ...jobs.pending,
-    ...jobs.inProgress,
-    ...jobs.inspection,
-    ...jobs.completed,
-  ];
+  // Use only jobs from jobsData for search results
+  const allJobs = jobsData.map(job => ({ ...job, type: 'job' }));
 
   // Add mock documents and products from job details
   const documents = [
@@ -100,7 +69,7 @@ export function Search() {
   const allResults = [
     ...documents.map((doc, idx) => ({ ...doc, id: `doc-${doc.id}-${idx}` })),
     ...products.map((prod, idx) => ({ ...prod, id: `prod-${prod.id}-${idx}` })),
-    ...allJobs.map((job, idx) => ({ ...job, id: `job-${job.id}-${idx}` })),
+    ...allJobs.map((job) => ({ ...job, id: job.id })), // Use original job.id
   ];
 
   const getFilteredResults = () => {
@@ -415,8 +384,8 @@ export function Search() {
                   key={item.id}
                   className="cursor-pointer transition-material hover:elevation-2"
                   onClick={() => {
-                    if (item.type === 'job') navigate(`/job/${item.id}`);
-                    if (item.type === 'product') navigate(`/product/${item.id}`);
+                    if (item.type === 'job') navigate(`/job/${String(item.id).trim()}`);
+                    if (item.type === 'product') navigate(`/product/${String(item.id).trim()}`);
                     // For documents, you may want to open a modal or link
                   }}
                 >
@@ -481,8 +450,10 @@ export function Search() {
                             {'completedDate' in item && (
                               <span className="text-xs text-muted-foreground">Completed: {new Date(item.completedDate).toLocaleDateString()}</span>
                             )}
-                            {'inspectionDate' in item && (
-                              <span className="text-xs text-muted-foreground">Inspection: {new Date(item.inspectionDate).toLocaleDateString()}</span>
+                            {'inspectionDate' in item && item.inspectionDate && typeof item.inspectionDate === 'string' && (
+                              <span className="text-xs text-muted-foreground">
+                                Inspection: {new Date(item.inspectionDate).toLocaleDateString()}
+                              </span>
                             )}
                           </div>
                         </div>

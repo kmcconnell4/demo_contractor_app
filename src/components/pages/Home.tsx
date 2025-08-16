@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJobImage } from '@/lib/getJobImage';
+import { jobsData } from '@/lib/jobsData';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -54,35 +55,22 @@ export function Home() {
   };
 
   // Mock data for jobs
-  const jobs = {
-    pending: [
-      { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: getJobStatus('7', 'Pending') },
-    ],
-    inProgress: [
-      { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: getJobStatus('2', 'Installation'), progress: 40 },
-      { id: '9', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: getJobStatus('9', 'Installation'), progress: 75 },
-      { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: getJobStatus('1', 'Installation'), progress: 65 },
-      { id: '10', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: getJobStatus('10', 'Installation'), progress: 30 },
-      { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
-      { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: getJobStatus('11', 'Installation'), progress: 85 },
-      { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: getJobStatus('12', 'Installation'), progress: 20 },
-    ],
-    inspection: [
-      { id: '13', title: 'University Science Building', location: '800 College Ave, Lancaster, PA', status: getJobStatus('13', 'Inspection'), inspectionDate: '2024-08-30' },
-      { id: '14', title: 'Regional Medical Center', location: '200 Health Blvd, Reading, PA', status: getJobStatus('14', 'Inspection'), inspectionDate: '2024-09-02' },
-      { id: '15', title: 'Tech Park Expansion', location: '1000 Innovation Dr, Harrisburg, PA', status: getJobStatus('15', 'Inspection'), inspectionDate: '2024-09-05' },
-    ],
-    completed: [
-      { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
-      { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: getJobStatus('3', 'Complete'), completedDate: '2024-08-15' },
-      { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
-      { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
-    ]
+  // Centralized jobs list
+  const jobs = jobsData.map(job => ({
+    ...job,
+    status: getJobStatus(job.id, job.status)
+  }));
+
+  // Filter jobs for UI sections
+  const jobsBySection = {
+    pending: jobs.filter(job => job.status === 'Pending'),
+    inProgress: jobs.filter(job => job.status === 'Installation' || job.status === 'Inspection' || job.status === 'Awarded'),
+    completed: jobs.filter(job => job.status === 'Complete'),
   };
 
   // Get favorited jobs
   const getFavoriteJobs = () => {
-    const allJobs = [...jobs.pending, ...jobs.inProgress, ...jobs.completed];
+  const allJobs = [...jobsBySection.pending, ...jobsBySection.inProgress, ...jobsBySection.completed];
     return allJobs.filter(job => isFavorite(job.id));
   };
 
@@ -322,19 +310,19 @@ export function Home() {
         </div>
 
         {/* In Progress Jobs */}
-        {jobs.inProgress.length > 0 && (
+  {jobsBySection.inProgress.length > 0 && (
           <div className="pt-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold">In Progress</h2>
                 <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
-                  {jobs.inProgress.length}
+                  {jobsBySection.inProgress.length}
                 </Badge>
               </div>
               <button className="text-sm text-primary font-medium">View all jobs</button>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
-              {jobs.inProgress.map((job) => (
+              {jobsBySection.inProgress.map((job) => (
                 <Card 
                   key={job.id}
                   className="cursor-pointer transition-material hover:elevation-2 w-[280px] flex-shrink-0"
@@ -379,19 +367,19 @@ export function Home() {
         )}
 
         {/* Recently Completed Jobs */}
-        {jobs.completed.length > 0 && (
+  {jobsBySection.completed.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold">Recently Completed</h2>
                 <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
-                  {jobs.completed.length}
+                  {jobsBySection.completed.length}
                 </Badge>
               </div>
               <button className="text-sm text-primary font-medium">View all jobs</button>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
-              {jobs.completed.map((job) => (
+              {jobsBySection.completed.map((job) => (
                 <Card 
                   key={job.id}
                   className="cursor-pointer transition-material hover:elevation-2 w-[280px] flex-shrink-0"

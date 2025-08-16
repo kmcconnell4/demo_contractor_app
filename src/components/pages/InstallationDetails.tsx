@@ -23,7 +23,7 @@ function getProductImage(name: string): string {
   return productImageMap[name] || '/placeholder.jpg';
 }
 import { ArrowLeft } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface InstallationDetailsProps {
   id: string;
@@ -39,6 +39,7 @@ const getSectionsForJob = (jobId: string) => {
 
 export function InstallationDetails({ id, area, onClose }: InstallationDetailsProps) {
   const sections = getSectionsForJob(id);
+  const navigate = useNavigate();
   return (
     <DialogContent
       className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col"
@@ -102,7 +103,7 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
                     <div 
                       key={i} 
                       className="min-w-[140px] w-36 h-44 bg-white rounded-xl shadow border flex flex-col overflow-hidden p-0 cursor-pointer"
-                      onClick={() => window.location.href = `/product/${encodeURIComponent(product.name)}`}
+                      onClick={() => navigate(`/product/${encodeURIComponent(product.name)}`)}
                     >
                       <img
                         src={getProductImage(product.name)}

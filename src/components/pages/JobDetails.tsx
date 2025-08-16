@@ -16,6 +16,7 @@ function formatHistoryTimestamp(ts: string) {
   return `${monthName} ${parseInt(day, 10)}, ${year} at ${hour}:${minute}${ampm}`;
 }
 import { useParams, useNavigate } from 'react-router-dom';
+import { jobsData } from '@/lib/jobsData';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -105,34 +106,18 @@ export function JobDetails() {
 
   // Job data that matches the Home page structure
   const getAllJobs = () => {
-    const jobs = {
-      pending: [
-        { id: '7', title: 'New Construction Project', location: '123 Commerce Drive, Carlisle, PA', status: getJobStatus('7', 'Pending'), dueDate: '2024-08-25' },
-      ],
-      inProgress: [
-        { id: '2', title: 'Retail Shopping Center', location: '2750 Cumberland Parkway, Mechanicsburg, PA', status: getJobStatus('2', 'Installation'), progress: 40 },
-        { id: '9', title: 'Corporate Headquarters', location: '555 Business Drive, Harrisburg, PA', status: getJobStatus('9', 'Installation'), progress: 75 },
-        { id: '1', title: 'Downtown Office Complex', location: '450 Market Street, Philadelphia, PA', status: getJobStatus('1', 'Installation'), progress: 65 },
-        { id: '10', title: 'Distribution Center', location: '2200 Logistics Way, York, PA', status: getJobStatus('10', 'Installation'), progress: 30 },
-        { id: '4', title: 'Warehouse Facility', location: '890 Norristown Road, Blue Bell, PA', status: getJobStatus('4', 'Awarded'), startDate: '2024-08-20' },
-        { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: getJobStatus('11', 'Installation'), progress: 85 },
-        { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: getJobStatus('12', 'Installation'), progress: 20 },
-      ],
-      completed: [
-        { id: '8', title: 'Hospital Renovation', location: '340 N 12th Street, Philadelphia, PA', status: getJobStatus('8', 'Complete'), completedDate: '2024-08-10' },
-        { id: '3', title: 'Manufacturing Plant', location: '1500 Industrial Boulevard, Carlisle, PA', status: getJobStatus('3', 'Complete'), completedDate: '2024-08-15' },
-        { id: '6', title: 'Medical Center', location: '100 N Academy Avenue, Danville, PA', status: getJobStatus('6', 'Complete'), completedDate: '2024-07-15' },
-        { id: '5', title: 'Tech Campus Building A', location: '1725 Duke Street, Camp Hill, PA', status: getJobStatus('5', 'Complete'), completedDate: '2024-07-28' },
-      ]
-    };
-    
-    return [...jobs.pending, ...jobs.inProgress, ...jobs.completed];
+    // Use centralized jobsData for all job lists
+    return jobsData.map(job => ({
+      ...job,
+      status: getJobStatus(job.id, job.status)
+    }));
   };
 
   // Find the specific job by ID
   const getJobData = () => {
-    const allJobs = getAllJobs();
-    return allJobs.find(job => job.id === id) || allJobs.find(job => job.id === '1'); // Default to job 1 if not found
+  const allJobs = getAllJobs();
+  const stringId = String(id).trim();
+  return allJobs.find(job => String(job.id).trim() === stringId) || allJobs.find(job => job.id === '1'); // Default to job 1 if not found
   };
 
   const jobData = getJobData();
@@ -497,55 +482,53 @@ export function JobDetails() {
                               <h3 className="font-semibold text-card-foreground truncate">
                                 {doc.name}
                               </h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                <span className="text-sm text-muted-foreground">{doc.size}</span>
+                              <div className="flex items-center justify-between">
+                                {['Pending', 'Awarded', 'Installation', 'Inspection', 'Complete'].map((status, index, arr) => {
+                                  const isActive = job.status === status;
+                                  const isCompleted = arr.indexOf(job.status) > index;
+                                  const isCurrentOrPast = isActive || isCompleted;
+                                  return (
+                                    <div key={status} className="flex items-center">
+                                      {/* Left connecting line for all except first step */}
+                                      {index > 0 && (
+                                        <div className={`w-10 h-0.5 mx-2 flex-shrink-0 transition-colors ${
+                                          isCompleted ? 'bg-primary' : 'bg-gray-300'
+                                        }`} />
+                                      )}
+                                      <div className="flex flex-col items-center">
+                                        {/* Status Circle */}
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                                          isCompleted 
+                                            ? 'bg-primary border-primary' 
+                                            : isActive 
+                                              ? 'bg-primary border-primary' 
+                                              : 'bg-transparent border-gray-300'
+                                        }`}>
+                                          {isCompleted ? (
+                                            <CheckCircle size={14} className="text-white" />
+                                          ) : isActive ? (
+                                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                                          ) : (
+                                            <div className="w-2 h-2 bg-gray-300 rounded-full" />
+                                          )}
+                                        </div>
+                                        {/* Status Label */}
+                                        <span className={`text-xs mt-1 font-medium transition-colors ${
+                                          isCurrentOrPast ? 'text-foreground' : 'text-muted-foreground'
+                                        }`}>
+                                          {status}
+                                        </span>
+                                      </div>
+                                      {/* Right connecting line for all except last step */}
+                                      {index < arr.length - 1 && (
+                                        <div className={`w-10 h-0.5 mx-2 flex-shrink-0 transition-colors ${
+                                          isCompleted ? 'bg-primary' : 'bg-gray-300'
+                                        }`} />
+                                      )}
+                                    </div>
+                                  );
+                                })}
                               </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="Safety Data" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocumentsByCategory(installationDocuments, 'Safety').map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#0a7d2f" }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground truncate">
-                                {doc.name}
-                              </h3>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <Badge variant="outline" className="text-xs">{doc.category}</Badge>
-                                <span className="text-sm text-muted-foreground">{doc.size}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
-                <TabsContent value="Product Info" className="space-y-3">
-                  <div className="space-y-3">
-                    {filterDocumentsByCategory(installationDocuments, 'Data Sheet').map((doc) => (
-                      <Card key={doc.id} className="cursor-pointer transition-material hover:elevation-2">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                              <File size={24} style={{ color: "#012b64" }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-card-foreground truncate">
-                                {doc.name}
-                              </h3>
                               <div className="flex items-center space-x-2 mt-1">
                                 <Badge variant="outline" className="text-xs">{doc.category}</Badge>
                                 <span className="text-sm text-muted-foreground">{doc.size}</span>
@@ -802,7 +785,7 @@ export function JobDetails() {
           />
           {/* Back Button Overlay */}
           <button 
-            onClick={() => navigate('/home')} 
+            onClick={() => navigate(-1)} 
             className="absolute left-4 p-2 rounded-full bg-white/90 hover:bg-white transition-colors shadow-md"
             style={{ top: 'calc(env(safe-area-inset-top) + 3rem)' }}
           >
@@ -863,7 +846,7 @@ export function JobDetails() {
           {/* Status Progress Tracker */}
           <div className="mb-6 max-w-md mx-auto">
             <div className="flex items-center justify-between">
-              {['Pending', 'Awarded', 'Installation', 'Complete'].map((status, index) => {
+              {['Pending', 'Awarded', 'Installation', 'Inspection', 'Complete'].map((status, index, arr) => {
                 const isActive = job.status === status;
                 const isCompleted = ['Pending', 'Awarded', 'Installation', 'Complete'].indexOf(job.status) > index;
                 const isCurrentOrPast = isActive || isCompleted;
