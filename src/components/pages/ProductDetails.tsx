@@ -14,10 +14,12 @@ import {
   Droplets,
   Zap
 } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 export function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Mock product data
   const product = {
@@ -101,9 +103,9 @@ export function ProductDetails() {
           <div>
             <h1 className="text-2xl font-bold text-white drop-shadow-lg mb-1">{product.name}</h1>
             <div className="flex items-center gap-4 text-white/90 drop-shadow">
-              <span className="text-sm">Code: {product.productCode}</span>
-              <span className="text-sm">Category: {product.category}</span>
-              <span className="text-sm">Size: {product.specifications.thickness} x {product.specifications.width} x {product.specifications.length}</span>
+              <span className="text-sm">{t('productCode')}: {product.productCode}</span>
+              <span className="text-sm">{t('category')}: {product.category}</span>
+              <span className="text-sm">{t('size')}: {product.specifications.thickness} x {product.specifications.width} x {product.specifications.length}</span>
             </div>
           </div>
           <Badge variant="outline" className="text-xs bg-white/80 text-primary backdrop-blur-sm">
@@ -142,7 +144,7 @@ export function ProductDetails() {
             </div>
             {/* Features */}
             <div className="space-y-2 mt-4">
-              <h2 className="text-xl font-semibold">Key Features</h2>
+              <h2 className="text-xl font-semibold">{t('keyFeatures')}</h2>
               <div className="flex flex-wrap gap-2">
                 {product.features.map((feature, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">
@@ -159,32 +161,32 @@ export function ProductDetails() {
           <CardContent className="p-0">
             <Tabs defaultValue="specs" className="space-y-0">
               <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                <TabsTrigger value="specs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Specs</TabsTrigger>
-                <TabsTrigger value="benefits" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Benefits</TabsTrigger>
-                <TabsTrigger value="install" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Install</TabsTrigger>
-                <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Docs</TabsTrigger>
+                <TabsTrigger value="specs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('specs')}</TabsTrigger>
+                <TabsTrigger value="benefits" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('benefits')}</TabsTrigger>
+                <TabsTrigger value="install" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('install')}</TabsTrigger>
+                <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('docs')}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="specs" className="p-4 space-y-4">
                 <h2 className="text-xl font-semibold flex items-center">
                   <Thermometer size={20} className="mr-2" />
-                  Technical Specifications
+                  {t('technicalSpecifications')}
                 </h2>
                 <div className="space-y-1">
-                  <SpecRow label="Thickness" value={product.specifications.thickness} />
-                  <SpecRow label="Width" value={product.specifications.width} />
-                  <SpecRow label="Length" value={product.specifications.length} />
-                  <SpecRow label="Weight" value={product.specifications.weight} />
-                  <SpecRow label="Color" value={product.specifications.color} />
-                  <SpecRow label="Temperature Range" value={product.specifications.temperatureRange} />
-                  <SpecRow label="Warranty" value={product.specifications.warranty} />
+                  <SpecRow label={t('thickness')} value={product.specifications.thickness} />
+                  <SpecRow label={t('width')} value={product.specifications.width} />
+                  <SpecRow label={t('length')} value={product.specifications.length} />
+                  <SpecRow label={t('weight')} value={product.specifications.weight} />
+                  <SpecRow label={t('color')} value={product.specifications.color} />
+                  <SpecRow label={t('temperatureRange')} value={product.specifications.temperatureRange} />
+                  <SpecRow label={t('warranty')} value={product.specifications.warranty} />
                 </div>
               </TabsContent>
 
               <TabsContent value="benefits" className="p-4 space-y-4">
                 <h2 className="text-xl font-semibold flex items-center">
                   <Shield size={20} className="mr-2" />
-                  Features & Benefits
+                  {t('featuresBenefits')}
                 </h2>
                 <div className="space-y-3">
                   {product.benefits.map((benefit, index) => (
@@ -199,7 +201,7 @@ export function ProductDetails() {
               <TabsContent value="install" className="p-4 space-y-4">
                 <h2 className="text-xl font-semibold flex items-center">
                   <Zap size={20} className="mr-2" />
-                  Installation Instructions
+                  {t('installationInstructions')}
                 </h2>
                 <div className="space-y-3">
                   {product.installationSteps.map((step, index) => (
@@ -215,7 +217,7 @@ export function ProductDetails() {
                 <Separator />
                 
                 <div className="space-y-3">
-                  <h4 className="font-semibold">Video Tutorials</h4>
+                  <h4 className="font-semibold">{t('videoTutorials')}</h4>
                   {product.videos.map((video, index) => (
                     <Button key={index} variant="outline" className="w-full justify-start">
                       <Play size={16} className="mr-2" />
@@ -228,7 +230,7 @@ export function ProductDetails() {
               <TabsContent value="docs" className="p-4 space-y-4">
                 <h2 className="text-xl font-semibold flex items-center">
                   <Download size={20} className="mr-2" />
-                  Documentation
+                  {t('documentation')}
                 </h2>
                 <div className="space-y-3">
                   {product.documents.map((doc, index) => (

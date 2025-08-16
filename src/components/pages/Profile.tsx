@@ -10,9 +10,11 @@ import {
   ArrowLeft,
   Camera
 } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 export function Profile() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   const [profile, setProfile] = useState({
     name: 'Chris Contractor',
@@ -32,10 +34,10 @@ export function Profile() {
               <button onClick={() => navigate('/settings')} className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white mt-1">
                 <ArrowLeft size={20} />
               </button>
-              <h1 className="text-2xl font-bold text-white">Edit Profile</h1>
+              <h1 className="text-2xl font-bold text-white">{t('editProfile')}</h1>
             </div>
             <Button variant="ghost" className="text-white hover:bg-white/20">
-              Save
+              {t('save')}
             </Button>
           </div>
         </div>
@@ -69,7 +71,7 @@ export function Profile() {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">{t('fullName')}</Label>
                 <Input
                   id="name"
                   value={profile.name}
@@ -78,7 +80,7 @@ export function Profile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('email')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -88,7 +90,7 @@ export function Profile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">{t('phone')}</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -98,7 +100,7 @@ export function Profile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
+                <Label htmlFor="company">{t('company')}</Label>
                 <Input
                   id="company"
                   value={profile.company}
@@ -107,7 +109,7 @@ export function Profile() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="location">{t('location')}</Label>
                 <Input
                   id="location"
                   value={profile.location}

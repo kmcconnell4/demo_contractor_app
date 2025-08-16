@@ -13,10 +13,12 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 export function ScheduleInspection() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [timePreference, setTimePreference] = useState<string>('');
   const [additionalDetails, setAdditionalDetails] = useState('');
@@ -37,7 +39,7 @@ export function ScheduleInspection() {
   const handleSubmit = () => {
     if (selectedDates.length === 0) {
       toast({
-        title: "Please select at least one preferred date",
+        title: t('selectDateToast'),
         variant: "destructive"
       });
       return;
@@ -45,7 +47,7 @@ export function ScheduleInspection() {
 
     if (!timePreference) {
       toast({
-        title: "Please select a time preference",
+        title: t('selectTimeToast'),
         variant: "destructive"
       });
       return;
@@ -67,8 +69,8 @@ export function ScheduleInspection() {
     localStorage.setItem(`job_status_${id}`, 'Complete');
 
     toast({
-      title: "Inspection scheduled successfully",
-      description: "Job has been marked as complete and we'll contact you within 24 hours to confirm the appointment."
+      title: t('inspectionScheduledToastTitle'),
+      description: t('inspectionScheduledToastDescription')
     });
 
     navigate(`/job/${id}`);
@@ -91,8 +93,8 @@ export function ScheduleInspection() {
               <ArrowLeft size={20} />
             </button>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-white">Request Inspection</h1>
-              <p className="text-white/80 text-sm">Select your preferred dates and times</p>
+              <h1 className="text-2xl font-bold text-white">{t('scheduleInspectionTitle')}</h1>
+              <p className="text-white/80 text-sm">{t('scheduleInspectionSubtitle')}</p>
             </div>
           </div>
         </div>
@@ -104,10 +106,10 @@ export function ScheduleInspection() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <CalendarIcon size={20} />
-              <span>Preferred Dates</span>
+              <span>{t('preferredDates')}</span>
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Select one or more dates that work for you. You can select multiple dates to increase scheduling flexibility.
+              {t('preferredDatesDescription')}
             </p>
           </CardHeader>
           <CardContent>
@@ -129,7 +131,7 @@ export function ScheduleInspection() {
             
             {selectedDates.length > 0 && (
               <div className="mt-4">
-                <Label className="text-sm font-medium">Selected Dates:</Label>
+                <Label className="text-sm font-medium">{t('selectedDates')}</Label>
                 <div className="mt-2 space-y-2">
                   {selectedDates.map((date, index) => (
                     <div key={index} className="flex items-center space-x-2 text-sm">
@@ -153,25 +155,25 @@ export function ScheduleInspection() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Clock size={20} />
-              <span>Time Preference</span>
+              <span>{t('timePreference')}</span>
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Select your preferred time of day for the inspection.
+              {t('timePreferenceDescription')}
             </p>
           </CardHeader>
           <CardContent>
             <RadioGroup value={timePreference} onValueChange={setTimePreference}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="morning" id="morning" />
-                <Label htmlFor="morning">Morning (8:00 AM - 12:00 PM)</Label>
+                <Label htmlFor="morning">{t('morningTime')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="afternoon" id="afternoon" />
-                <Label htmlFor="afternoon">Afternoon (12:00 PM - 5:00 PM)</Label>
+                <Label htmlFor="afternoon">{t('afternoonTime')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="flexible" id="flexible" />
-                <Label htmlFor="flexible">Flexible (Any time during business hours)</Label>
+                <Label htmlFor="flexible">{t('flexibleTime')}</Label>
               </div>
             </RadioGroup>
           </CardContent>
@@ -180,14 +182,14 @@ export function ScheduleInspection() {
         {/* Additional Details */}
         <Card>
           <CardHeader>
-            <CardTitle>Additional Details</CardTitle>
+            <CardTitle>{t('additionalDetails')}</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Any special requirements, access instructions, or other important information for the inspector.
+              {t('additionalDetailsDescription')}
             </p>
           </CardHeader>
           <CardContent>
             <Textarea
-              placeholder="Enter any additional details, special requirements, or access instructions..."
+              placeholder={t('additionalDetailsPlaceholder')}
               value={additionalDetails}
               onChange={(e) => setAdditionalDetails(e.target.value)}
               className="min-h-[100px]"
@@ -198,7 +200,7 @@ export function ScheduleInspection() {
         {/* Submit Button */}
         <div className="pt-4">
           <Button onClick={handleSubmit} className="w-full h-12">
-            Request Inspection
+            {t('requestInspection')}
           </Button>
         </div>
       </div>

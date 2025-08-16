@@ -5,8 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Send, Search, Phone, Video } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 export function Messages() {
+  const { t } = useLanguage();
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -110,12 +112,11 @@ export function Messages() {
       {/* Header */}
       <div className="bg-surface border-b border-border safe-top">
         <div className="p-8">
-          <h1 className="text-2xl font-bold mb-3">Messages</h1>
-          
+          <h1 className="text-2xl font-bold mb-3">{t('messagesTitle')}</h1>
           {/* Search */}
           <div className="relative">
             <Input
-              placeholder="Search conversations..."
+              placeholder={t('searchChatsPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 rounded-full"
@@ -136,54 +137,51 @@ export function Messages() {
                   chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map((chat) => (
-                <Card 
-                  key={chat.id} 
-                  className="cursor-pointer transition-material hover:elevation-2"
-                  onClick={() => setSelectedChat(chat.id)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="relative">
-                        <Avatar className="h-12 w-12">
-                          {chat.avatar ? (
-                            <AvatarImage src={chat.avatar} alt={chat.name} />
-                          ) : (
-                            <AvatarFallback>
-                              {chat.type === 'group' ? '👥' : chat.type === 'support' ? '🛠️' : getAvatarFallback(chat.name)}
-                            </AvatarFallback>
+                  <Card 
+                    key={chat.id} 
+                    className="cursor-pointer transition-material hover:elevation-2"
+                    onClick={() => setSelectedChat(chat.id)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="relative">
+                          <Avatar className="h-12 w-12">
+                            {chat.avatar ? (
+                              <AvatarImage src={chat.avatar} alt={chat.name} />
+                            ) : (
+                              <AvatarFallback>
+                                {chat.type === 'group' ? '👥' : chat.type === 'support' ? '🛠️' : getAvatarFallback(chat.name)}
+                              </AvatarFallback>
+                            )}
+                          </Avatar>
+                          {chat.unread > 0 && (
+                            <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
+                              {chat.unread}
+                            </Badge>
                           )}
-                        </Avatar>
-                        {chat.unread > 0 && (
-                          <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
-                            {chat.unread}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-semibold text-card-foreground truncate">
-                            {chat.name} {getChatIcon(chat.type)}
-                          </h3>
-                          <span className="text-xs text-muted-foreground">
-                            {chat.timestamp}
-                          </span>
                         </div>
-                        
-                        <p className="text-sm text-muted-foreground truncate mt-1">
-                          {chat.lastMessage}
-                        </p>
-                        
-                        {chat.type === 'group' && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {chat.participants.join(', ')}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-semibold text-card-foreground truncate">
+                              {chat.name} {getChatIcon(chat.type)}
+                            </h3>
+                            <span className="text-xs text-muted-foreground">
+                              {chat.timestamp}
+                            </span>
+                          </div>
+                          <p className="text-sm text-muted-foreground truncate mt-1">
+                            {chat.lastMessage}
                           </p>
-                        )}
+                          {chat.type === 'group' && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {chat.participants.join(', ')}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
             </div>
           </div>
         ) : (

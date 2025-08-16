@@ -8,8 +8,10 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search as SearchIcon, Filter, Mic, MicOff, File, Package, Briefcase, Heart, Star } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 export function Search() {
+  const { t } = useLanguage();
   // Modal state for filters
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
@@ -210,7 +212,7 @@ export function Search() {
           <div className="flex items-center space-x-3">
             <div className="flex-1 relative">
               <Input
-                placeholder="Search documents, products, or jobs..."
+                placeholder={t('searchPlaceholder')}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="pl-10 pr-12 h-12 rounded-full"
@@ -234,7 +236,7 @@ export function Search() {
 
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="min-w-[160px] w-48 pl-3">
-                <span className="font-medium mr-1">Sort By:</span>
+                <span className="font-medium mr-1">{t('sortBy')}</span>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="min-w-[160px] w-48">

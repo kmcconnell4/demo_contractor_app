@@ -10,10 +10,12 @@ import {
   Clock,
   MapPin
 } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 export function OrderDetails() {
   const { orderId } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Mock order data - in real app, this would come from API
   const order = {
@@ -85,7 +87,7 @@ export function OrderDetails() {
               <ArrowLeft size={20} />
             </button>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-white">Order Details</h1>
+              <h1 className="text-2xl font-bold text-white">{t('orderDetailsTitle')}</h1>
               <div className="flex items-center space-x-2">
                 <p className="text-white/80 text-sm">{order.orderNumber}</p>
                 <span className="text-white/60 text-sm">•</span>
@@ -99,8 +101,8 @@ export function OrderDetails() {
           
           {order.status === 'shipped' && (
             <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
-              <p className="text-white/80 text-sm">Tracking: {order.trackingNumber}</p>
-              <p className="text-white/80 text-sm">Est. Delivery: {new Date(order.estimatedDelivery).toLocaleDateString()}</p>
+              <p className="text-white/80 text-sm">{t('tracking')}: {order.trackingNumber}</p>
+              <p className="text-white/80 text-sm">{t('estimatedDelivery')}: {new Date(order.estimatedDelivery).toLocaleDateString()}</p>
             </div>
           )}
         </div>
@@ -110,23 +112,23 @@ export function OrderDetails() {
         {/* Order Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Order Information</CardTitle>
+            <CardTitle>{t('orderInformation')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Order Number</span>
+              <span className="text-muted-foreground">{t('orderNumber')}</span>
               <span className="font-semibold">{order.orderNumber}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Order Date</span>
+              <span className="text-muted-foreground">{t('orderDate')}</span>
               <span className="font-semibold">{new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Supplier</span>
+              <span className="text-muted-foreground">{t('supplier')}</span>
               <span className="font-semibold">{order.supplier}</span>
             </div>
             <div className="flex justify-between items-start">
-              <span className="text-muted-foreground">Shipping Address</span>
+              <span className="text-muted-foreground">{t('shippingAddress')}</span>
               <div className="text-right">
                 <div className="flex items-center space-x-1">
                   <MapPin size={16} className="text-muted-foreground" />
@@ -140,7 +142,7 @@ export function OrderDetails() {
         {/* Products */}
         <Card>
           <CardHeader>
-            <CardTitle>Products ({order.productCount} items)</CardTitle>
+            <CardTitle>{t('products')} ({order.productCount} {t('items')})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -161,11 +163,11 @@ export function OrderDetails() {
                     <div className="flex-1 space-y-1">
                       <h3 className="font-semibold text-card-foreground">{product.name}</h3>
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-muted-foreground">Qty: {product.quantity}</span>
+                        <span className="text-muted-foreground">{t('quantity')}: {product.quantity}</span>
                         <span className="text-muted-foreground">@ {product.unitPrice}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-muted-foreground">Unit Price: {product.unitPrice}</span>
+                        <span className="text-xs text-muted-foreground">{t('unitPrice')}: {product.unitPrice}</span>
                         <span className="font-semibold text-primary">{product.total}</span>
                       </div>
                     </div>
@@ -179,25 +181,25 @@ export function OrderDetails() {
         {/* Order Summary */}
         <Card>
           <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+            <CardTitle>{t('orderSummary')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-muted-foreground">{t('subtotal')}</span>
                 <span className="font-semibold">$12,450.00</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Shipping</span>
-                <span className="font-semibold">Free</span>
+                <span className="text-muted-foreground">{t('shipping')}</span>
+                <span className="font-semibold">{t('free')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Tax</span>
+                <span className="text-muted-foreground">{t('tax')}</span>
                 <span className="font-semibold">$0.00</span>
               </div>
               <div className="border-t pt-3">
                 <div className="flex justify-between">
-                  <span className="text-lg font-bold">Total</span>
+                  <span className="text-lg font-bold">{t('total')}</span>
                   <span className="text-lg font-bold text-primary">{order.totalAmount}</span>
                 </div>
               </div>
@@ -209,10 +211,10 @@ export function OrderDetails() {
         <div className="flex space-x-3">
           <Button variant="outline" className="flex-1">
             <Package size={20} className="mr-2" />
-            Track Package
+            {t('trackPackage')}
           </Button>
           <Button variant="outline" className="flex-1">
-            Contact Supplier
+            {t('contactSupplier')}
           </Button>
         </div>
       </div>

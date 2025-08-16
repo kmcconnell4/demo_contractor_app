@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import installationDetailsData from '../../lib/installationDetailsData';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
 
 // Map product names to image filenames in public/Product images
 const productImageMap: Record<string, string> = {
@@ -40,6 +41,7 @@ const getSectionsForJob = (jobId: string) => {
 export function InstallationDetails({ id, area, onClose }: InstallationDetailsProps) {
   const sections = getSectionsForJob(id);
   const navigate = useNavigate();
+  const { t } = useLanguage();
   return (
     <DialogContent
       className="fixed left-0 right-0 bottom-0 top-[100px] w-full max-w-none !translate-x-0 !translate-y-0 rounded-t-2xl m-0 shadow-lg p-0 overflow-hidden flex flex-col"
@@ -49,7 +51,7 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
           <button type="button" className="flex items-center justify-center rounded-full p-2 hover:bg-muted mb-[-4px]" onClick={onClose} aria-label="Back">
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-2xl font-bold leading-none tracking-tight">Installation Details</h1>
+          <h1 className="text-2xl font-bold leading-none tracking-tight">{t('installationDetailsTitle')}</h1>
         </div>
       </DialogHeader>
       <div className="px-6 pb-6 flex-1 overflow-y-auto">
@@ -91,13 +93,13 @@ export function InstallationDetails({ id, area, onClose }: InstallationDetailsPr
               {section.attachmentMethodLink && (
                 <>
                   {' '}
-                  <a href={section.attachmentMethodLink.url} className="text-blue-600 underline ml-1 text-sm font-normal" target="_blank" rel="noopener noreferrer">View attachment method</a>
+                  <a href={section.attachmentMethodLink.url} className="text-blue-600 underline ml-1 text-sm font-normal" target="_blank" rel="noopener noreferrer">{t('viewAttachmentMethod')}</a>
                 </>
               )}
             </p>
             {section.products && section.products.length > 0 && (
               <div className="mb-2">
-                <div className="font-medium text-sm mb-1">Products</div>
+                <div className="font-medium text-sm mb-1">{t('products')}</div>
                 <div className="flex gap-3 mb-2 overflow-x-auto pb-2" style={{ WebkitOverflowScrolling: 'touch' }}>
                   {section.products.map((product, i) => (
                     <div 

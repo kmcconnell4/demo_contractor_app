@@ -3,6 +3,7 @@ import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/hooks/useLanguage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJobImage } from '@/lib/getJobImage';
 import { jobsData } from '@/lib/jobsData';
@@ -13,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, Calendar, MapPin, Star, CloudSun, CloudRain, Wrench, AlertTriangle, Clock, FileText, Shield, Clipboard, FileCheck, FolderOpen, Bell } from 'lucide-react';
 
 export function Home() {
+  const { t } = useLanguage();
   // Toggle favorite status for a job
   const toggleFavorite = (jobId: string, event?: React.MouseEvent) => {
     if (event) event.stopPropagation();
@@ -45,13 +47,12 @@ export function Home() {
   const getGreeting = () => {
     const hour = new Date().getHours();
     const name = "Chris";
-    
     if (hour < 12) {
-      return `Good morning, ${name}!`;
+      return t('goodMorning').replace('{name}', name);
     } else if (hour < 17) {
-      return `Good afternoon, ${name}!`;
+      return t('goodAfternoon').replace('{name}', name);
     } else {
-      return `Good evening, ${name}!`;
+      return t('goodEvening').replace('{name}', name);
     }
   };
 
@@ -160,7 +161,7 @@ export function Home() {
               <div className="flex-1 ml-4">
                 <h1 className="text-2xl font-bold text-white">{getGreeting()}</h1>
                 <div className="flex items-center text-white/80 text-sm">
-                  <span>Carlisle, PA • 72°F</span>
+                  <span>{t('locationTemp')}</span>
                   <CloudSun size={16} className="ml-2" />
                 </div>
               </div>
@@ -169,11 +170,10 @@ export function Home() {
               </button>
             </div>
           </div>
-          
           {/* Search Bar */}
           <div className="relative">
             <Input
-              placeholder="Search documents, products, or jobs..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -183,7 +183,6 @@ export function Home() {
           </div>
         </div>
       </div>
-
       {/* Job Dashboard */}
       <div className="home-page pt-8 px-8 space-y-8 pb-20">
         {/* Alerts Section */}
@@ -195,21 +194,20 @@ export function Home() {
                 <Clock size={18} className="text-[#012b64]" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-[#012b64] mb-1 text-sm">Inspection reminder</h3>
+                <h3 className="font-semibold text-[#012b64] mb-1 text-sm">{t('inspectionReminderTitle')}</h3>
                 <p className="text-xs text-[#012b64]/80 leading-relaxed">
-                  You have an inspection at 4PM today at 450 Market St.
+                  {t('inspectionReminderBody')}
                 </p>
               </div>
             </div>
           </div>
         </div>
-
         {/* Favorited Jobs */}
         {getFavoriteJobs().length > 0 && (
           <div className="-mt-2">
             <div className="mb-3">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold">Favorites</h2>
+                <h2 className="text-xl font-semibold">{t('favorites')}</h2>
                 <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
                   {getFavoriteJobs().length}
                 </Badge>
@@ -259,12 +257,11 @@ export function Home() {
             </div>
           </div>
         )}
-
         {/* Browse for Documents */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold">Browse for documents</h2>
-            <button className="text-sm text-primary font-medium">View all</button>
+            <h2 className="text-xl font-semibold">{t('browseDocuments')}</h2>
+            <button className="text-sm text-primary font-medium">{t('viewAll')}</button>
           </div>
           <div className="flex space-x-2 overflow-x-auto scrollbar-hide pb-2 pt-2">
             {/* Safety Data Sheets */}
@@ -272,54 +269,49 @@ export function Home() {
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
                 <Shield size={28} className="text-[#00509e]" />
               </div>
-              <span className="text-[10px] font-medium text-gray-700 leading-tight">Safety<br />Data Sheets</span>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">{t('safetyDataSheets')}</span>
             </div>
-            
             {/* Product Data Sheets */}
             <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
                 <FileText size={28} className="text-[#00509e]" />
               </div>
-              <span className="text-[10px] font-medium text-gray-700 leading-tight">Product<br />Data Sheets</span>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">{t('productDataSheets')}</span>
             </div>
-            
             {/* Assembly Letters */}
             <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
                 <Clipboard size={28} className="text-[#00509e]" />
               </div>
-              <span className="text-[10px] font-medium text-gray-700 leading-tight">Assembly<br />Letters</span>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">{t('assemblyLetters')}</span>
             </div>
-            
             {/* Warranty */}
             <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
                 <FileCheck size={28} className="text-[#00509e]" />
               </div>
-              <span className="text-[10px] font-medium text-gray-700 leading-tight">Warranty</span>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">{t('warranty')}</span>
             </div>
-            
             {/* Other Documents */}
             <div className="flex flex-col items-center text-center min-w-[80px] flex-shrink-0">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
                 <FolderOpen size={28} className="text-[#00509e]" />
               </div>
-              <span className="text-[10px] font-medium text-gray-700 leading-tight">Other<br />Documents</span>
+              <span className="text-[10px] font-medium text-gray-700 leading-tight">{t('otherDocuments')}</span>
             </div>
           </div>
         </div>
-
         {/* In Progress Jobs */}
-  {jobsBySection.inProgress.length > 0 && (
+        {jobsBySection.inProgress.length > 0 && (
           <div className="pt-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold">In Progress</h2>
+                <h2 className="text-xl font-semibold">{t('inProgress')}</h2>
                 <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
                   {jobsBySection.inProgress.length}
                 </Badge>
               </div>
-              <button className="text-sm text-primary font-medium">View all jobs</button>
+              <button className="text-sm text-primary font-medium">{t('viewAllJobs')}</button>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {jobsBySection.inProgress.map((job) => (
@@ -365,18 +357,17 @@ export function Home() {
             </div>
           </div>
         )}
-
         {/* Recently Completed Jobs */}
-  {jobsBySection.completed.length > 0 && (
+        {jobsBySection.completed.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold">Recently Completed</h2>
+                <h2 className="text-xl font-semibold">{t('recentlyCompleted')}</h2>
                 <Badge variant="secondary" className="text-xs bg-[#00509e] text-white hover:bg-[#00509e]">
                   {jobsBySection.completed.length}
                 </Badge>
               </div>
-              <button className="text-sm text-primary font-medium">View all jobs</button>
+              <button className="text-sm text-primary font-medium">{t('viewAllJobs')}</button>
             </div>
             <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
               {jobsBySection.completed.map((job) => (

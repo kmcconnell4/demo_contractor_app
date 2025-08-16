@@ -1,20 +1,4 @@
 import { useState } from 'react';
-
-// Helper to format history timestamp as 'Month Day, Year at XX:XXAM/PM'
-function formatHistoryTimestamp(ts: string) {
-  // Example: '2024-07-28 2:15 PM' => 'July 28, 2024 at 2:15PM'
-  const dateTimeMatch = ts.match(/(\d{4})-(\d{2})-(\d{2}) (\d{1,2}):(\d{2}) ([AP]M)/);
-  if (!dateTimeMatch) return ts;
-  const year = dateTimeMatch[1];
-  const month = dateTimeMatch[2];
-  const day = dateTimeMatch[3];
-  const hour = dateTimeMatch[4];
-  const minute = dateTimeMatch[5];
-  const ampm = dateTimeMatch[6];
-  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const monthName = months[parseInt(month, 10) - 1];
-  return `${monthName} ${parseInt(day, 10)}, ${year} at ${hour}:${minute}${ampm}`;
-}
 import { useParams, useNavigate } from 'react-router-dom';
 import { jobsData } from '@/lib/jobsData';
 import { Button } from '@/components/ui/button';
@@ -57,6 +41,23 @@ import { Dialog } from '@/components/ui/dialog';
 import { InstallationDetails } from './InstallationDetails';
 import { getJobImage } from '@/lib/getJobImage';
 import installationDetailsData from '../../lib/installationDetailsData';
+import { useLanguage } from '@/hooks/useLanguage.tsx';
+
+// Helper to format history timestamp as 'Month Day, Year at XX:XXAM/PM'
+function formatHistoryTimestamp(ts: string) {
+  // Example: '2024-07-28 2:15 PM' => 'July 28, 2024 at 2:15PM'
+  const dateTimeMatch = ts.match(/(\d{4})-(\d{2})-(\d{2}) (\d{1,2}):(\d{2}) ([AP]M)/);
+  if (!dateTimeMatch) return ts;
+  const year = dateTimeMatch[1];
+  const month = dateTimeMatch[2];
+  const day = dateTimeMatch[3];
+  const hour = dateTimeMatch[4];
+  const minute = dateTimeMatch[5];
+  const ampm = dateTimeMatch[6];
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const monthName = months[parseInt(month, 10) - 1];
+  return `${monthName} ${parseInt(day, 10)}, ${year} at ${hour}:${minute}${ampm}`;
+}
 
 function getJobProductDocs(jobId: string) {
   const jobDetails = installationDetailsData.find(j => j.jobId === jobId);
@@ -74,6 +75,7 @@ function getJobProductDocs(jobId: string) {
 export function JobDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showAllHistory, setShowAllHistory] = useState(false);
   const [showAllOrders, setShowAllOrders] = useState(false);
@@ -412,7 +414,7 @@ export function JobDetails() {
           {/* Orders */}
           <Card>
             <CardHeader className="pb-4 pt-3">
-              <h2 className="text-xl font-semibold leading-none tracking-tight">Orders</h2>
+              <h2 className="text-xl font-semibold leading-none tracking-tight">{t('orders')}</h2>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -428,7 +430,7 @@ export function JobDetails() {
                               <div>
                                 <h3 className="font-semibold">{order.orderNumber}</h3>
                                 <p className="text-sm text-muted-foreground">
-                                  {order.status === 'delivered' ? 'Delivered' : 'Placed on'} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? 'product' : 'products'}
+                                  {order.status === 'delivered' ? t('delivered') : t('placedOn')} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? t('product') : t('products')}
                                 </p>
                               </div>
                             </div>
@@ -441,14 +443,14 @@ export function JobDetails() {
                 {!showAllOrders && orders.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
-                      Show more
+                      {t('showMore')}
                     </Button>
                   </div>
                 )}
                 {showAllOrders && orders.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllOrders(false)}>
-                      Show less
+                      {t('showLess')}
                     </Button>
                   </div>
                 )}
@@ -459,14 +461,14 @@ export function JobDetails() {
           {/* Documents */}
           <Card>
             <CardHeader className="pb-4 pt-3">
-              <h2 className="text-xl font-semibold leading-none tracking-tight">Documents</h2>
+              <h2 className="text-xl font-semibold leading-none tracking-tight">{t('documents')}</h2>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="Project" className="space-y-4">
                 <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                  <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                  <TabsTrigger value="Safety Data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
-                  <TabsTrigger value="Product Info" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                  <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('project')}</TabsTrigger>
+                  <TabsTrigger value="Safety Data" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('safetyData')}</TabsTrigger>
+                  <TabsTrigger value="Product Info" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('productInfo')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="Project" className="space-y-3">
@@ -559,7 +561,7 @@ export function JobDetails() {
           {/* History */}
           <Card className="mt-6">
             <CardHeader className="pb-4 pt-3">
-              <h2 className="text-xl font-semibold leading-none tracking-tight">History</h2>
+              <h2 className="text-xl font-semibold leading-none tracking-tight">{t('history')}</h2>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -579,14 +581,14 @@ export function JobDetails() {
                 {!showAllHistory && jobHistory.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllHistory(true)}>
-                      Show more
+                      {t('showMore')}
                     </Button>
                   </div>
                 )}
                 {showAllHistory && jobHistory.length > 3 && (
                   <div className="pt-2">
                     <Button variant="outline" size="sm" onClick={() => setShowAllHistory(false)}>
-                      Show less
+                      {t('showLess')}
                     </Button>
                   </div>
                 )}
@@ -603,8 +605,8 @@ export function JobDetails() {
             {job.status !== 'Installation' && (
               <Card>
                 <CardContent className="p-8 text-center">
-                  <h3 className="text-lg font-semibold mb-2">Job Complete</h3>
-                  <p className="text-muted-foreground">All work has been completed and approved.</p>
+                  <h3 className="text-lg font-semibold mb-2">{t('jobComplete')}</h3>
+                  <p className="text-muted-foreground">{t('allWorkCompleted')}</p>
                 </CardContent>
               </Card>
             )}
@@ -612,14 +614,14 @@ export function JobDetails() {
             {/* Documents */}
             <Card>
               <CardHeader className="pb-4 pt-3">
-                <h2 className="text-xl font-semibold leading-none tracking-tight">Documents</h2>
+                <h2 className="text-xl font-semibold leading-none tracking-tight">{t('documents')}</h2>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="Project" className="space-y-4">
                   <TabsList className="h-auto p-0 bg-transparent border-b border-border rounded-none w-full justify-start">
-                    <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Project</TabsTrigger>
-                    <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Safety Data</TabsTrigger>
-                    <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">Product Info</TabsTrigger>
+                    <TabsTrigger value="Project" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('project')}</TabsTrigger>
+                    <TabsTrigger value="Safety" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('safetyData')}</TabsTrigger>
+                    <TabsTrigger value="Data Sheet" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent bg-transparent px-4 py-3 text-sm font-medium transition-colors hover:text-primary data-[state=active]:text-primary">{t('productInfo')}</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="Project" className="space-y-3">
@@ -703,7 +705,7 @@ export function JobDetails() {
             {/* Orders */}
             <Card>
               <CardHeader className="pb-4 pt-3">
-                <h2 className="text-xl font-semibold leading-none tracking-tight">Orders</h2>
+                <h2 className="text-xl font-semibold leading-none tracking-tight">{t('orders')}</h2>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -719,7 +721,7 @@ export function JobDetails() {
                               <div>
                                 <h3 className="font-semibold">{order.orderNumber}</h3>
                                 <p className="text-sm text-muted-foreground">
-                                  {order.status === 'delivered' ? 'Delivered' : 'Placed on'} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? 'product' : 'products'}
+                                  {order.status === 'delivered' ? t('delivered') : t('placedOn')} {new Date(order.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • {order.productCount} {order.productCount === 1 ? t('product') : t('products')}
                                 </p>
                               </div>
                             </div>
@@ -732,14 +734,14 @@ export function JobDetails() {
                   {!showAllOrders && orders.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(true)}>
-                        Show more
+                        {t('showMore')}
                       </Button>
                     </div>
                   )}
                   {showAllOrders && orders.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllOrders(false)}>
-                        Show less
+                        {t('showLess')}
                       </Button>
                     </div>
                   )}
@@ -748,7 +750,7 @@ export function JobDetails() {
             </Card>
             <Card>
               <CardHeader className="pb-4 pt-3">
-                <h2 className="text-xl font-semibold leading-none tracking-tight">History</h2>
+                <h2 className="text-xl font-semibold leading-none tracking-tight">{t('history')}</h2>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -766,14 +768,14 @@ export function JobDetails() {
                   {!showAllHistory && jobHistory.length > 3 && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllHistory(true)}>
-                        Show more
+                        {t('showMore')}
                       </Button>
                     </div>
                   )}
                   {showAllHistory && (
                     <div className="pt-2">
                       <Button variant="outline" size="sm" onClick={() => setShowAllHistory(false)}>
-                        Show less
+                        {t('showLess')}
                       </Button>
                     </div>
                   )}
@@ -817,10 +819,10 @@ export function JobDetails() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem className="cursor-pointer">
-                Request inspection
+                {t('requestInspection')}
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
-                Manage job team
+                {t('manageJobTeam')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -910,7 +912,7 @@ export function JobDetails() {
           {/* Installation Instructions Section - Only show for Installation status */}
           {job.status === 'Installation' && (
             <div className="mb-6">
-              <h2 className="text-lg font-semibold mb-3">Installation instructions</h2>
+              <h2 className="text-lg font-semibold mb-3">{t('installationInstructions')}</h2>
               <div className="space-y-2">
                 {roofAreas.map((area) => (
                   <div 
