@@ -484,8 +484,15 @@ export function JobDetails() {
                               </h3>
                               <div className="flex items-center justify-between">
                                 {['Pending', 'Awarded', 'Installation', 'Inspection', 'Complete'].map((status, index, arr) => {
-                                  const isActive = job.status === status;
-                                  const isCompleted = arr.indexOf(job.status) > index;
+                                  // Mark all steps to the left of Inspection as complete if current status is Inspection
+                                  let isActive = job.status === status;
+                                  let isCompleted = false;
+                                  if (job.status === 'Inspection') {
+                                    isCompleted = index < arr.indexOf('Inspection');
+                                    isActive = status === 'Inspection';
+                                  } else {
+                                    isCompleted = arr.indexOf(job.status) > index;
+                                  }
                                   const isCurrentOrPast = isActive || isCompleted;
                                   return (
                                     <div key={status} className="flex items-center">
@@ -522,7 +529,12 @@ export function JobDetails() {
                                       {/* Right connecting line for all except last step */}
                                       {index < arr.length - 1 && (
                                         <div className={`w-10 h-0.5 mx-2 flex-shrink-0 transition-colors ${
-                                          isCompleted ? 'bg-primary' : 'bg-gray-300'
+                                          // Add extra spacing and style for Installation->Inspection and Inspection->Complete
+                                          (status === 'Installation' && job.status === 'Inspection') || (status === 'Inspection' && arr[index+1] === 'Complete')
+                                            ? isCurrentOrPast ? 'bg-primary' : 'bg-gray-300' : isCompleted ? 'bg-primary' : 'bg-gray-300'
+                                        } ${
+                                          (status === 'Installation' && arr[index+1] === 'Inspection') || (status === 'Inspection' && arr[index+1] === 'Complete')
+                                            ? 'w-12' : ''
                                         }`} />
                                       )}
                                     </div>
@@ -847,10 +859,16 @@ export function JobDetails() {
           <div className="mb-6 max-w-md mx-auto">
             <div className="flex items-center justify-between">
               {['Pending', 'Awarded', 'Installation', 'Inspection', 'Complete'].map((status, index, arr) => {
-                const isActive = job.status === status;
-                const isCompleted = ['Pending', 'Awarded', 'Installation', 'Complete'].indexOf(job.status) > index;
+                // Mark all steps to the left of Inspection as complete if current status is Inspection
+                let isActive = job.status === status;
+                let isCompleted = false;
+                if (job.status === 'Inspection') {
+                  isCompleted = index < arr.indexOf('Inspection');
+                  isActive = status === 'Inspection';
+                } else {
+                  isCompleted = arr.indexOf(job.status) > index;
+                }
                 const isCurrentOrPast = isActive || isCompleted;
-                
                 return (
                   <div key={status} className="flex-1 flex items-center">
                     <div className="flex flex-col items-center">
@@ -870,7 +888,6 @@ export function JobDetails() {
                           <div className="w-2 h-2 bg-gray-300 rounded-full" />
                         )}
                       </div>
-                      
                       {/* Status Label */}
                       <span className={`text-xs mt-1 font-medium transition-colors ${
                         isCurrentOrPast ? 'text-foreground' : 'text-muted-foreground'
@@ -878,11 +895,10 @@ export function JobDetails() {
                         {status}
                       </span>
                     </div>
-                    
                     {/* Connecting Line */}
-                    {index < 3 && (
-                      <div className={`flex-1 h-0.5 mx-2 transition-colors ${
-                        isCompleted ? 'bg-primary' : 'bg-gray-300'
+                    {index < arr.length - 1 && (
+                      <div className={`w-5 h-0.5 mx-1 flex-shrink-0 transition-colors ${
+                        isCompleted || isCurrentOrPast ? 'bg-primary' : 'bg-gray-300'
                       }`} />
                     )}
                   </div>

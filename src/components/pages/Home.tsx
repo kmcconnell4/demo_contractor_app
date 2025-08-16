@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJobImage } from '@/lib/getJobImage';
 import { jobsData } from '@/lib/jobsData';
+import { BottomNavigation } from '../navigation/BottomNavigation';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -144,8 +145,7 @@ export function Home() {
   );
 
   return (
-    <div className="h-full bg-background">
-      {/* Header */}
+    <div className="h-full bg-blue-50">
       <div className="bg-gradient-primary-two-color safe-top rounded-b-3xl">
         <div className="px-8 py-4 pb-6">
           <div className="mb-4">
@@ -422,7 +422,8 @@ export function Home() {
             </div>
           </div>
         )}
-      </div>
+      </div> {/* End main content wrapper */}
+      <BottomNavigation />
     </div>
   );
 }

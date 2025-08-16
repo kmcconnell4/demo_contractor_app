@@ -14,6 +14,6 @@ export const jobsData = [
   { id: '11', title: 'Data Center Expansion', location: '1800 Technology Circle, King of Prussia, PA', status: 'Installation', progress: 85 },
   { id: '12', title: 'Automotive Plant', location: '3400 Industrial Park Drive, Lancaster, PA', status: 'Installation', progress: 20 },
   // Inspection jobs
-  { id: '13', title: 'Inspection Job 1', location: '100 Inspection Ave, Harrisburg, PA', status: 'Inspection', progress: 90 },
-  { id: '14', title: 'Inspection Job 2', location: '200 Inspection Blvd, Lancaster, PA', status: 'Inspection', progress: 80 },
+  { id: '13', title: 'Regional Office Inspection', location: '100 Inspection Ave, Harrisburg, PA', status: 'Inspection', progress: 90, photo: '/Job pictures/Office building 2.jpeg' },
+  { id: '14', title: 'Medical Center Inspection', location: '200 Inspection Blvd, Lancaster, PA', status: 'Inspection', progress: 80, photo: '/Job pictures/Hospital 2.jpeg' },
 ];
