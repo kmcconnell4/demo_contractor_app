@@ -89,10 +89,16 @@ export default {
 				'3000': '3000ms',
 				'4000': '4000ms'
 			},
+			fontFamily: {
+				sans: ['Tahoma', 'Arial', 'sans-serif'],
+				mono: ['Courier New', 'monospace'],
+				serif: ['Times New Roman', 'serif'],
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				md: 'var(--radius)',
+				sm: 'var(--radius)',
+				DEFAULT: '0px',
 			},
 			keyframes: {
 				'accordion-down': {
